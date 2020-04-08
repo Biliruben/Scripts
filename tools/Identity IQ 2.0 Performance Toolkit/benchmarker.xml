@@ -1,0 +1,96 @@
+
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<!--
+  Initialization file for new SailPoint repositories.
+-->
+<sailpoint>
+  <TaskDefinition name="Data Load Simulation Tool"
+                    executor="sailpoint.performance.Benchmarker"
+                    progressMode="Percentage" subType="SailPoint Performance Lab" 
+                    resultAction="Rename">
+        <Description>
+       
+        </Description>
+        <Attributes>
+        </Attributes>
+        <Signature>
+			<Inputs>
+			    <Argument name="apprefix" type="string">
+			    	<Prompt>Naming prefix for simulated applications</Prompt>
+                    <Description>Naming prefix for simulated applications</Description>
+                </Argument>
+                <Argument name="idprefix" type="string">
+                	<Prompt>Naming prefix for simulated identities</Prompt>
+                    <Description>Naming prefix for simulated identities</Description>
+                </Argument>
+                <Argument name="actprefix" type="string">
+                	<Prompt>Naming prefix for simulated accounts</Prompt>
+                    <Description>Naming prefix for simulated accounts</Description>
+                </Argument>
+			    <Argument name="entprefix" type="string">
+			    	<Prompt>Naming prefix for simulated managed entitlements</Prompt>
+                    <Description>Naming prefix for simulated managed entitlements</Description>
+                </Argument>
+                <Argument name="entgrpprefix" type="string">
+                	<Prompt>Naming prefix for simulated managed entitlement groups</Prompt>
+                    <Description>Naming prefix for simulated managed entitlement groups</Description>
+                </Argument>
+                <Argument name="actgrpprefix" type="string">
+                	<Prompt>Naming prefix for simulated accountgroups</Prompt>
+                    <Description>Naming prefix for simulated accountgroups</Description>
+                </Argument>
+                <Argument name="applications" type="int">
+                    <Prompt>Number of Applications to create</Prompt>
+                    <Description>Number of applications to be created, first created application represents authoritative application.</Description>
+                </Argument>
+                <Argument name="accountgroupsperapp" type="int">
+                	<Prompt>Number of accountgroups per application</Prompt>
+                    <Description>Number of account groups to be created for each application</Description>
+                </Argument>
+                <Argument name="instances" type="int">
+                	<Prompt>Number of instances per account</Prompt>
+                    <Description>Number of instances each account link will have </Description>
+                </Argument>
+                <Argument name="identities" type="int">
+                	<Prompt>Number of identities</Prompt>
+                    <Description>Number of identities</Description>
+                </Argument>
+                <Argument name="links" type="int">
+                	<Prompt>Number of accounts per identity</Prompt>
+                    <Description>Number of accounts each identity will have, typically set to the number of applications</Description>
+                </Argument>
+                <Argument name="entitlements" type="int">
+                	<Prompt>Number of managed entitlements per application</Prompt>
+                    <Description>Number of managed attributes which link to an entitlement per application</Description>
+                </Argument>
+                <Argument name="entitlementgroups" type="int">
+                	<Prompt>Number of managed accountgroups per application</Prompt>
+                    <Description>Number of managed attributes which link to an accountgroup per application</Description>
+                </Argument>
+                <Argument name="groupsperlink" type="int">
+                	<Prompt>Number of accountgroups per account</Prompt>
+                    <Description>Number of account groups for each link instance</Description>
+                </Argument>
+                <Argument name="entitlementsperlink" type="int">
+                	<Prompt>Number of entitlements per account</Prompt>
+                    <Description>Number of entitlements for each link instance</Description>
+                </Argument>
+                <Argument name="attributes" type="int">
+                	<Prompt>Number of additional attributes per account</Prompt>
+                    <Description>Number of account attributes for each link instance</Description>
+                </Argument>
+                
+
+            </Inputs>
+            <Returns>
+                <Argument name="idenitycreationtime" type="Long">
+                    <Description>Time to create identities</Description>
+                </Argument>
+
+            </Returns>
+        </Signature>
+    </TaskDefinition>
+    </sailpoint>

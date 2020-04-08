@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Test 286 w/ MA">
+
+    <Source>
+      <![CDATA[
+import sailpoint.api.ManagedAttributer;
+import sailpoint.object.Application;
+import sailpoint.object.Identity;
+import sailpoint.object.ManagedAttribute;
+
+        String testIdentity = "Amy.Cox";
+        // lazy load object
+        Identity identity = context.getObjectByName(Identity.class, testIdentity);
+        
+        // bootstrap MA1
+        Application app = context.getObjectByName(Application.class, "Active_Directory");
+        ManagedAttribute srcMA = new ManagedAttribute(app, "memberof", "IIQSR-286");
+        log.warn("srcMA: " + srcMA);
+        ManagedAttributer attributer = new ManagedAttributer(context);
+        // turn off the safe guard
+        attributer.setDisableExistenceCheck(true);
+
+        // bootstrap 1 - this should succeed
+        ManagedAttribute ma1 = attributer.bootstrapIfNew(srcMA);
+        
+        log.warn("Bootstrapped MA1: " + ma1);
+        ManagedAttribute ma2 = null;
+        try {
+            // bootstrap 2 - this should fail (one already exists)
+            ma2 = attributer.bootstrapIfNew(srcMA);
+        } catch (Throwable t) {
+            log.error("Expected exception: " + t.getMessage());
+        }
+        log.warn("Bootstrapped MA2: " + ma2);
+
+        List links = null;
+        // The test: lazy load a collection on the original Identity. This should not fail w/ LazyInit
+        links = identity.getLinks();
+
+        // serializing the 'links' array should do it
+        return links;
+        ]]>
+    </Source>
+</Rule>

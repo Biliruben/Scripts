@@ -1,0 +1,26 @@
+Compiled from "GetOpts.java"
+public class com.biliruben.util.GetOpts extends java.lang.Object{
+    public static final java.lang.String DEFAULT_SWITCH;
+    public static final java.lang.String DEFAULT_END_OPT_SWITCH;
+    static {};
+    public static void main(java.lang.String[]);
+    public com.biliruben.util.GetOpts(java.lang.Class);
+    public void setUsageTail(java.lang.String);
+    public void setPropertiesDefaultFileName(java.lang.String);
+    public void setDescriptionTail(java.lang.String);
+    public java.lang.String genUsage(com.biliruben.util.OptionParseException);
+    public java.lang.String genUsage();
+    public java.lang.String genUsage(boolean);
+    public void parseOpts(java.lang.String[]);
+    public void setOpts(java.lang.String[]);
+    public java.lang.String getStr(java.lang.String);
+    public java.util.List getList(java.lang.String);
+    public java.util.Map getProperties()       throws java.io.IOException;
+    public void addLegend(com.biliruben.util.OptionLegend);
+    public void addAllLegends(java.util.Collection);
+    public void setEndOptsSwitch(java.lang.String);
+    public java.util.ArrayList getUnswitchedOptions();
+    public void setPropertiesLegendHidden(boolean);
+    public java.lang.String toString();
+}
+

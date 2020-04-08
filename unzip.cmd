@@ -1,0 +1,1 @@
+wzunzip -d -yo -o %*

@@ -1,0 +1,1783 @@
+#-------------------------------------------------------------------------------
+# This file has been generated on 01.15.2013 at 11:54 from ldap.utexas.edu:389
+# by Softerra LDAP Browser 2.6 (http://www.ldapbrowser.com)
+#-------------------------------------------------------------------------------
+version: 1
+dn: uid=jls5,ou=people,dc=directory,dc=utexas,dc=edu
+uid: jls5
+cn: Jamie L Shutter
+cn: Jamie Shutter
+sn: Shutter
+utexasEduPersonCampusMailCode: A3900
+telephoneNumber: +1 512 475 8455
+givenName: Jamie
+utexasEduPersonHighestDegree: MSED
+displayName: Jamie L Shutter
+utexasEduPersonPrimaryOrgUnitName: University Health Services
+utexasEduPersonPrimaryPubAffiliation: staff
+postalAddress: The University of Texas at Austin$University Health Services$PO Box 7339$Austin, TX 78713
+mail: j.shutter@uhs.utexas.edu
+facsimileTelephoneNumber: +1 512 475 8850
+utexasEduPersonOrgUnitName: University Health Services
+ou: University Health Services
+utexasEduPersonPriorEid: shutterjl
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: jls5
+utexasEduPersonOfficeLocation: SSB 2.212
+utexasEduPersonPrimaryTitle: Director, University Health Services
+title: Director, University Health Services
+
+dn: uid=yme55,ou=people,dc=directory,dc=utexas,dc=edu
+uid: yme55
+cn: Yolanda M Esquivel
+cn: Yolanda Esquivel
+sn: Esquivel
+utexasEduPersonOrgUnitName: Division of Housing & Food Service
+givenName: Yolanda
+utexasEduPersonPrimaryOrgUnitName: Division of Housing & Food Service
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Yolanda M Esquivel
+ou: Division of Housing & Food Service
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+postalAddress: The University of Texas at Austin$Division of Housing and Food Service$P O Box 7666$Austin, TX 78713-7666
+utexasEduPersonPrimaryTitle: Building Attendant Leader
+title: Building Attendant Leader
+utexasEduPersonPriorEid: esquivelym
+utexasEduPersonOfficeLocation: KIN HSKG
+mail: yme55@austin.utexas.edu
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: yme55
+utexasEduPersonCampusMailCode: E1820
+telephoneNumber: +1 512 471 7303
+telephoneNumber: +1 512 471 1941
+
+dn: uid=dbddm,ou=people,dc=directory,dc=utexas,dc=edu
+uid: dbddm
+sn: McManigle
+telephoneNumber: +1 512 475 9610
+telephoneNumber: +1 512 471 5424
+utexasEduPersonHighestDegree: BS
+cn: Dianne D McManigle
+cn: Dianne McManigle
+givenName: Dianne
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Dianne D McManigle
+mail: diannem@austin.utexas.edu
+homePostalAddress: 209 EDGEWOOD DR$FREDERICKSBRG, TX 78624-2837
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonPrimaryTitle: Director of Development
+title: Director of Development
+utexasEduPersonOrgUnitName: University Development Office
+utexasEduPersonPrimaryOrgUnitName: University Development Office
+ou: University Development Office
+utexasEduPersonPriorEid: mcmanigledd
+userCertificate;binary:: MIIF0TCCBLmgAwIBAgIQBlx26wVQfegVCCF+eKyPfTANBgkqhkiG9w0BAQUFADCBizELMAkGA1UE
+ BhMCVVMxKjAoBgNVBAoTIVRoZSBVbml2ZXJzaXR5IG9mIFRleGFzIGF0IEF1c3RpbjEkMCIGA1UE
+ CxMbSW5mb3JtYXRpb24gU2VjdXJpdHkgT2ZmaWNlMSowKAYDVQQDEyFUaGUgVW5pdmVyc2l0eSBv
+ ZiBUZXhhcyBhdCBBdXN0aW4wHhcNMTEwNDIxMDAwMDAwWhcNMTYwNDIwMjM1OTU5WjCByzEOMAwG
+ A1UEERMFNzg3MTIxKjAoBgNVBAoTIVRoZSBVbml2ZXJzaXR5IG9mIFRleGFzIGF0IEF1c3RpbjEd
+ MBsGA1UECRMUMSBVbml2ZXJzaXR5IFN0YXRpb24xCzAJBgNVBAgTAlRYMQ8wDQYDVQQHEwZBdXN0
+ aW4xCzAJBgNVBAYTAnVzMRkwFwYDVQQDExBEaWFubmUgTWNNYW5pZ2xlMSgwJgYJKoZIhvcNAQkB
+ FhlkaWFubmVtQGF1c3Rpbi51dGV4YXMuZWR1MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+ AQEAhhfa0ztn0nHkR3SKmX9G2O+6BdsxFMMW8elXg2/Zix2HyLa+BUfh90+vYj5JNmnrn04E62YX
+ gLK4aCvDSF78fcQHVt0a3TCuq34lDW/WLaV5cWN0uKs36hYztNIYVL7T0xFf6ms2fDmv1PO8E9mc
+ VF0ujqI09dd6dch3CW8Z+AQfHbiO8XiWFnpcv8NBBtKg2168FP8vlOxP2LG0rFJV0+sGepZUVpP0
+ c7I3fHvTazq1EnlXgI8hOEweyNp21vQe+Y2sZKjtbN/IJq2wfpS3Ve05BkKISBoK6tSfDeuNhWYh
+ g7E2qUa/DMruIPcFO+Kb+AMvVa/lz1bBmpDZnEF2SQIDAQABo4IB7TCCAekwHwYDVR0jBBgwFoAU
+ mcUsxU0OJzjLwIyDAGPZ9hl8rbgwHQYDVR0OBBYEFH2dMVaRLSj1Y71mLxpAJ49n49UBMA4GA1Ud
+ DwEB/wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUFBwMEBggrBgEFBQcDAjBY
+ BgNVHSAEUTBPME0GDCsGAQQBsjEBAgIkAjA9MDsGCCsGAQUFBwIBFi9odHRwczovL2lkbS51dHN5
+ c3RlbS5lZHUvdXRmZWQvSW5Db21tb25DUFMuaHRtbDBHBgNVHR8EQDA+MDygOqA4hjZodHRwOi8v
+ Y3JsLnV0ZXhhcy5lZHUvVGhlVW5pdmVyc2l0eW9mVGV4YXNhdEF1c3Rpbi5jcmwwdgYIKwYBBQUH
+ AQEEajBoMEIGCCsGAQUFBzAChjZodHRwOi8vY3J0LnV0ZXhhcy5lZHUvVGhlVW5pdmVyc2l0eW9m
+ VGV4YXNhdEF1c3Rpbi5jcnQwIgYIKwYBBQUHMAGGFmh0dHA6Ly9vY3NwLnV0ZXhhcy5lZHUwTwYD
+ VR0RBEgwRqApBgorBgEEAYI3FAIDoBsMGWRpYW5uZW1AYXVzdGluLnV0ZXhhcy5lZHWBGWRpYW5u
+ ZW1AYXVzdGluLnV0ZXhhcy5lZHUwDQYJKoZIhvcNAQEFBQADggEBAB2ZkY22Bm0yr/vjCHHZ4+IY
+ i21WF1OybkfU0aJuHP0PnjL7ZH+4fBJl6pgLF5Ipf4j11BvyPeKN3WAhdt/AoJNELM/JGHkOU0gs
+ 3JqTCb4vFlISZK7vFOd3EAvubFlUQ7kj01bszG6cyKHDzSdBv4sZx/TF/dG147C1uZuCdmRQfL5g
+ NeBO7RQEd82zA/iewuYugxMjAJZWrMbwgAVf5p3kSZYFF/p9hb8PO8U5iHKRJwa3SF72344Z6YsP
+ yppDI97vzHVKt6+rhz/J4z1ZgO92CSE9QfxLfLawNhN8ktfbIeIuUZhf09/GYfwJ16IkcZvACY3A
+ mlTmx2hGiTq4m3k=
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+homePhone: +1 830 990 4852
+utexasEduPersonEid: dbddm
+utexasEduPersonCampusMailCode: F3200
+utexasEduPersonOfficeLocation: WWH 224
+postalAddress: The University of Texas at Austin$Ofc of Public Affairs$PO Box Z$Austin, TX 78713
+facsimileTelephoneNumber: +1 512 471 5322
+
+dn: uid=nac64,ou=people,dc=directory,dc=utexas,dc=edu
+uid: nac64
+cn: Nancy A Cottington
+cn: Nancy Cottington
+sn: Cottington
+utexasEduPersonCampusMailCode: E0630
+facsimileTelephoneNumber: +1 512 471 0140
+homePhone: +1 512 260 3344
+telephoneNumber: +1 512 471 4335
+utexasEduPersonOfficeLocation: BEG 3.102B
+mail: nancy.cottington@beg.utexas.edu
+givenName: Nancy
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Nancy A Cottington
+postalAddress: The University of Texas at Austin$Bureau of Economic Geology, Jackson School of Geosciences$P O Box X$Austin, TX 78713-8924
+utexasEduPersonOrgUnitName: Bureau of Economic Geology, Jackson School of Geosciences
+utexasEduPersonPrimaryOrgUnitName: Bureau of Economic Geology, Jackson School of Geosciences
+ou: Bureau of Economic Geology, Jackson School of Geosciences
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonPriorEid: cottingtonna
+utexasEduPersonPrimaryTitle: Senior Computer Illustrator
+title: Senior Computer Illustrator
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: nac64
+
+dn: uid=ruizce,ou=people,dc=directory,dc=utexas,dc=edu
+uid: ruizce
+sn: Ruiz-Snowden
+utexasEduPersonOrgUnitName: Neighborhood Longhorns Program
+facsimileTelephoneNumber: +1 512 232 4656
+givenName: Celina
+utexasEduPersonPrimaryOrgUnitName: Neighborhood Longhorns Program
+telephoneNumber: +1 512 232 4654
+telephoneNumber: +1 512 232 4650
+utexasEduPersonHighestDegree: BA
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Celina E Ruiz-Snowden
+cn: Celina E Ruiz-Snowden
+cn: Celina Ruiz-Snowden
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+ou: Neighborhood Longhorns Program
+mail: hopscotch@austin.utexas.edu
+utexasEduPersonOfficeLocation: BEL 312
+postalAddress: The University of Texas at Austin$Neighborhood Longhorns Program$2100 San Jacinto Blvd$Suite 312$Austin, TX 78712
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: ruizce
+utexasEduPersonCampusMailCode: E2400
+utexasEduPersonPrimaryTitle: Assistant Director Neighborhood Longhorns Program
+title: Assistant Director Neighborhood Longhorns Program
+
+dn: uid=hirschdj,ou=people,dc=directory,dc=utexas,dc=edu
+uid: hirschdj
+cn: Debra J Hirsch
+cn: Debra Hirsch
+sn: Hirsch
+utexasEduPersonCampusMailCode: G0400
+facsimileTelephoneNumber: +1 512 471 7620
+telephoneNumber: +1 512 232 3615
+telephoneNumber: +1 512 471 4511
+utexasEduPersonOfficeLocation: MAI 101
+givenName: Debra
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Debra J Hirsch
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonOrgUnitName: Office of Graduate Studies
+utexasEduPersonPrimaryOrgUnitName: Office of Graduate Studies
+ou: Office of Graduate Studies
+postalAddress: The University of Texas at Austin$Office of Graduate Studies$1 University Station G0400$Austin, TX 78712
+title: Webmaster
+utexasEduPersonPrimaryTitle: Webmaster
+userCertificate;binary:: MIIF0DCCBLigAwIBAgIQVRmsx+eratrtK6GF1nnDuDANBgkqhkiG9w0BAQUFADCBizELMAkGA1UE
+ BhMCVVMxKjAoBgNVBAoTIVRoZSBVbml2ZXJzaXR5IG9mIFRleGFzIGF0IEF1c3RpbjEkMCIGA1UE
+ CxMbSW5mb3JtYXRpb24gU2VjdXJpdHkgT2ZmaWNlMSowKAYDVQQDEyFUaGUgVW5pdmVyc2l0eSBv
+ ZiBUZXhhcyBhdCBBdXN0aW4wHhcNMTEwMjIxMDAwMDAwWhcNMTYwMjIxMjM1OTU5WjCByDEOMAwG
+ A1UEERMFNzg3MTIxKjAoBgNVBAoTIVRoZSBVbml2ZXJzaXR5IG9mIFRleGFzIGF0IEF1c3RpbjEd
+ MBsGA1UECRMUMSBVbml2ZXJzaXR5IFN0YXRpb24xCzAJBgNVBAgTAlRYMQ8wDQYDVQQHEwZBdXN0
+ aW4xCzAJBgNVBAYTAnVzMRUwEwYDVQQDEwxEZWJyYSBIaXJzY2gxKTAnBgkqhkiG9w0BCQEWGmRq
+ aGlyc2NoQGF1c3Rpbi51dGV4YXMuZWR1MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA
+ ign1fPegOKhavK4wEwcaOfO4Of/VTZTXsHYq02jyYaV7T0b6pepvwUvvWA/c8ZEFyHANtnI3ZBNp
+ s9w6g5n0ZSNH1hUMFYIWXC2qOX+gkICnuOpb+at/ukmK2bLjI7j6iwXZ06k3qeELBe3A759+gfea
+ EleRTCfOZRpqmA/RXjrZwLNMC6EdmdUqui8mvslId2VKsxWyeS1vEQ+NwFfDJfTcThPgSZu+ibS8
+ ZTtGpRud2qcK9UZDcT7IFD9qZzSv00pLYC5tiDWBIln+wFLTOnmphiiqh+21fES1Pmfj3R/2wN0N
+ zbQRJ7GOgSTgqvzyJkjTJaNERZ+algH0saXZxQIDAQABo4IB7zCCAeswHwYDVR0jBBgwFoAUmcUs
+ xU0OJzjLwIyDAGPZ9hl8rbgwHQYDVR0OBBYEFJVn86qaI5hrF7cf82bFUdoShHbiMA4GA1UdDwEB
+ /wQEAwIFoDAMBgNVHRMBAf8EAjAAMB0GA1UdJQQWMBQGCCsGAQUFBwMEBggrBgEFBQcDAjBYBgNV
+ HSAEUTBPME0GDCsGAQQBsjEBAgIkAjA9MDsGCCsGAQUFBwIBFi9odHRwczovL2lkbS51dHN5c3Rl
+ bS5lZHUvdXRmZWQvSW5Db21tb25DUFMuaHRtbDBHBgNVHR8EQDA+MDygOqA4hjZodHRwOi8vY3Js
+ LnV0ZXhhcy5lZHUvVGhlVW5pdmVyc2l0eW9mVGV4YXNhdEF1c3Rpbi5jcmwwdgYIKwYBBQUHAQEE
+ ajBoMEIGCCsGAQUFBzAChjZodHRwOi8vY3J0LnV0ZXhhcy5lZHUvVGhlVW5pdmVyc2l0eW9mVGV4
+ YXNhdEF1c3Rpbi5jcnQwIgYIKwYBBQUHMAGGFmh0dHA6Ly9vY3NwLnV0ZXhhcy5lZHUwUQYDVR0R
+ BEowSKAqBgorBgEEAYI3FAIDoBwMGmRqaGlyc2NoQGF1c3Rpbi51dGV4YXMuZWR1gRpkamhpcnNj
+ aEBhdXN0aW4udXRleGFzLmVkdTANBgkqhkiG9w0BAQUFAAOCAQEAGyP5cuOXIa0xIATo79s5VBxQ
+ 2XjKCBVBANCLxnh716e1re0+8qG1qqO6umUrlr5NXWLUg2kb8ifucHVFrU7vCrvjsTWOLJXh129T
+ maMqUxbibjWPgmx9ZPdzlZf7J2JZZ/vKSpoKyXtol5Eii73qSjDetKhtvBO/z2bAWZKNOOiMg+zr
+ DV+0fWLobNndfKqgp8l4J+qMd29gWfKeXT1T0XD5bxOgQd7sRg4gUKJnKHXnJ4pGNC6EHJSEeFgZ
+ pW62+3BL3XADO0uyNRq+G9OkzyZyby+ga8B9mfXxZbqj5O5S7uTpS6moy5+JU9w66YjX+1GfVDY/
+ 9rtkurmaluqeXg==
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: hirschdj
+mail: djhirsch@austin.utexas.edu
+
+dn: uid=ariasmj,ou=people,dc=directory,dc=utexas,dc=edu
+uid: ariasmj
+sn: Arias
+utexasEduPersonOrgUnitName: Intercollegiate Athletics
+utexasEduPersonOfficeLocation: STD 1.246T
+utexasEduPersonOfficeLocation: MNC 2.0
+utexasEduPersonCampusMailCode: E2400
+facsimileTelephoneNumber: +1 512 471 7715
+telephoneNumber: +1 512 471 6826
+givenName: Michael
+utexasEduPersonPrimaryOrgUnitName: Intercollegiate Athletics
+utexasEduPersonHighestDegree: BS
+mail: mike.arias@athletics.utexas.edu
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Michael J Arias
+cn: Michael J Arias
+cn: Michael Arias
+ou: Intercollegiate Athletics
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+postalAddress: The University of Texas at Austin$Intercollegiate Athletics$P O Box 7399$Austin, TX 78713-7399
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: ariasmj
+title: Assistant Director for Video Operations
+utexasEduPersonPrimaryTitle: Assistant Director for Video Operations
+
+dn: uid=reidaw,ou=people,dc=directory,dc=utexas,dc=edu
+uid: reidaw
+cn: Alan W Reid
+cn: Alan Reid
+sn: Reid
+utexasEduPersonCampusMailCode: C1200
+mail: areid@math.utexas.edu
+telephoneNumber: +1 512 471 3153
+utexasEduPersonOfficeLocation: RLM 10.172
+givenName: Alan
+utexasEduPersonHighestDegree: PHD
+displayName: Alan W Reid
+utexasEduPersonPrimaryHonor: Pennzoil Company Regents Professor in Mathematics
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: reidaw
+title: Professor
+title: Department Chair
+utexasEduPersonPrimaryPubAffiliation: staff
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: faculty
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonPrimaryTitle: Department Chair
+utexasEduPersonPrimaryOrgUnitName: Department of Mathematics, College of Natural Sciences
+utexasEduPersonOrgUnitName: Department of Mathematics, College of Natural Sciences
+ou: Department of Mathematics, College of Natural Sciences
+postalAddress: The University of Texas at Austin$Department of Mathematics, College of Natural Sciences$1 University Station C1200$Austin, TX 78712
+utexasEduPersonHonor: Pennzoil Company Regents Professor in Mathematics
+utexasEduPersonHonor: Fellow of Robert L. Moore Chair in Mathematics
+utexasEduPersonHonor: Fellow of Sid W. Richardson Foundation Regents Chair in Mathematics #4
+utexasEduPersonHonor: Fellow of Leslie Surginer Endowed Professorship
+utexasEduPersonHonor: Fellow of Jane and Roland Blumberg Centennial Professorship in Mathematics
+utexasEduPersonHonor: Fellow of Paul V. Montgomery Centennial Memorial Professorship in Actuarial Mathematics
+utexasEduPersonHonor: Fellow of Mildred Caldwell and Baine Perkins Kerr Centennial Professorship in Mathematics
+
+dn: uid=jcflores,ou=people,dc=directory,dc=utexas,dc=edu
+uid: jcflores
+sn: Castillo-Flores
+cn: Janie C Castillo-Flores
+cn: Janie Castillo-Flores
+givenName: Janie
+utexasEduPersonHighestDegree: BA
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Janie C Castillo-Flores
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonCampusMailCode: A1200
+facsimileTelephoneNumber: +1 512 471 7018
+telephoneNumber: +1 512 471 8119
+utexasEduPersonPrimaryOrgUnitName: Department of Advertising, College of Communication
+utexasEduPersonOrgUnitName: Department of Advertising, College of Communication
+ou: Department of Advertising, College of Communication
+mail: jcflores@austin.utexas.edu
+postalAddress: The University of Texas at Austin$Department of Advertising, College of Communication$1 University Station A1200$Austin, TX 78712
+utexasEduPersonPrimaryTitle: Financial Analyst
+title: Financial Analyst
+utexasEduPersonPriorEid: castilloj
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: jcflores
+utexasEduPersonOfficeLocation: BMC 4.340D
+
+dn: uid=mfw1221,ou=people,dc=directory,dc=utexas,dc=edu
+uid: mfw1221
+sn: Wheeler
+cn: Mary F Wheeler
+cn: Mary Wheeler
+givenName: Mary
+displayName: Mary F Wheeler
+utexasEduPersonOfficeLocation: ACE 5.324
+utexasEduPersonCampusMailCode: C0200
+mail: mfw@ices.utexas.edu
+facsimileTelephoneNumber: +1 512 232 2445
+telephoneNumber: +1 512 475 8625
+utexasEduPersonHighestDegree: PHD
+utexasEduPersonPrimaryPubAffiliation: faculty
+utexasEduPersonPrimaryOrgUnitName: Department of Aerospace Engineering and Engineering Mechanics, Cockrell School of Engineering
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: faculty
+utexasEduPersonPriorEid: wheelermf
+utexasEduPersonPrimaryTitle: Professor
+title: Professor
+utexasEduPersonPrimaryHonor: Ernest and Virginia Cockrell Chair in Engineering
+utexasEduPersonHonor: Ernest and Virginia Cockrell Chair in Engineering
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: mfw1221
+utexasEduPersonOrgUnitName: Department of Aerospace Engineering and Engineering Mechanics, Cockrell School of Engineering
+utexasEduPersonOrgUnitName: Department of Petroleum and Geosystems Engineering, Cockrell School of Engineering
+utexasEduPersonOrgUnitName: Department of Mathematics, College of Natural Sciences
+ou: Department of Aerospace Engineering and Engineering Mechanics, Cockrell School of Engineering; Department of Petroleum and Geosystems Engineering, Cockrell School of Engineering; Department of Mathematics, College of Natural Sciences
+postalAddress: The University of Texas at Austin$Department of Aerospace Engineering and Engineering Mechanics, Cockrell School of Engineering$210 E. 24th Street, Stop C0600$Austin, TX 78712
+
+dn: uid=hasiii,ou=people,dc=directory,dc=utexas,dc=edu
+uid: hasiii
+sn: Schwemmer
+utexasEduPersonCampusMailCode: E3300
+telephoneNumber: +1 512 471 7308
+telephoneNumber: +1 512 475 7109
+utexasEduPersonOfficeLocation: PAC 2.216A
+givenName: Henry
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Henry A Schwemmer
+cn: Henry A Schwemmer
+cn: Henry Schwemmer
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+postalAddress: The University of Texas at Austin$Perf Art Ctr and Box Ofc$PO Box 7818$Austin, TX 78713
+utexasEduPersonOrgUnitName: Texas Performing Arts, College of Fine Arts
+utexasEduPersonPrimaryOrgUnitName: Texas Performing Arts, College of Fine Arts
+ou: Texas Performing Arts, College of Fine Arts
+mail: hschwemmer@texasperformingarts.org
+utexasEduPersonPriorEid: schwemmerha
+utexasEduPersonPriorEid: hankschwemmer
+title: Master Carpenter
+utexasEduPersonPrimaryTitle: Master Carpenter
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: hasiii
+
+dn: uid=rkb,ou=people,dc=directory,dc=utexas,dc=edu
+uid: rkb
+cn: Richard K Bredahl
+cn: Richard Bredahl
+sn: Bredahl
+mail: rkb@austin.utexas.edu
+facsimileTelephoneNumber: +1 512 471 9101
+utexasEduPersonOrgUnitName: Division of Housing & Food Service
+utexasEduPersonCampusMailCode: E1810
+givenName: Richard
+utexasEduPersonPrimaryOrgUnitName: Division of Housing & Food Service
+utexasEduPersonHighestDegree: MBA
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Richard K Bredahl
+ou: Division of Housing & Food Service
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+postalAddress: The University of Texas at Austin$Division of Housing and Food Service$P O Box 7666$Austin, TX 78713-7666
+utexasEduPersonOfficeLocation: KIN 019
+utexasEduPersonPriorEid: bredahlrk
+telephoneNumber: +1 512 232 2537
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: rkb
+userCertificate;binary:: MIIFxTCCBK2gAwIBAgIRAO/p1HK+A0oPP0ipURxO9X0wDQYJKoZIhvcNAQEFBQAwgYsxCzAJBgNV
+ BAYTAlVTMSowKAYDVQQKEyFUaGUgVW5pdmVyc2l0eSBvZiBUZXhhcyBhdCBBdXN0aW4xJDAiBgNV
+ BAsTG0luZm9ybWF0aW9uIFNlY3VyaXR5IE9mZmljZTEqMCgGA1UEAxMhVGhlIFVuaXZlcnNpdHkg
+ b2YgVGV4YXMgYXQgQXVzdGluMB4XDTExMDcyMjAwMDAwMFoXDTE2MDcyMTIzNTk1OVowgcYxDjAM
+ BgNVBBETBTc4NzEyMSowKAYDVQQKEyFUaGUgVW5pdmVyc2l0eSBvZiBUZXhhcyBhdCBBdXN0aW4x
+ HTAbBgNVBAkTFDEgVW5pdmVyc2l0eSBTdGF0aW9uMQswCQYDVQQIEwJUWDEPMA0GA1UEBxMGQXVz
+ dGluMQswCQYDVQQGEwJ1czEYMBYGA1UEAxMPUmljaGFyZCBCcmVkYWhsMSQwIgYJKoZIhvcNAQkB
+ FhVya2JAYXVzdGluLnV0ZXhhcy5lZHUwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCb
+ 8sC1Hf21xurlZGEyPAWw7YMac4vALsdbWONqG03JeGOcoTJ4zVlkO7pOFDMKi6/FGnAvizX4pbnV
+ mYLYrKfoxW1VsNVZMB0fR6dwxIHGakUt/3RGl/RxAaxgb2Vty/Usg8wfI0sEJ5hgW9OxudDu2hjm
+ uxXKe6/yuwADdHHW3KKW1a4+/QBC6u3chYxBQ96xQKHm2Er021FgkHJoFQqNz2MlYA2YXJ5YMO8k
+ C4OC093mNJYvYjw5o+ar1BjvgRAN7gbqvnVVr45CCWufg1y18TKa7o7C/QekJ+0Et/mSqFW4TzFP
+ eY1uuOYGE3QyZ3P5ifYWQ7u0ANhcyn+Euk3pAgMBAAGjggHlMIIB4TAfBgNVHSMEGDAWgBSZxSzF
+ TQ4nOMvAjIMAY9n2GXytuDAdBgNVHQ4EFgQUWXcfhyEpWbfjwAS922ftahS/9qMwDgYDVR0PAQH/
+ BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMCMFgGA1Ud
+ IARRME8wTQYMKwYBBAGyMQECAiQCMD0wOwYIKwYBBQUHAgEWL2h0dHBzOi8vaWRtLnV0c3lzdGVt
+ LmVkdS91dGZlZC9JbkNvbW1vbkNQUy5odG1sMEcGA1UdHwRAMD4wPKA6oDiGNmh0dHA6Ly9jcmwu
+ dXRleGFzLmVkdS9UaGVVbml2ZXJzaXR5b2ZUZXhhc2F0QXVzdGluLmNybDB2BggrBgEFBQcBAQRq
+ MGgwQgYIKwYBBQUHMAKGNmh0dHA6Ly9jcnQudXRleGFzLmVkdS9UaGVVbml2ZXJzaXR5b2ZUZXhh
+ c2F0QXVzdGluLmNydDAiBggrBgEFBQcwAYYWaHR0cDovL29jc3AudXRleGFzLmVkdTBHBgNVHREE
+ QDA+oCUGCisGAQQBgjcUAgOgFwwVcmtiQGF1c3Rpbi51dGV4YXMuZWR1gRVya2JAYXVzdGluLnV0
+ ZXhhcy5lZHUwDQYJKoZIhvcNAQEFBQADggEBAKP9CaJpCrR6UTeCUc3I6hSSqTQfWnw/TkWd2a1H
+ cwue1JkJDEm48jgfApVdum2DP697ZNuTPHqmfDkBsTE+7z1nWQqzIhn7gd4XhJKJIj6OrlPE5tKy
+ zvaLk1FjL+jBRKShml+yvZJBWFXyjFBLb2221daHKEEbLr+gq7u6yuL0IaejCLy/xuYqvW6itcd3
+ W1JPHYPXQLw/XFd3g4DRIaHbiTYLG4uK90R/gn+37A9DECWt+e3l7qfaHnzr0Eue9fD9M9YmiTVQ
+ S/lVs56jZV6amSKQqlOV9/TVYwpNUy5rQPYAw0aMqlJfQRAueX0H7/AKDpZHt41SFamlM7R4pQQ=
+utexasEduPersonPrimaryTitle: Associate Director - Information Technology
+title: Associate Director - Information Technology
+
+dn: uid=wef58,ou=people,dc=directory,dc=utexas,dc=edu
+uid: wef58
+cn: William E Forbath
+cn: William Forbath
+sn: Forbath
+utexasEduPersonCampusMailCode: D1800
+facsimileTelephoneNumber: +1 512 471 6988
+homePhone: +1 512 499 0515
+telephoneNumber: +1 512 232 1326
+givenName: William
+utexasEduPersonPrimaryOrgUnitName: School of Law
+utexasEduPersonHighestDegree: PHD
+utexasEduPersonOrgUnitName: School of Law
+utexasEduPersonOrgUnitName: Department of History, College of Liberal Arts
+displayName: William E Forbath
+ou: School of Law; Department of History, College of Liberal Arts
+homePostalAddress: 3206 GREENLEE DR$AUSTIN, TX 78703-1622
+postalAddress: The University of Texas at Austin$Law School$727 E Dean Keeton St$Austin, TX 78705-3299
+mail: wforbath@law.utexas.edu
+utexasEduPersonPrimaryPubAffiliation: faculty
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: faculty
+utexasEduPersonPriorEid: forbathwe
+utexasEduPersonPriorEid: weforbath
+utexasEduPersonPrimaryTitle: Professor
+title: Professor
+utexasEduPersonPrimaryHonor: Lloyd M. Bentsen Chair in Law
+utexasEduPersonOfficeLocation: JON 6.216
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: wef58
+utexasEduPersonHonor: Lloyd M. Bentsen Chair in Law
+
+dn: uid=rowleyre,ou=people,dc=directory,dc=utexas,dc=edu
+uid: rowleyre
+cn: Rick E Rowley
+cn: Rick Rowley
+sn: Rowley
+givenName: Rick
+displayName: Rick E Rowley
+utexasEduPersonCampusMailCode: E3100
+homePhone: +1 512 443 6726
+telephoneNumber: +1 512 471 4442
+utexasEduPersonHighestDegree: HS
+homePostalAddress: 2001 PARKER LN APT 135$AUSTIN, TX 78741-3849
+utexasEduPersonOrgUnitName: School of Music, College of Fine Arts
+utexasEduPersonPrimaryOrgUnitName: School of Music, College of Fine Arts
+ou: School of Music, College of Fine Arts
+mail: rickrowley@juno.com
+postalAddress: The University of Texas at Austin$School of Music, College of Fine Arts$1 University Station E3100$Austin, TX 78712
+utexasEduPersonOfficeLocation: MRH 4.128
+utexasEduPersonPrimaryPubAffiliation: faculty
+utexasEduPersonPubAffiliation: affiliate
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: faculty
+utexasEduPersonPrimaryTitle: Senior Lecturer
+title: Senior Lecturer
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: rowleyre
+
+dn: uid=dlm1376,ou=people,dc=directory,dc=utexas,dc=edu
+uid: dlm1376
+utexasEduPersonCampusMailCode: C0400
+givenName: Donna
+utexasEduPersonHighestDegree: BFA
+utexasEduPersonPrimaryPubAffiliation: staff
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+mail: dmartin@che.utexas.edu
+postalAddress: The University of Texas at Austin$Department of Chemical Engineering, Cockrell School of Engineering$1 University Station C0400$Austin, TX 78712
+utexasEduPersonPrimaryOrgUnitName: Department of Chemical Engineering, Cockrell School of Engineering
+cn: Donna L Martin
+cn: Donna Martin
+sn: Martin
+displayName: Donna L Martin
+utexasEduPersonPriorEid: martinbracdl
+utexasEduPersonPriorEid: helenlove
+utexasEduPersonPriorEid: donnamartinbrac
+utexasEduPersonOrgUnitName: Department of Chemical Engineering, Cockrell School of Engineering
+ou: Department of Chemical Engineering, Cockrell School of Engineering
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: dlm1376
+utexasEduPersonPrimaryTitle: Senior Administrative Associate
+title: Senior Administrative Associate
+facsimileTelephoneNumber: +1 512 471 7060
+telephoneNumber: +1 512 471 3975
+utexasEduPersonOfficeLocation: WEL 5.240
+
+dn: uid=berryba,ou=people,dc=directory,dc=utexas,dc=edu
+uid: berryba
+sn: Berry
+givenName: Betsy
+displayName: Betsy A Berry
+utexasEduPersonOfficeLocation: CAL 303
+utexasEduPersonCampusMailCode: B5000
+mail: bbarama@mail.utexas.edu
+facsimileTelephoneNumber: +1 512 471 4909
+telephoneNumber: +1 512 471 8385
+utexasEduPersonHighestDegree: PHD
+utexasEduPersonPrimaryPubAffiliation: faculty
+cn: Betsy A Berry
+cn: Betsy Berry
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: faculty
+postalAddress: The University of Texas at Austin$Department of English, College of Liberal Arts$1 University Station B5000$Austin, TX 78712
+utexasEduPersonOrgUnitName: Department of English, College of Liberal Arts
+utexasEduPersonPrimaryOrgUnitName: Department of English, College of Liberal Arts
+ou: Department of English, College of Liberal Arts
+utexasEduPersonPrimaryTitle: Senior Lecturer
+title: Senior Lecturer
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: berryba
+
+dn: uid=scuff,ou=people,dc=directory,dc=utexas,dc=edu
+uid: scuff
+sn: Galloway
+utexasEduPersonOrgUnitName: University of Texas Libraries
+utexasEduPersonCampusMailCode: S5433
+telephoneNumber: +1 512 495 4600
+utexasEduPersonOfficeLocation: WEL 2.132
+givenName: James
+utexasEduPersonPrimaryOrgUnitName: University of Texas Libraries
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: James R Galloway
+cn: James R Galloway
+cn: James Galloway
+ou: University of Texas Libraries
+utexasEduPersonHighestDegree: MLIS
+postalAddress: The University of Texas at Austin$University of Texas Libraries$1 University Station S5400$Austin, TX 78712
+utexasEduPersonPriorEid: gallowayjr
+utexasEduPersonPriorEid: jgalloway
+title: Chemistry Library, Library Assistant I
+utexasEduPersonPrimaryTitle: Chemistry Library, Library Assistant I
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: scuff
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonPubAffiliation: alum
+mail: j.galloway@austin.utexas.edu
+
+dn: uid=utd,ou=people,dc=directory,dc=utexas,dc=edu
+uid: utd
+givenName: Janice
+sn: Duff
+utexasEduPersonOrgUnitName: University of Texas Libraries
+utexasEduPersonCampusMailCode: S5460
+telephoneNumber: +1 512 495 4300
+utexasEduPersonOfficeLocation: PCL 2.122
+utexasEduPersonPrimaryOrgUnitName: University of Texas Libraries
+utexasEduPersonHighestDegree: BA
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Janice Duff
+cn: Janice Duff
+ou: University of Texas Libraries
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+mail: jduff@austin.utexas.edu
+postalAddress: The University of Texas at Austin$University of Texas Libraries$1 University Station S5400$Austin, TX 78712
+utexasEduPersonPriorEid: duffj
+title: PCL Circulation Services - Administrative Assistant
+utexasEduPersonPrimaryTitle: PCL Circulation Services - Administrative Assistant
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: utd
+facsimileTelephoneNumber: +1 512 495 4219
+
+dn: uid=burrowsb,ou=people,dc=directory,dc=utexas,dc=edu
+uid: burrowsb
+cn: Brian Burrows
+givenName: Brian
+sn: Burrows
+utexasEduPersonOfficeLocation: PPE 3.210
+utexasEduPersonOfficeLocation: SER 229A
+utexasEduPersonCampusMailCode: H8040
+mail: man_u_fan55@hotmail.com
+telephoneNumber: +1 512 471 2527
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Brian Burrows
+utexasEduPersonOrgUnitName: Utilities and Energy Management
+utexasEduPersonPrimaryOrgUnitName: Utilities and Energy Management
+ou: Utilities and Energy Management
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+postalAddress: The University of Texas at Austin$Utilities and Energy Management$P O Box 7459$Austin, TX 78713-7459
+utexasEduPersonPrimaryTitle: PP-USO II
+title: PP-USO II
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: burrowsb
+
+dn: uid=mvg1222,ou=people,dc=directory,dc=utexas,dc=edu
+uid: mvg1222
+cn: Michelle V Gadush
+cn: Michelle Gadush
+sn: Gadush
+utexasEduPersonCampusMailCode: A4800
+telephoneNumber: +1 512 471 3741
+facsimileTelephoneNumber: +1 512 232 3432
+utexasEduPersonOfficeLocation: MBB 1420
+givenName: Michelle
+utexasEduPersonHighestDegree: MS
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Michelle V Gadush
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonPrimaryTitle: Research Engineering/ Scientist Associate IV
+title: Research Engineering/ Scientist Associate IV
+utexasEduPersonPriorEid: gadushm
+utexasEduPersonPriorEid: miska
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: mvg1222
+utexasEduPersonOrgUnitName: Institute for Cellular and Molecular Biology, College of Natural Sciences
+utexasEduPersonPrimaryOrgUnitName: Institute for Cellular and Molecular Biology, College of Natural Sciences
+ou: Institute for Cellular and Molecular Biology, College of Natural Sciences
+postalAddress: The University of Texas at Austin$Institute for Cellular and Molecular Biology, College of Natural Sciences$1 University Station A4800$Austin, TX 78712
+mail: gadush@austin.utexas.edu
+
+dn: uid=hooksej,ou=people,dc=directory,dc=utexas,dc=edu
+uid: hooksej
+cn: Emily J Hooks
+cn: Emily Hooks
+sn: Hooks
+givenName: Emily
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Emily J Hooks
+utexasEduPersonHighestDegree: BS
+utexasEduPersonCampusMailCode: E0610
+facsimileTelephoneNumber: +1 512 471 0140
+utexasEduPersonOfficeLocation: BEG 1.214
+utexasEduPersonPrimaryOrgUnitName: Bureau of Economic Geology, Jackson School of Geosciences
+postalAddress: The University of Texas at Austin$Bureau of Economic Geology, Jackson School of Geosciences$P O Box X$Austin, TX 78713-8924
+utexasEduPersonOrgUnitName: Bureau of Economic Geology, Jackson School of Geosciences
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: hooksej
+mail: emily.hooks@beg.utexas.edu
+utexasEduPersonPrimaryTitle: Assistant to the Director
+title: Assistant to the Director
+telephoneNumber: +1 512 475 9588
+ou: Bureau of Economic Geology, Jackson School of Geosciences; College of Natural Sciences
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonPubAffiliation: student
+utexasEduPersonMajor: Undeclared
+utexasEduPersonClassification: Senior
+utexasEduPersonSchool: College of Natural Sciences
+
+dn: uid=debradzw,ou=people,dc=directory,dc=utexas,dc=edu
+uid: debradzw
+utexasEduPersonCampusMailCode: R5500
+mail: debra@icc.utexas.edu
+homePhone: +1 512 458 5771
+telephoneNumber: +1 512 305 0333
+utexasEduPersonPrimaryPubAffiliation: staff
+sn: Dzwonczyk
+displayName: Debra A Dzwonczyk
+givenName: Debra
+cn: Debra A Dzwonczyk
+cn: Debra Dzwonczyk
+homePostalAddress: 3010 HUNT TRL$AUSTIN, TX 78757-4311
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonOrgUnitName: IC2 Institute
+utexasEduPersonPrimaryOrgUnitName: IC2 Institute
+ou: IC2 Institute
+utexasEduPersonHighestDegree: M.ED.
+utexasEduPersonOfficeLocation: MCC 3.11022
+utexasEduPersonPrimaryTitle: Assistant Director
+title: Assistant Director
+utexasEduPersonPriorEid: dzwonczykda
+postalAddress: The University of Texas at Austin$IC2 Institute$2815 San Gabriel St$Austin, TX 78705-3512
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: debradzw
+
+dn: uid=banksja,ou=people,dc=directory,dc=utexas,dc=edu
+uid: banksja
+sn: Banks
+utexasEduPersonCampusMailCode: F0252
+mail: jbanks@arlut.utexas.edu
+telephoneNumber: +1 512 835 3463
+givenName: Joel
+utexasEduPersonHighestDegree: MSE
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Joel A Banks
+cn: Joel A Banks
+cn: Joel Banks
+utexasEduPersonOfficeLocation: ARL S144
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonOrgUnitName: Applied Research Laboratories
+utexasEduPersonPrimaryOrgUnitName: Applied Research Laboratories
+ou: Applied Research Laboratories
+postalAddress: The University of Texas at Austin$ARL-Space and Geophysics Group$PO Box 8029$Austin, TX 78713
+utexasEduPersonPrimaryTitle: Engineering Scientist
+title: Engineering Scientist
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: banksja
+
+dn: uid=jmax,ou=people,dc=directory,dc=utexas,dc=edu
+uid: jmax
+sn: Maxwell
+utexasEduPersonOfficeLocation: SZB 406
+utexasEduPersonCampusMailCode: D5700
+facsimileTelephoneNumber: +1 512 471 8460
+givenName: James
+utexasEduPersonOrgUnitName: Department of Curriculum and Instruction, College of Education
+utexasEduPersonPrimaryOrgUnitName: Department of Curriculum and Instruction, College of Education
+utexasEduPersonHighestDegree: BA
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: James R Maxwell
+cn: James R Maxwell
+cn: James Maxwell
+ou: Department of Curriculum and Instruction, College of Education
+postalAddress: The University of Texas at Austin$Department of Curriculum and Instruction, College of Education$1 University Station D5700$Austin, TX 78712
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonPrimaryTitle: Executive Assistant
+title: Executive Assistant
+telephoneNumber: +1 512 232 5149
+telephoneNumber: +1 512 471 5942
+utexasEduPersonPriorEid: maxwelljr
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: jmax
+mail: jmax@austin.utexas.edu
+
+dn: uid=swan,ou=people,dc=directory,dc=utexas,dc=edu
+uid: swan
+sn: Newberry
+utexasEduPersonOrgUnitName: University of Texas Libraries
+utexasEduPersonCampusMailCode: S5461
+telephoneNumber: +1 512 495 4694
+utexasEduPersonOfficeLocation: CDL CDL
+givenName: Jeffrey
+utexasEduPersonPrimaryOrgUnitName: University of Texas Libraries
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Jeffrey A Newberry
+cn: Jeffrey A Newberry
+cn: Jeffrey Newberry
+ou: University of Texas Libraries
+postalAddress: The University of Texas at Austin$University of Texas Libraries$1 University Station S5400$Austin, TX 78712
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonPriorEid: newberryja
+title: Collection Deposit Library - Library Assistant III
+utexasEduPersonPrimaryTitle: Collection Deposit Library - Library Assistant III
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: swan
+mail: jnewberry@austin.utexas.edu
+
+dn: uid=shariry,ou=people,dc=directory,dc=utexas,dc=edu
+uid: shariry
+cn: Yacov Sharir
+givenName: Yacov
+sn: Sharir
+displayName: Yacov Sharir
+utexasEduPersonPrimaryOrgUnitName: Department of Theatre and Dance, College of Fine Arts
+utexasEduPersonOfficeLocation: WIN 2.132D
+utexasEduPersonCampusMailCode: D3900
+homePhone: +1 512 454 6369
+telephoneNumber: +1 512 232 5333
+utexasEduPersonHighestDegree: BFA
+utexasEduPersonPrimaryPubAffiliation: faculty
+homePostalAddress: 5406 MOUNT BONNELL$AUSTIN, TX 78731
+postalAddress: The University of Texas at Austin$Department of Theatre and Dance, College of Fine Arts$1 University Station D3900$Austin, TX 78712
+utexasEduPersonPrimaryTitle: Professor
+utexasEduPersonOrgUnitName: Department of Theatre and Dance, College of Fine Arts
+title: Professor
+ou: Department of Theatre and Dance, College of Fine Arts
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: faculty
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: shariry
+utexasEduPersonPrimaryHonor: Fellow of E. W. Doty Professorship in Fine Arts
+utexasEduPersonHonor: Fellow of E. W. Doty Professorship in Fine Arts
+mail: sharir@austin.utexas.edu
+
+dn: uid=willirl,ou=people,dc=directory,dc=utexas,dc=edu
+uid: willirl
+sn: Williams
+mail: oa.rwilliams@austin.utexas.edu
+facsimileTelephoneNumber: +1 512 471 5178
+givenName: Ramona
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Ramona L Williams
+cn: Ramona L Williams
+cn: Ramona Williams
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonPrimaryTitle: Administrative Associate
+title: Administrative Associate
+utexasEduPersonCampusMailCode: K5300
+utexasEduPersonOfficeLocation: MAI 132
+postalAddress: The University of Texas at Austin$Accounting, Ofc of$PO Box 7159$Austin, TX 78713
+telephoneNumber: +1 512 471 3273
+utexasEduPersonOrgUnitName: Office of Accounting
+utexasEduPersonPrimaryOrgUnitName: Office of Accounting
+ou: Office of Accounting
+utexasEduPersonPriorEid: williamsrl
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: willirl
+
+dn: uid=morenopg,ou=people,dc=directory,dc=utexas,dc=edu
+uid: morenopg
+cn: Pedro G Moreno
+cn: Pedro Moreno
+sn: Moreno
+utexasEduPersonOrgUnitName: University of Texas Libraries
+homePhone: +1 512 452 3450
+telephoneNumber: +1 512 495 4654
+givenName: Pedro
+utexasEduPersonPrimaryOrgUnitName: University of Texas Libraries
+utexasEduPersonHighestDegree: MSLIS
+utexasEduPersonOfficeLocation: PCL 2.402C
+mail: pgmoreno@austin.utexas.edu
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Pedro G Moreno
+ou: University of Texas Libraries
+utexasEduPersonCampusMailCode: S5466
+postalAddress: The University of Texas at Austin$University of Texas Libraries$1 University Station S5400$Austin, TX 78712
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+title: PCL Reference - Social Work and Government Librarian
+utexasEduPersonPrimaryTitle: PCL Reference - Social Work and Government Librarian
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: morenopg
+
+dn: uid=lopezfa,ou=people,dc=directory,dc=utexas,dc=edu
+uid: lopezfa
+cn: Francisco A Lopez
+cn: Francisco Lopez
+sn: Lopez
+utexasEduPersonCampusMailCode: H8040
+mail: frank.lopez@cpfm.utexas.edu
+telephoneNumber: +1 512 471 5947
+utexasEduPersonOfficeLocation: PPE 3.210
+givenName: Francisco
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Francisco A Lopez
+utexasEduPersonOrgUnitName: Utilities and Energy Management
+utexasEduPersonPrimaryOrgUnitName: Utilities and Energy Management
+ou: Utilities and Energy Management
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+postalAddress: The University of Texas at Austin$Utilities and Energy Management$P O Box 7459$Austin, TX 78713-7459
+utexasEduPersonPrimaryTitle: PP-Util Insulator
+title: PP-Util Insulator
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: lopezfa
+
+dn: uid=muddsp,ou=people,dc=directory,dc=utexas,dc=edu
+uid: muddsp
+cn: Susan P Mudd
+cn: Susan Mudd
+sn: Mudd
+utexasEduPersonCampusMailCode: H7000
+mail: susan.mudd@austin.utexas.edu
+facsimileTelephoneNumber: +1 512 475 6345
+homePhone: +1 979 242 5948
+givenName: Susan
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Susan P Mudd
+utexasEduPersonOrgUnitName: Facilities Services
+utexasEduPersonPrimaryOrgUnitName: Facilities Services
+ou: Facilities Services
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+postalAddress: The University of Texas at Austin$Facilities Services$P O Box 7580$Austin, TX 78713-7580
+utexasEduPersonOfficeLocation: FC1 3.210H
+title: Manager, Project Accounts
+utexasEduPersonPrimaryTitle: Manager, Project Accounts
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: muddsp
+telephoneNumber: +1 512 475 9781
+telephoneNumber: +1 512 674 1793
+
+dn: uid=bgp58,ou=people,dc=directory,dc=utexas,dc=edu
+uid: bgp58
+cn: Brenda G Preston-Robison
+cn: Brenda Preston-Robison
+sn: Preston-Robison
+utexasEduPersonCampusMailCode: E2400
+facsimileTelephoneNumber: +1 512 471 4556
+homePhone: +1 512 327 3596
+givenName: Brenda
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Brenda G Preston-Robison
+mail: brenda.preston@athletics.utexas.edu
+utexasEduPersonOfficeLocation: MNC 2.204
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+homePostalAddress: 5015 TIMBERLINE DR$AUSTIN, TX 78746
+utexasEduPersonOrgUnitName: Intercollegiate Athletics
+utexasEduPersonPrimaryOrgUnitName: Intercollegiate Athletics
+ou: Intercollegiate Athletics
+postalAddress: The University of Texas at Austin$Intercollegiate Athletics$P O Box 7399$Austin, TX 78713-7399
+utexasEduPersonPrimaryTitle: Administrative Associate
+title: Administrative Associate
+telephoneNumber: +1 512 471 5892
+telephoneNumber: +1 512 748 7272
+utexasEduPersonPriorEid: prestonbg
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: bgp58
+
+dn: uid=kellykam,ou=people,dc=directory,dc=utexas,dc=edu
+uid: kellykam
+sn: Kamm
+givenName: Kelly
+displayName: Kelly L Kamm
+utexasEduPersonCampusMailCode: B6600
+mail: kelly.kamm@mccombs.utexas.edu
+telephoneNumber: +1 512 471 4368
+utexasEduPersonHighestDegree: PHD
+utexasEduPersonPrimaryPubAffiliation: faculty
+cn: Kelly L Kamm
+cn: Kelly Kamm
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: faculty
+postalAddress: The University of Texas at Austin$Department of Finance, Red McCombs School of Business$1 University Station B6600$Austin, TX 78712
+utexasEduPersonOrgUnitName: Department of Finance, Red McCombs School of Business
+utexasEduPersonPrimaryOrgUnitName: Department of Finance, Red McCombs School of Business
+ou: Department of Finance, Red McCombs School of Business
+utexasEduPersonPrimaryTitle: Senior Lecturer
+title: Senior Lecturer
+utexasEduPersonPriorEid: leahykm
+utexasEduPersonPriorEid: kellykamm
+utexasEduPersonOfficeLocation: GSB 5.124C
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: kellykam
+
+dn: uid=rwj,ou=people,dc=directory,dc=utexas,dc=edu
+uid: rwj
+cn: Robert W Jensen
+cn: Robert Jensen
+sn: Jensen
+givenName: Robert
+displayName: Robert W Jensen
+utexasEduPersonCampusMailCode: A1000
+telephoneNumber: +1 512 471 1990
+utexasEduPersonHighestDegree: PHD
+utexasEduPersonPrimaryPubAffiliation: faculty
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: faculty
+homePostalAddress: 5405 JEFFBURN CV$AUSTIN, TX 78745-3012
+utexasEduPersonPrimaryTitle: Professor
+title: Professor
+utexasEduPersonPriorEid: jensenrw
+utexasEduPersonPriorEid: robertjensen
+utexasEduPersonOrgUnitName: School of Journalism, College of Communication
+utexasEduPersonOrgUnitName: Center for Women's and Gender Studies, College of Liberal Arts
+utexasEduPersonPrimaryOrgUnitName: School of Journalism, College of Communication
+ou: School of Journalism, College of Communication; Center for Women's and Gender Studies, College of Liberal Arts
+postalAddress: The University of Texas at Austin$School of Journalism, College of Communication$1 University Station A1000$Austin, TX 78712
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: rwj
+utexasEduPersonOfficeLocation: BMC 3.304
+mail: rjensen@austin.utexas.edu
+
+dn: uid=emm2,ou=people,dc=directory,dc=utexas,dc=edu
+uid: emm2
+sn: Marcotte
+givenName: Edward
+displayName: Edward M Marcotte
+utexasEduPersonCampusMailCode: A4800
+mail: marcotte@icmb.utexas.edu
+telephoneNumber: +1 512 471 5435
+telephoneNumber: +1 512 232 3919
+utexasEduPersonHighestDegree: PHD
+cn: Edward M Marcotte
+cn: Edward Marcotte
+utexasEduPersonPrimaryPubAffiliation: faculty
+utexasEduPersonPriorEid: marcotteem
+utexasEduPersonPrimaryTitle: Professor
+title: Professor
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: emm2
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: faculty
+utexasEduPersonPubAffiliation: alum
+utexasEduPersonPrimaryHonor: Mr. and Mrs. Corbin J. Robertson, Sr. Regents Chair in Molecular Biology
+utexasEduPersonPrimaryOrgUnitName: Department of Chemistry and Biochemistry, College of Natural Sciences
+utexasEduPersonOrgUnitName: Department of Chemistry and Biochemistry, College of Natural Sciences
+utexasEduPersonOrgUnitName: College of Natural Sciences
+ou: Department of Chemistry and Biochemistry, College of Natural Sciences; College of Natural Sciences
+postalAddress: The University of Texas at Austin$Department of Chemistry and Biochemistry, College of Natural Sciences$1 University Station A5300$Austin, TX 78712
+utexasEduPersonHonor: Mr. and Mrs. Corbin J. Robertson, Sr. Regents Chair in Molecular Biology
+utexasEduPersonOfficeLocation: MBB 3.148BA
+
+dn: uid=abs1,ou=people,dc=directory,dc=utexas,dc=edu
+uid: abs1
+utexasEduPersonOrgUnitName: School of Information
+givenName: Ann
+utexasEduPersonPrimaryOrgUnitName: School of Information
+utexasEduPersonHighestDegree: BFA
+sn: Bottenfield Seago
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Ann Bottenfield Seago
+cn: Ann Bottenfield Seago
+cn: Ann Bottenfield
+cn: Ann Seago
+cn: Bottenfield Seago
+ou: School of Information
+title: Senior Administrative Associate
+utexasEduPersonPrimaryTitle: Senior Administrative Associate
+utexasEduPersonOfficeLocation: UTA 5.202
+utexasEduPersonCampusMailCode: D8600
+facsimileTelephoneNumber: +1 512 471 3971
+telephoneNumber: +1 512 471 8290
+telephoneNumber: +1 512 471 2742
+postalAddress: The University of Texas at Austin$School of Information$1616 Guadalupe Street$Suite 5.202$Austin, TX 78701-1213
+utexasEduPersonPriorEid: bottenfielda
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonPubAffiliation: alum
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: abs1
+mail: annseago@ischool.utexas.edu
+
+dn: uid=zelda,ou=people,dc=directory,dc=utexas,dc=edu
+uid: zelda
+sn: Sayre
+utexasEduPersonCampusMailCode: D1300
+telephoneNumber: +1 512 475 6140
+givenName: Deborah
+utexasEduPersonHighestDegree: MFA
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Deborah L Sayre
+cn: Deborah L Sayre
+cn: Deborah Sayre
+title: Information Technology Manager
+utexasEduPersonPrimaryTitle: Information Technology Manager
+utexasEduPersonPriorEid: sayredl
+utexasEduPersonOfficeLocation: ART 1.116C
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: zelda
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonPubAffiliation: alum
+utexasEduPersonOrgUnitName: College of Fine Arts
+utexasEduPersonPrimaryOrgUnitName: College of Fine Arts
+ou: College of Fine Arts
+postalAddress: The University of Texas at Austin$College of Fine Arts$1 University Station D1400$Austin, TX 78712
+mail: sayred@utexas.edu
+
+dn: uid=birdca,ou=people,dc=directory,dc=utexas,dc=edu
+uid: birdca
+cn: Chad A Bird
+cn: Chad Bird
+sn: Bird
+utexasEduPersonCampusMailCode: D0200
+mail: chad.bird@athletics.utexas.edu
+facsimileTelephoneNumber: +1 512 471 9652
+utexasEduPersonOfficeLocation: ERC 1.110
+givenName: Chad
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Chad A Bird
+homePhone: +1 512 826 3547
+utexasEduPersonOrgUnitName: Frank C. Erwin, Jr. Special Events Center
+utexasEduPersonPrimaryOrgUnitName: Frank C. Erwin, Jr. Special Events Center
+ou: Frank C. Erwin, Jr. Special Events Center
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+postalAddress: The University of Texas at Austin$Frank C. Erwin, Jr. Special Events Center$P O Box 2929$1701 Red River Street$Austin, TX 78768-2929
+telephoneNumber: +1 512 232 5798
+utexasEduPersonPrimaryTitle: Asst TBO Manager
+title: Asst TBO Manager
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: birdca
+
+dn: uid=hdj,ou=people,dc=directory,dc=utexas,dc=edu
+uid: hdj
+sn: Johns
+givenName: Ann
+displayName: Ann C Johns
+cn: Ann C Johns
+cn: Ann Johns
+homePostalAddress: 3902 AVENUE C$AUSTIN, TX 78751-4519
+utexasEduPersonPrimaryOrgUnitName: Department of Art and Art History, College of Fine Arts
+postalAddress: The University of Texas at Austin$Department of Art and Art History, College of Fine Arts$1 University Station D1300$Austin, TX 78712
+utexasEduPersonHighestDegree: PHD
+utexasEduPersonCampusMailCode: D1300
+utexasEduPersonPrimaryPubAffiliation: faculty
+utexasEduPersonPubAffiliation: affiliate
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: faculty
+utexasEduPersonOrgUnitName: Department of Art and Art History, College of Fine Arts
+ou: Department of Art and Art History, College of Fine Arts
+utexasEduPersonPriorEid: johnsac
+utexasEduPersonOfficeLocation: DFA 2.520
+homePhone: +1 512 453 5010
+telephoneNumber: +1 512 471 1936
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: hdj
+utexasEduPersonPrimaryTitle: Senior Lecturer
+title: Senior Lecturer
+mail: acjohns@austin.utexas.edu
+
+dn: uid=bakerae,ou=people,dc=directory,dc=utexas,dc=edu
+uid: bakerae
+cn: Archie E Baker
+cn: Archie Baker
+sn: Baker
+utexasEduPersonCampusMailCode: A3900
+mail: a.baker@mail.uhs.utexas.edu
+telephoneNumber: +1 512 475 8277
+givenName: Archie
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Archie E Baker
+utexasEduPersonOrgUnitName: University Health Services
+utexasEduPersonPrimaryOrgUnitName: University Health Services
+ou: University Health Services
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+postalAddress: The University of Texas at Austin$University Health Services$PO Box 7339$Austin, TX 78713
+utexasEduPersonOfficeLocation: SSB
+facsimileTelephoneNumber: +1 512 475 8280
+title: Radiologic Technologist
+utexasEduPersonPrimaryTitle: Radiologic Technologist
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: bakerae
+
+dn: uid=arumibb,ou=people,dc=directory,dc=utexas,dc=edu
+uid: arumibb
+sn: Arumi
+title: Program Coordinator
+utexasEduPersonCampusMailCode: E2000
+facsimileTelephoneNumber: +1 512 232 6126
+telephoneNumber: +1 512 232 4334
+telephoneNumber: +1 512 471 4633
+givenName: Betsy
+utexasEduPersonPrimaryTitle: Program Coordinator
+utexasEduPersonHighestDegree: MA
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Betsy B Arumi
+cn: Betsy B Arumi
+cn: Betsy Arumi
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+mail: arumi@austin.utexas.edu
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: arumibb
+utexasEduPersonOfficeLocation: TCC 1.116A
+utexasEduPersonOrgUnitName: Professional Development Center
+utexasEduPersonPrimaryOrgUnitName: Professional Development Center
+ou: Professional Development Center
+postalAddress: The University of Texas at Austin$Professional Development Center$P O Box 7518$Austin, TX 78713-7518
+
+dn: uid=bak73,ou=people,dc=directory,dc=utexas,dc=edu
+uid: bak73
+cn: Beverly A Kearney
+cn: Beverly Kearney
+sn: Kearney
+utexasEduPersonOrgUnitName: Intercollegiate Athletics
+telephoneNumber: +1 512 471 9146
+givenName: Beverly
+utexasEduPersonPrimaryOrgUnitName: Intercollegiate Athletics
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Beverly A Kearney
+ou: Intercollegiate Athletics
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+postalAddress: The University of Texas at Austin$Intercollegiate Athletics$P O Box 7399$Austin, TX 78713-7399
+mail: beverly.kearney@athletics.utexas.edu
+utexasEduPersonOfficeLocation: BEL 606
+utexasEduPersonPriorEid: kearneyba
+title: Head Coach - Women's Track
+utexasEduPersonPrimaryTitle: Head Coach - Women's Track
+utexasEduPersonCampusMailCode: E2400
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: bak73
+
+dn: uid=allenaw,ou=people,dc=directory,dc=utexas,dc=edu
+uid: allenaw
+sn: Allen
+givenName: Arthur
+displayName: Arthur W Allen
+utexasEduPersonOfficeLocation: PAI 1.22G
+mail: billallen@mail.utexas.edu
+homePhone: +1 512 292 3827
+telephoneNumber: +1 512 471 2691
+utexasEduPersonHighestDegree: PHD
+cn: Arthur W Allen
+cn: Arthur Allen
+homePostalAddress: 10926 PRESTON TRAILS DR$AUSTIN, TX 78747-1646
+utexasEduPersonCampusMailCode: A5400
+utexasEduPersonPriorEid: minum
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: allenaw
+utexasEduPersonPrimaryPubAffiliation: faculty
+utexasEduPersonPubAffiliation: affiliate
+utexasEduPersonPubAffiliation: alum
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: faculty
+utexasEduPersonPrimaryTitle: Lecturer
+title: Lecturer
+utexasEduPersonOrgUnitName: School of Biological Sciences, College of Natural Sciences
+utexasEduPersonPrimaryOrgUnitName: School of Biological Sciences, College of Natural Sciences
+ou: School of Biological Sciences, College of Natural Sciences
+postalAddress: The University of Texas at Austin$School of Biological Sciences, College of Natural Sciences$1 University Station A6500$Austin, TX 78712
+
+dn: uid=riosrc,ou=people,dc=directory,dc=utexas,dc=edu
+uid: riosrc
+cn: Raymond C Rios
+cn: Raymond Rios
+sn: Rios
+givenName: Raymond
+utexasEduPersonCampusMailCode: E2400
+telephoneNumber: +1 512 471 6075
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Raymond C Rios
+homePostalAddress: P.O. BOX 472$KYLE, TX 78640
+utexasEduPersonOrgUnitName: Intercollegiate Athletics
+utexasEduPersonPrimaryOrgUnitName: Intercollegiate Athletics
+ou: Intercollegiate Athletics
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonPrimaryTitle: Groundskeeper
+title: Groundskeeper
+postalAddress: The University of Texas at Austin$Intercollegiate Athletics$P O Box 7399$Austin, TX 78713-7399
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonOfficeLocation: BEL 1.246
+utexasEduPersonEid: riosrc
+
+dn: uid=cruzme,ou=people,dc=directory,dc=utexas,dc=edu
+uid: cruzme
+cn: Maria E Cruz
+cn: Maria Cruz
+sn: Cruz
+title: Building Attendant II
+utexasEduPersonCampusMailCode: H7030
+givenName: Maria
+utexasEduPersonPrimaryTitle: Building Attendant II
+telephoneNumber: +1 512 471 5072
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Maria E Cruz
+utexasEduPersonOrgUnitName: Facilities Services
+utexasEduPersonPrimaryOrgUnitName: Facilities Services
+ou: Facilities Services
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+postalAddress: The University of Texas at Austin$Facilities Services$P O Box 7580$Austin, TX 78713-7580
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: cruzme
+utexasEduPersonOfficeLocation: FC1 3.208
+utexasEduPersonOfficeLocation: MEZ 4.204
+
+dn: uid=shawmj,ou=people,dc=directory,dc=utexas,dc=edu
+uid: shawmj
+sn: Shaw
+utexasEduPersonCampusMailCode: A0704
+givenName: Margo
+utexasEduPersonHighestDegree: BS
+mail: mshaw@kut.org
+telephoneNumber: +1 512 232 9500
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Margo J Shaw
+cn: Margo J Shaw
+cn: Margo Shaw
+postalAddress: The University of Texas at Austin$KUT Radio, College of Communication$1 University Station A0704$Austin, TX 78712
+utexasEduPersonOrgUnitName: KUT Radio, College of Communication
+utexasEduPersonPrimaryOrgUnitName: KUT Radio, College of Communication
+ou: KUT Radio, College of Communication
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonPrimaryTitle: Administrative Associate
+title: Administrative Associate
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: shawmj
+
+dn: uid=castiron,ou=people,dc=directory,dc=utexas,dc=edu
+uid: castiron
+sn: Casteel
+utexasEduPersonOrgUnitName: University of Texas Press
+utexasEduPersonCampusMailCode: E4800
+telephoneNumber: +1 512 232 7631
+utexasEduPersonOfficeLocation: PPB 2.202B
+givenName: Sharon
+utexasEduPersonPrimaryOrgUnitName: University of Texas Press
+utexasEduPersonHighestDegree: BA
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Sharon L Casteel
+cn: Sharon L Casteel
+cn: Sharon Casteel
+ou: University of Texas Press
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+postalAddress: The University of Texas at Austin$Univ Press$PO Box 7819$Austin, TX 78713
+mail: scasteel@utpress.utexas.edu
+utexasEduPersonPriorEid: casteelsl
+utexasEduPersonPrimaryTitle: Electronic Publishing Specialist
+title: Electronic Publishing Specialist
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: castiron
+
+dn: uid=challock,ou=people,dc=directory,dc=utexas,dc=edu
+uid: challock
+sn: Hallock
+utexasEduPersonOrgUnitName: University of Texas Libraries
+utexasEduPersonCampusMailCode: S5439
+facsimileTelephoneNumber: +1 512 495 4638
+homePhone: +1 512 973 9929
+utexasEduPersonOfficeLocation: MAI 220
+givenName: Christine
+utexasEduPersonPrimaryOrgUnitName: University of Texas Libraries
+utexasEduPersonHighestDegree: BA
+telephoneNumber: +1 512 495 4633
+telephoneNumber: +1 512 495 4630
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Christine H Hallock
+cn: Christine H Hallock
+cn: Christine Hallock
+ou: University of Texas Libraries
+mail: challock@austin.utexas.edu
+postalAddress: The University of Texas at Austin$University of Texas Libraries$1 University Station S5400$Austin, TX 78712
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonPubAffiliation: alum
+utexasEduPersonPriorEid: hallockch
+title: Life Science Library - Library Assistant III
+utexasEduPersonPrimaryTitle: Life Science Library - Library Assistant III
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: challock
+
+dn: uid=bcarreon,ou=people,dc=directory,dc=utexas,dc=edu
+uid: bcarreon
+sn: Carreon
+utexasEduPersonOrgUnitName: Office of the Dean of Students
+utexasEduPersonCampusMailCode: A6210
+facsimileTelephoneNumber: +1 512 471 3408
+utexasEduPersonPrimaryOrgUnitName: Office of the Dean of Students
+utexasEduPersonHighestDegree: BA
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Becky H Carreon
+cn: Rebecca H Carreon
+cn: Becky H Carreon
+cn: Becky Carreon
+cn: Rebecca Carreon
+givenName: Rebecca
+givenName: Becky
+ou: Office of the Dean of Students
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonPrimaryTitle: Senior Administrative Associate
+title: Senior Administrative Associate
+postalAddress: The University of Texas at Austin$Office of the Dean of Students$1 University Station A5800$Austin, TX 78712
+utexasEduPersonPriorEid: carreonrh
+telephoneNumber: +1 512 471 3166
+telephoneNumber: +1 512 232 2945
+utexasEduPersonOfficeLocation: SAC 2.102
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: bcarreon
+mail: bcarreon@austin.utexas.edu
+
+dn: uid=woolfdj,ou=people,dc=directory,dc=utexas,dc=edu
+uid: woolfdj
+cn: Dana J Woolf
+cn: Dana Woolf
+sn: Woolf
+utexasEduPersonCampusMailCode: A1100
+telephoneNumber: +1 512 471 2385
+givenName: Dana
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Dana J Woolf
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonOrgUnitName: Department of Communication Sciences and Disorders, College of Communication
+utexasEduPersonPrimaryOrgUnitName: Department of Communication Sciences and Disorders, College of Communication
+ou: Department of Communication Sciences and Disorders, College of Communication
+postalAddress: The University of Texas at Austin$Department of Communication Sciences and Disorders, College of Communication$1 University Station A1100$Austin, TX 78712
+facsimileTelephoneNumber: +1 512 232 1804
+mail: woolf@austin.utexas.edu
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: woolfdj
+utexasEduPersonPrimaryTitle: Manager
+title: Manager
+utexasEduPersonOfficeLocation: CMA 4.130AA
+userCertificate;binary:: MIIFhTCCBG2gAwIBAgIRAOk4JAOdmLUKjlPoRuH/my0wDQYJKoZIhvcNAQEFBQAwgYsxCzAJBgNV
+ BAYTAlVTMSowKAYDVQQKEyFUaGUgVW5pdmVyc2l0eSBvZiBUZXhhcyBhdCBBdXN0aW4xJDAiBgNV
+ BAsTG0luZm9ybWF0aW9uIFNlY3VyaXR5IE9mZmljZTEqMCgGA1UEAxMhVGhlIFVuaXZlcnNpdHkg
+ b2YgVGV4YXMgYXQgQXVzdGluMB4XDTEyMDkxMDAwMDAwMFoXDTE3MDkxMDIzNTk1OVowgasxDjAM
+ BgNVBBETBTc4NzEzMSIwIAYDVQQKExlBUEkgLSBTL01JTUUgUHJvdmlzaW9uaW5nMQ0wCwYDVQQJ
+ EwROb25lMQswCQYDVQQIEwJUWDEPMA0GA1UEBxMGQXVzdGluMQswCQYDVQQGEwJVUzETMBEGA1UE
+ AxMKRGFuYSBXb29sZjEmMCQGCSqGSIb3DQEJARYXd29vbGZAYXVzdGluLnV0ZXhhcy5lZHUwggEi
+ MA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDhlx72zTHr8Aoc8QqlLw7mT0Iix8uBQjDuD4W6
+ vsMNAsFM24NCIuyb2TCwGce6X7Y6YOhVISqXhOl2a7FMLvhZkrFC8fGriP1t/a7+54NqtMtCgeAm
+ PU2ljBejXQ3bU5f3Y+AVsEndghguifX/1w7FDDEJNDJN8gFdtMOsp+FXq+0BIJCyWB2VHDnHKVcY
+ tiPTb8FXr3mURGJYOa/XvW8O6NXr3BzzaO14Ue87UBejhMptB5KLSmc9c+Thagvl0Uw3EoFn3S7x
+ NSMSMAby4/Evd34r+f6rjRo0kr+ihOgCkSZuMGRZ/qeQfUjMf+CYhLGrNH/uuVOH82aEl723MyUX
+ AgMBAAGjggHAMIIBvDAfBgNVHSMEGDAWgBSZxSzFTQ4nOMvAjIMAY9n2GXytuDAdBgNVHQ4EFgQU
+ LLgUfZZXDLyY9pUYQjEFRm/CzYcwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0l
+ BBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMCMFgGA1UdIARRME8wTQYMKwYBBAGyMQECAiQCMD0wOwYI
+ KwYBBQUHAgEWL2h0dHBzOi8vaWRtLnV0c3lzdGVtLmVkdS91dGZlZC9JbkNvbW1vbkNQUy5odG1s
+ MEcGA1UdHwRAMD4wPKA6oDiGNmh0dHA6Ly9jcmwudXRleGFzLmVkdS9UaGVVbml2ZXJzaXR5b2ZU
+ ZXhhc2F0QXVzdGluLmNybDB2BggrBgEFBQcBAQRqMGgwQgYIKwYBBQUHMAKGNmh0dHA6Ly9jcnQu
+ dXRleGFzLmVkdS9UaGVVbml2ZXJzaXR5b2ZUZXhhc2F0QXVzdGluLmNydDAiBggrBgEFBQcwAYYW
+ aHR0cDovL29jc3AudXRleGFzLmVkdTAiBgNVHREEGzAZgRd3b29sZkBhdXN0aW4udXRleGFzLmVk
+ dTANBgkqhkiG9w0BAQUFAAOCAQEAGhMEPYszkFOcYo9TnFj304nSlZMYgHpGCoT1Ac3F9zbEywQs
+ fMZPwh68+trNSdMkyeMZDCb8K5bYun/GNAJwNvbkeNT/Ygg4dNXmTf00EZGrzwSvi8lcLXroiOQH
+ q8hgqwSBgkxAuTkVBa7oL+S8gRtLY//epIU9WO9U03YR1G0CTdF94AFFMEJLyMtr5nsO0LPVVjUq
+ 0lnquay5QzNUCCRVanEZQP26aREae19lNPJcWgZdJ7WDqDtz0aZVgcYizvOcw7AtkYRxWg4jXvLp
+ bPjXy0Il6vUppEikal4I+rqesGs/jCy9CMsRwh+4Obgzj6Rz+CpxErDA42x/3F5ZDg==
+
+dn: uid=jgb335,ou=people,dc=directory,dc=utexas,dc=edu
+uid: jgb335
+cn: Jeanie G Brown
+cn: Jeanie Brown
+sn: Brown
+utexasEduPersonCampusMailCode: B6300
+mail: jeanie.brown@mccombs.utexas.edu
+facsimileTelephoneNumber: +1 512 471 3937
+givenName: Jeanie
+telephoneNumber: +1 512 471 5945
+telephoneNumber: +1 512 471 3676
+utexasEduPersonPrimaryPubAffiliation: staff
+displayName: Jeanie G Brown
+utexasEduPersonPubAffiliation: member
+utexasEduPersonPubAffiliation: staff
+utexasEduPersonOfficeLocation: CBA 4.202
+utexasEduPersonPriorEid: lewisjg
+utexasEduPersonPriorEid: jlewis
+utexasEduPersonOrgUnitName: Red McCombs School of Business
+utexasEduPersonPrimaryOrgUnitName: Red McCombs School of Business
+ou: Red McCombs School of Business
+postalAddress: The University of Texas at Austin$Red McCombs School of Business$1 University Station B6000$Austin, TX 78712
+objectClass: top
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson
+objectClass: eduPerson
+objectClass: utexasEduPerson
+objectClass: inetUser
+objectClass: utPerson
+utexasEduPersonEid: jgb335
+title: Interface Manager
+utexasEduPersonPrimaryTitle: Interface Manager

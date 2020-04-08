@@ -1,0 +1,1 @@
+@echo Eat my shit

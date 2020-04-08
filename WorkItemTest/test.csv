@@ -1,0 +1,21 @@
+class,name,owner,description,handler,renderer,type,completer
+sailpoint.object.WorkItem,0000050001,ManagedAttributeProvisioningAdmin,Owner Approval - Account Changes for User: Richard.Jackson,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,pass6
+sailpoint.object.WorkItem,0000050002,Grace.Stanley,Owner Approval - Account Changes for User: AlertAdministrator,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,fj'ohnston
+sailpoint.object.WorkItem,0000050003,Scott.Richardson,Owner Approval - Account Changes for User: Sam,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,DanLewis
+sailpoint.object.WorkItem,0000050004,Ruth.Gonzalez,Owner Approval - Account Changes for User: bobbyjindal,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,Julia Snyder
+sailpoint.object.WorkItem,0000050005,Patrick.Jenkins,Owner Approval - Account Changes for User: IdentityAdministrator,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,Cynthia Cook
+sailpoint.object.WorkItem,0000050006,Louise.Payne,Owner Approval - Account Changes for User: Scott.Fisher,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,Thursday2
+sailpoint.object.WorkItem,0000050007,T-381123,Owner Approval - Account Changes for User: Justin.Owens,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,disabled account
+sailpoint.object.WorkItem,0000050008,Eric.Howard,Owner Approval - Account Changes for User: Benjamin.Hicks,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,T-339222
+sailpoint.object.WorkItem,0000050009,Rdap,Owner Approval - Account Changes for User: Bruce.Henry,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,Vikram
+sailpoint.object.WorkItem,0000050010,Marc.Schulz,Owner Approval - Account Changes for User: Billy.Holmes,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,systemAdministrator1
+sailpoint.object.WorkItem,0000050011,Craig.Hart,Owner Approval - Account Changes for User: Bryan.Ryan,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,Sara Berry
+sailpoint.object.WorkItem,0000050012,Leonard.Williamson,Owner Approval - Account Changes for User: test_enable,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,Rosa Garza
+sailpoint.object.WorkItem,0000050013,acct2,Owner Approval - Account Changes for User: SCIMExecutor,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,Paula Weaver
+sailpoint.object.WorkItem,0000050014,plavo,Owner Approval - Account Changes for User: AssignOrDetectRoleAdministrator,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,Brenda Cooper
+sailpoint.object.WorkItem,0000050015,Thursday1,Owner Approval - Account Changes for User: Amy.Cox,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,Roger Diaz
+sailpoint.object.WorkItem,0000050016,IdentityRequestAdministrator,Owner Approval - Account Changes for User: TaskResultsViewer,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,Linda Davis
+sailpoint.object.WorkItem,0000050017,Robin.Lawson,Owner Approval - Account Changes for User: Sandra.Lopez,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,Judy Warren
+sailpoint.object.WorkItem,0000050018,Rosa.Garza,Owner Approval - Account Changes for User: Denise.Hunt,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,Arthur Bryant
+sailpoint.object.WorkItem,0000050019,ldap,Owner Approval - Account Changes for User: Adam.Kennedy,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,Norma Armstrong
+sailpoint.object.WorkItem,0000050020,Michelle.Perez,Owner Approval - Account Changes for User: Sandra.Lopez,sailpoint.api.Workflower,lcmWorkItemRenderer.xhtml,,Norman Harvey

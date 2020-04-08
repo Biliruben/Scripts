@@ -1,0 +1,13 @@
+Index: faces-config.xml
+===================================================================
+--- faces-config.xml	(revision 38639)
++++ faces-config.xml	(working copy)
+@@ -2114,7 +2114,7 @@
+     <description>Certification Schedule Bean</description>
+     <managed-bean-name>certificationSchedule</managed-bean-name>
+     <managed-bean-class>
+-      sailpoint.web.certification.CertificationScheduleBean
++      sailpoint.web.certification.GranularCertificationScheduleBean
+     </managed-bean-class>
+     <managed-bean-scope>request</managed-bean-scope>
+   </managed-bean>

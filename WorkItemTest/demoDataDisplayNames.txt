@@ -1,0 +1,386 @@
+spadmin
+SelfRegistrationWorkGroup
+Top Level Managers
+ERP Global App Owners
+HR_Employees App Owners
+HR_Contractors App Owners
+Oracle_DB_Oasis App Owners
+Mary Johnson
+Patricia Jones
+Amanda Ross
+Lori Ferguson
+Randy Knight
+Dennis Barnes
+John Williams
+Debra Wood
+Jane Grant
+Linda Davis
+Barbara Wilson
+James Smith
+Edna Mccoy
+Willie Gomez
+Joe Myers
+Nancy Lee
+Laura Turner
+Evelyn Ellis
+Brandon Mason
+AlertOwner1
+D'Arcy O'Mahoney
+Robert Brown
+Michael Miller
+William Moore
+Elizabeth Taylor
+David Anderson
+Jennifer Thomas
+Richard Jackson
+Maria White
+Charles Harris
+Susan Martin
+Joseph Thompson
+Margaret Garcia
+Christopher Clark
+Lisa Rodriguez
+Daniel Lewis
+Karen Hall
+Mark Allen
+Betty Young
+George Wright
+Sandra Lopez
+Kenneth Hill
+Carol Adams
+Edward Baker
+Ruth Gonzalez
+Ronald Mitchell
+Michelle Perez
+Anthony Roberts
+Sarah Campbell
+Jason Parker
+Kimberly Evans
+Gary Stewart
+Jessica Sanchez
+Timothy Morris
+Cynthia Cook
+Larry Morgan
+Angela Bell
+Frank Rivera
+Brenda Cooper
+Scott Richardson
+Anna Ward
+Stephen Torres
+Rebecca Peterson
+Raymond James
+Kathleen Watson
+Gregory Brooks
+Martha Price
+Jerry Bennett
+Walter Henderson
+Stephanie Coleman
+Patrick Jenkins
+Carolyn Perry
+Peter Powell
+Christine Long
+Harold Patterson
+Marie Hughes
+Douglas Flores
+Janet Washington
+Henry Butler
+Catherine Simmons
+Carl Foster
+Frances Gonzales
+Ryan Russell
+Joyce Griffin
+Roger Diaz
+Alice Ford
+Juan Hamilton
+Julie Graham
+Albert Woods
+Teresa Cole
+Jonathan West
+Gloria Reynolds
+Terry Fisher
+Keith Mcdonald
+Cheryl Cruz
+Samuel Marshall
+Katherine Murray
+Ralph Freeman
+Joan Wells
+Nicholas Stevens
+Judith Tucker
+Roy Porter
+Janice Crawford
+Bruce Henry
+Kelly Boyd
+Adam Kennedy
+Judy Warren
+Harry Dixon
+Kathy Burns
+Wayne Gordon
+Theresa Shaw
+Steve Robertson
+Denise Hunt
+Louis Black
+Irene Mills
+Aaron Nichols
+Howard Rose
+Rachel Stone
+Eugene Hawkins
+Marilyn Dunn
+Carlos Perkins
+Andrea Hudson
+Russell Spencer
+Kathryn Gardner
+Bobby Stephens
+Louise Payne
+Victor Pierce
+Sara Berry
+Martin Matthews
+Anne Arnold
+Phillip Ray
+Wanda Watkins
+Todd Olson
+Julia Snyder
+Craig Hart
+Ruby Cunningham
+Shawn Andrews
+Tina Ruiz
+Clarence Harper
+Norma Armstrong
+Philip Carpenter
+Paula Weaver
+Johnny Elliott
+Annie Chavez
+Earl Sims
+Emily Kelley
+Antonio Franklin
+Robin Lawson
+Bryan Ryan
+Crystal Schmidt
+Tony Carr
+Rita Wheeler
+Mike Chapman
+Dawn Oliver
+Leonard Williamson
+Florence Johnston
+Nathan Banks
+Manuel Howell
+Tiffany Alvarez
+Curtis Fernandez
+Rosa Garza
+Norman Harvey
+Grace Stanley
+Thomas Martinez
+Dorothy Robinson
+Paul Walker
+Donald Hernandez
+Helen King
+Donna Scott
+Steven Green
+Brian Nelson
+Sharon Carter
+Kevin Phillips
+Matthew Edwards
+Deborah Collins
+Shirley Rogers
+Jose Reed
+Jeffrey Murphy
+Melissa Bailey
+Amy Cox
+Eric Howard
+Andrew Gray
+Virginia Ramirez
+Pamela Kelly
+Joshua Sanders
+Arthur Bryant
+Ann Alexander
+Diane Hayes
+Jack Sullivan
+Heather Wallace
+Doris Jordan
+Justin Owens
+Gerald Harrison
+Jean Gibson
+Mildred Ortiz
+Lawrence Webb
+Ashley Simpson
+Rose Hunter
+Benjamin Hicks
+Nicole Morales
+Christina Ramos
+Fred Reyes
+Billy Holmes
+Beverly Rice
+Tammy Daniels
+Jeremy Palmer
+Ernest Wagner
+Jacqueline Willis
+Bonnie Carroll
+Jesse Duncan
+Alan Bradley
+Lois Lane
+Phyllis Fox
+Sean Riley
+Chris Greene
+Diana Lawrence
+Lillian Austin
+Jimmy Peters
+Danny Fields
+Peggy Gutierrez
+Gladys Vasquez
+Luis Castillo
+Stanley Montgomery
+Connie Richards
+Tracy Meyer
+Dale Bishop
+Rodney Morrison
+Carmen Hansen
+Cindy Little
+Allen Burton
+T-339222
+T-128444
+T-381123
+T-111849
+S-WAS002
+S-WAS003
+S-DB2001
+S-DB2002
+Administrator
+guest
+nobody
+root
+mail
+sa
+DanLewis
+TonyRoberts
+DebCollins
+AngieBell
+JeffMurphy
+FloJohnston
+MarvinNguyen
+WendyGeorge
+AccessManager
+AlertAdministrator
+ApplicationAdministrator
+Auditor
+BatchRequestAdministrator
+BusinessRoleAdministrator
+CertificationAdministrator
+ComplianceOfficer
+EntitlementRoleAdministrator
+HelpDesk
+IdentityAdministrator
+IdentityCorrelationAdministrator
+IdentityRequestAdministrator
+ITRoleAdministrator
+ManagedAttributePropertyAdmin
+ManagedAttributeProvisioningAdmin
+OrganizationalRoleAdministrator
+PasswordAdministrator
+PolicyAdministrator
+RoleAdministrator
+RuleAdministrator
+SignOffAdministrator
+SyslogAdministrator
+systemAdministrator1
+TaskResultsViewer
+WebServicesExecutor
+WorkgroupAdministrator
+WorkItemAdministrator
+ContainerRoleAdministrator
+AssignOrDetectRoleAdministrator
+FormAdministrator
+FullAccessAdminConsole
+PluginAdministrator
+SCIMExecutor
+PAMAdministrator
+ViewAdminConsole
+sys2
+sys3
+ralphj1
+ralphj2
+ralphj3
+ralphj4
+tstUser1
+tstUser2
+tstUser3
+tstUser5
+Adam1 Kennedy
+Andrew GrayDa
+Anna Krueger
+Anna1 Ward1
+billy kid
+bobbyjindal
+dhara jani
+disabled account
+Edna MccoyToDel1
+expired password
+fj'ohnston
+Frank Sampson
+Freddy Krueger
+iiqtc6 user
+jav test18
+Jim Stuart
+Kelly Wrinkle2
+blah
+Ldap Test
+locked account
+Marc Schulz
+Maria1 White1
+native change
+Night Gallery
+old password
+pass1 thru1
+pass2 thru2
+pass3 thru3
+pass3 thru9
+pass4 thru4
+pass5 thru5
+pass6
+pass7 thru7
+pass8 thru8
+pawar
+Pedro Gonzalez2
+plavo
+Rex Ryan1
+Sally May
+sam email
+sam garza
+same mail
+Scott Fisher
+Sterling Archer
+Steve RandallAD
+Steve VaiD
+test_enable
+Vishal masih
+Vikram
+Thursday1
+Thursday2
+"[Sidney, Sidney Crosby]"
+"[Evgeni, Evgeni Malkin]"
+cn_passthru5
+Sam
+"[adam, Adam Kennedy]"
+"[jtest123, jtest1]"
+acct2
+ldaplol
+ldap
+"[Tersea Cole, Teresa Cole]"
+"[Joe, JoeBob]"
+"[Dead, DeadSpin]"
+Rdap
+Belle Brisbane
+crocodileDundee
+Apawar
+Matt Smith
+Crocodile Dundee
+Betty Blaze
+ABCXYZ
+Byron Billings
+Ann Austin
+Matt Bearden
+Antonio Franklin
+Beverly Buttons
+Bill Blevins
+Bosh Barnes
+KEvin Hermes
+Pedro Gonzalez
+Tawny Priscilla

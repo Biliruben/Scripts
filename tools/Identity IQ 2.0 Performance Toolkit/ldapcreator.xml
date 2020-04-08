@@ -1,0 +1,65 @@
+
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<!--
+  Initialization file for new SailPoint repositories.
+-->
+<sailpoint>
+  <TaskDefinition name="Account LDAP Creation Tool"
+                    executor="sailpoint.performance.LDAPCreator"
+                    progressMode="Percentage" subType="SailPoint Performance Lab" 
+                    resultAction="Rename">
+        <Description>
+       
+        </Description>
+        <Attributes>
+        </Attributes>
+        <Signature>
+			<Inputs>
+			    <Argument name="identities" type="int">
+			    	<Prompt>Number of correlated identities to create</Prompt>
+                    <Description>Number of correlated identities to create</Description>
+                </Argument>
+                <Argument name="accounts" type="int">
+                	<Prompt>Number of accounts per correlated identity</Prompt>
+                    <Description>Number of accounts per correlated identity</Description>
+                </Argument>
+                <Argument name="instances" type="int">
+                	<Prompt>Number of instances per account (at least 1)</Prompt>
+                    <Description>Number of instances per account (at least 1)</Description>
+                </Argument>
+			    <Argument name="attributes" type="int">
+			    	<Prompt>Number of attributes per account link</Prompt>
+                    <Description>Number of attributes per account link</Description>
+                </Argument>
+                <Argument name="entitlements" type="int">
+                	<Prompt>Number of entitlement entries per account link</Prompt>
+                    <Description>Number of entitlement entries per account link</Description>
+                </Argument>
+                <Argument name="acctgroups" type="int">
+                	<Prompt>Number of accountgroup entries per account link</Prompt>
+                    <Description>Number of accountgroup entries per account link</Description>
+                </Argument>
+                <Argument name="url" type="string">
+                    <Prompt>LDAP Server URL</Prompt>
+                    <Description>LDAP Server URL</Description>
+                </Argument>
+                <Argument name="principal" type="string">
+                    <Prompt>LDAP User Name</Prompt>
+                    <Description>LDAP User Name</Description>
+                </Argument>
+                <Argument name="secret" type="string">
+                    <Prompt>LDAP User Password</Prompt>
+                    <Description>LDAP User Password</Description>
+                </Argument>
+               </Inputs>
+               <Argument name="baseDN" type="string">
+                    <Prompt>Base DN for User accounts</Prompt>
+                    <Description>Base DN for User accounts</Description>
+                </Argument>
+               </Inputs>
+        </Signature>
+    </TaskDefinition>
+    </sailpoint>

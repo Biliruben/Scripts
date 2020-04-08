@@ -1,0 +1,52 @@
+
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<!--
+  Initialization file for new SailPoint repositories.
+-->
+<sailpoint>
+  <TaskDefinition name="Account Data File Creation Tool"
+                    executor="sailpoint.performance.CSVCreator"
+                    progressMode="Percentage" subType="SailPoint Performance Lab" 
+                    resultAction="Rename">
+        <Description>
+       
+        </Description>
+        <Attributes>
+        </Attributes>
+        <Signature>
+			<Inputs>
+			    <Argument name="identities" type="int">
+			    	<Prompt>Number of correlated identities to create</Prompt>
+                    <Description>Number of correlated identities to create</Description>
+                </Argument>
+                <Argument name="accounts" type="int">
+                	<Prompt>Number of accounts per correlated identity</Prompt>
+                    <Description>Number of accounts per correlated identity</Description>
+                </Argument>
+                <Argument name="instances" type="int">
+                	<Prompt>Number of instances per account (at least 1)</Prompt>
+                    <Description>Number of instances per account (at least 1)</Description>
+                </Argument>
+			    <Argument name="attributes" type="int">
+			    	<Prompt>Number of attributes per account link</Prompt>
+                    <Description>Number of attributes per account link</Description>
+                </Argument>
+                <Argument name="entitlements" type="int">
+                	<Prompt>Number of entitlement entries per account link</Prompt>
+                    <Description>Number of entitlement entries per account link</Description>
+                </Argument>
+                <Argument name="acctgroups" type="int">
+                	<Prompt>Number of accountgroup entries per account link</Prompt>
+                    <Description>Number of accountgroup entries per account link</Description>
+                </Argument>
+                <Argument name="file" type="string">
+                    <Prompt>File name for the simulated data</Prompt>
+                    <Description>File name for the simulated data</Description>
+                </Argument>
+               </Inputs>
+        </Signature>
+    </TaskDefinition>
+    </sailpoint>

@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Fuck You Cache">
+  <Description>
+	  Decrypts a string I hate
+  </Description>
+  <Source>
+      <![CDATA[
+      import sailpoint.server.Service;
+      import sailpoint.server.Servicer;
+      import sailpoint.server.Environment;
+
+      String FU_SERVICE = "Cache";
+      int FU_INTERVAL = 9999999;
+
+      Environment env = Environment.getEnvironment();
+      Servicer servicer = env.getServicer();
+
+      if (servicer == null) {
+        return "Fuck you, no servicer";
+      }
+
+      Service cache = servicer.getService(FU_SERVICE);
+      if (cache == null) {
+        return "Fuck you, no " + FU_SERVICE + " service";
+      }
+
+      cache.setInterval(FU_INTERVAL);
+      cache.suspend();
+
+      return "Fuck yeah!";
+      ]]>
+  </Source>
+</Rule>
+

@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Class-Path: . LogAnalyzer_2.6.1_lib/log4j-1.2.16.jar LogAnalyzer_2.6.1
+ _lib/jdom.jar LogAnalyzer_2.6.1_lib/ThreadRunner_1.2.jar LogAnalyzer_
+ 2.6.1_lib/xercesImpl.jar LogAnalyzer_2.6.1_lib/commons-logging-api-1.
+ 1.jar LogAnalyzer_2.6.1_lib/serializer.jar LogAnalyzer_2.6.1_lib/CSVS
+ ource_1.2.jar LogAnalyzer_2.6.1_lib/resolver.jar
+Main-Class: sailpoint.services.tools.LogAnalyzerApp
+

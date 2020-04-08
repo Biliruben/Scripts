@@ -1,0 +1,5 @@
+.externalToolBuilders/dist.launch
+.externalToolBuilders/generateImpl.launch
+.externalToolBuilders/weaveAspects.launch
+src/iiq.properties
+tools/packtag-3.5/src/packtag.properties

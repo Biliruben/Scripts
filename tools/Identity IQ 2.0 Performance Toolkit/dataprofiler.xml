@@ -1,0 +1,32 @@
+
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<!--
+  Initialization file for new SailPoint repositories.
+-->
+<sailpoint>
+  <TaskDefinition name="Data Profiling Tool"
+                    executor="sailpoint.performance.DataProfiler"
+                    progressMode="Percentage" subType="SailPoint Performance Lab" 
+                    resultAction="Rename">
+        <Description>
+       
+        </Description>
+        <Attributes>
+        </Attributes>
+        <Signature>
+			<Inputs>
+			    <Argument name="file" type="string">
+			    	<Prompt>Export File Name</Prompt>
+                    <Description>Export File Name</Description>
+                </Argument>
+                <Argument name="seed" type="string">
+			    	<Prompt>Encryption Seed</Prompt>
+                    <Description>Encryption seed used to obscure the data</Description>
+                </Argument>
+ 			</Inputs>
+        </Signature>
+    </TaskDefinition>
+    </sailpoint>

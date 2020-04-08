@@ -1,0 +1,104 @@
+sailpoint.task.Housekeeper:execute (
+	context    : sailpoint.server.InternalContext@17ed24a
+	sched      : sailpoint.object.TaskSchedule@1bef0d[id=60b78f682f8c449496dbc766b12ed89f,name=60b78f682f8c449496dbc766b12ed89f]
+	result     : sailpoint.object.TaskResult@327d8c[id=2c9081ab306c21cb01306c43955a0b33,name=Perform Maintenance]
+	args       : {launcher=spadmin, finishCertifications=true, scanRemediations=true, scanLCMRequests=true, locale=en_US, pruneRequests=true, pruneTaskResults=true, denormalizeScopes=true, transitionContinuousCertifications=true, phaseCertifications=true, timezone=America/Chicago, pruneCertifications=true, pruneHistory=true, forwardInactiveWorkItems=true} )
+
+sailpoint.task.Housekeeper:finishCertifications ( )
+
+sailpoint.api.Certificationer:finish (
+	cert       : sailpoint.object.Certification@183a1d5[id=2c9081ab306c21cb01306c39696c0844,name=Application Owner Access Review for Active_Directory] )
+
+sailpoint.api.Certificationer:finishEntity (
+	entity     : sailpoint.object.CertificationEntity@aa0aa6[id=2c9081ab306c21cb01306c398eee0846,name=<null>] )
+
+2011-06-07 17:51:40,765 ERROR QuartzScheduler_Worker-5 org.hibernate.LazyInitializationException:42 - failed to lazily initialize a collection of role: sailpoint.object.Certification.certifiers, no session or session was closed
+org.hibernate.LazyInitializationException: failed to lazily initialize a collection of role: sailpoint.object.Certification.certifiers, no session or session was closed
+	at org.hibernate.collection.AbstractPersistentCollection.throwLazyInitializationException(AbstractPersistentCollection.java:380)
+	at org.hibernate.collection.AbstractPersistentCollection.throwLazyInitializationExceptionIfNotConnected(AbstractPersistentCollection.java:372)
+	at org.hibernate.collection.AbstractPersistentCollection.initialize(AbstractPersistentCollection.java:365)
+	at org.hibernate.collection.AbstractPersistentCollection.read(AbstractPersistentCollection.java:108)
+	at org.hibernate.collection.PersistentList.iterator(PersistentList.java:138)
+	at sailpoint.tools.xml.WrappedListSerializer.serializeToElement(WrappedListSerializer.java:33)
+	at sailpoint.tools.xml.AnnotationSerializer.serializeToElement(AnnotationSerializer.java:557)
+	at sailpoint.tools.xml.XMLObjectFactory.toXml(XMLObjectFactory.java:287)
+	at sailpoint.tools.xml.BuiltinSerializers$ListSerializer.serializeToElement(BuiltinSerializers.java:533)
+	at sailpoint.tools.xml.XMLObjectFactory.toXml(XMLObjectFactory.java:287)
+	at sailpoint.tools.xml.XMLObjectFactory.toXml(XMLObjectFactory.java:271)
+	at sailpoint.tools.xml.XMLObjectFactory.toXml(XMLObjectFactory.java:249)
+	at sailpoint.persistence.XmlType.compareXml(XmlType.java:613)
+	at sailpoint.persistence.XmlType.equals(XmlType.java:579)
+	at org.hibernate.type.CustomType.isEqual(CustomType.java:113)
+	at org.hibernate.type.CustomType.isEqual(CustomType.java:118)
+	at org.hibernate.type.AbstractType.isSame(AbstractType.java:128)
+	at org.hibernate.type.AbstractType.isDirty(AbstractType.java:94)
+	at org.hibernate.type.CustomType.isDirty(CustomType.java:262)
+	at org.hibernate.type.TypeFactory.findDirty(TypeFactory.java:668)
+	at org.hibernate.persister.entity.AbstractEntityPersister.findDirty(AbstractEntityPersister.java:3380)
+	at org.hibernate.event.def.DefaultFlushEntityEventListener.dirtyCheck(DefaultFlushEntityEventListener.java:520)
+	at org.hibernate.event.def.DefaultFlushEntityEventListener.isUpdateNecessary(DefaultFlushEntityEventListener.java:230)
+	at org.hibernate.event.def.DefaultFlushEntityEventListener.onFlushEntity(DefaultFlushEntityEventListener.java:154)
+	at sailpoint.persistence.PatchedDefaultFlushEntityEventListener.onFlushEntity(PatchedDefaultFlushEntityEventListener.java:17)
+	at org.hibernate.event.def.AbstractFlushingEventListener.flushEntities(AbstractFlushingEventListener.java:219)
+	at org.hibernate.event.def.AbstractFlushingEventListener.flushEverythingToExecutions(AbstractFlushingEventListener.java:99)
+	at org.hibernate.event.def.DefaultFlushEventListener.onFlush(DefaultFlushEventListener.java:50)
+	at org.hibernate.impl.SessionImpl.flush(SessionImpl.java:1206)
+	at org.hibernate.impl.SessionImpl.managedFlush(SessionImpl.java:375)
+	at org.hibernate.transaction.JDBCTransaction.commit(JDBCTransaction.java:137)
+	at sailpoint.persistence.HibernatePersistenceManager.commitTransaction(HibernatePersistenceManager.java:322)
+	at sailpoint.persistence.ClassPersistenceManager.commitTransaction(ClassPersistenceManager.java:170)
+	at sailpoint.server.InternalContext.commitTransaction(InternalContext.java:629)
+	at sailpoint.api.Certificationer.finishEntity(Certificationer.java:3504)
+	at sailpoint.api.Certificationer.finish(Certificationer.java:3357)
+	at sailpoint.task.Housekeeper.finishCertifications(Housekeeper.java:816)
+	at sailpoint.task.Housekeeper.execute(Housekeeper.java:305)
+	at sailpoint.api.TaskManager.runSync(TaskManager.java:643)
+	at sailpoint.scheduler.JobAdapter.execute(JobAdapter.java:116)
+	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)
+	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:529)
+
+----------------------------------------------------
+
+
+sailpoint.task.Housekeeper:execute (
+	context    : sailpoint.server.InternalContext@17ed24a
+	sched      : sailpoint.object.TaskSchedule@1bef0d[id=60b78f682f8c449496dbc766b12ed89f,name=60b78f682f8c449496dbc766b12ed89f]
+	result     : sailpoint.object.TaskResult@327d8c[id=2c9081ab306c21cb01306c43955a0b33,name=Perform Maintenance]
+	args       : {launcher=spadmin, finishCertifications=true, scanRemediations=true, scanLCMRequests=true, locale=en_US, pruneRequests=true, pruneTaskResults=true, denormalizeScopes=true, transitionContinuousCertifications=true, phaseCertifications=true, timezone=America/Chicago, pruneCertifications=true, pruneHistory=true, forwardInactiveWorkItems=true} )
+
+sailpoint.task.Housekeeper:finishCertifications ( )
+
+sailpoint.api.Certificationer:finish (
+	cert       : sailpoint.object.Certification@183a1d5[id=2c9081ab306c21cb01306c39696c0844,name=Application Owner Access Review for Active_Directory] )
+
+sailpoint.api.Certificationer:finishEntity (
+	entity     : sailpoint.object.CertificationEntity@aa0aa6[id=2c9081ab306c21cb01306c398eee0846,name=<null>] )
+
+2011-06-07 17:51:40,768 ERROR QuartzScheduler_Worker-5 sailpoint.task.Housekeeper:838 - sailpoint.tools.GeneralException: failed to lazily initialize a collection of role: sailpoint.object.Certification.certifiers, no session or session was closed
+
+----------------------------------------------------
+
+
+sailpoint.task.Housekeeper:execute (
+	context    : sailpoint.server.InternalContext@17ed24a
+	sched      : sailpoint.object.TaskSchedule@1bef0d[id=60b78f682f8c449496dbc766b12ed89f,name=60b78f682f8c449496dbc766b12ed89f]
+	result     : sailpoint.object.TaskResult@327d8c[id=2c9081ab306c21cb01306c43955a0b33,name=Perform Maintenance]
+	args       : {launcher=spadmin, finishCertifications=true, scanRemediations=true, scanLCMRequests=true, locale=en_US, pruneRequests=true, pruneTaskResults=true, denormalizeScopes=true, transitionContinuousCertifications=true, phaseCertifications=true, timezone=America/Chicago, pruneCertifications=true, pruneHistory=true, forwardInactiveWorkItems=true} )
+
+sailpoint.task.Housekeeper:finishCertifications ( )
+
+sailpoint.api.Certificationer:finish (
+	cert       : sailpoint.object.Certification@183a1d5[id=2c9081ab306c21cb01306c39696c0844,name=Application Owner Access Review for Active_Directory] )
+
+sailpoint.api.Certificationer:finishEntity (
+	entity     : sailpoint.object.CertificationEntity@aa0aa6[id=2c9081ab306c21cb01306c398eee0846,name=<null>] )
+
+sailpoint.task.Housekeeper:addMessage (
+	message    : sailpoint.tools.Message@a5be71 )
+
+2011-06-07 17:51:40,770 ERROR QuartzScheduler_Worker-5 sailpoint.task.Housekeeper:1204 - Could not finish certification ID=2c9081ab306c21cb01306c39696c0844, name=Application Owner Access Review for Active_Directory
+
+----------------------------------------------------
+
+
+

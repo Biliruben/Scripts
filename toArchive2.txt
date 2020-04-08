@@ -1,0 +1,3 @@
+f:\test_installs,c:\test_installs
+f:\tomcat,c:\tomcat
+f:\tomcatEclipse,c:\tomcatEclipse
