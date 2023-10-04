@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Encrypt Me">
+
+    <Source>
+      <![CDATA[
+
+      String decrypted = "Jc1co5nwIcWREmb^9hY3b0Sut7U*5AdD";
+      String decrypted = "Implementations MUST NOT not add line feeds to base encoded data\n" +
+        "unless the specification referring to this document explicitly\n" +
+        "directs base encoders to add line feeds after a specific number of\n" +
+        "characters.";
+      String encrypted = context.encrypt(decrypted);
+      log.warn (encrypted);
+      return encrypted;
+
+        ]]>
+    </Source>
+</Rule>

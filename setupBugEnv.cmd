@@ -23,6 +23,9 @@ if defined pull_branch (
     set pause=pause
 )
 if defined pause (
+    echo.
+    echo %SCRIPT_HOME%\clearBugEnv.cmd will clear these values
+    echo.
     if not defined noPause (
         echo 
         pause
@@ -109,11 +112,7 @@ goto eof
 goto eof
 
 :setJiraTagPrefix
-if %JIRA_PREFIX%==EFIX set tagPrefix=x
-if %JIRA_PREFIX%==SET set tagPrefix=z
-if %JIRA_PREFIX%==IIQSR set tagPrefix=s
-if %JIRA_PREFIX%==IIQTC set tagPrefix=t
-if %JIRA_PREFIX%==IIQETN set tagPrefix=e
+call %scriptsdir%\applyJiraPrefixToTag.cmd
 goto eof
 
 

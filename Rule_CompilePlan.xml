@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Do the plan">
+
+    <Source>
+      <![CDATA[
+      import sailpoint.api.Provisioner;
+      import sailpoint.object.ProvisioningProject;
+      import sailpoint.object.ProvisioningPlan;
+      import sailpoint.object.Identity;
+      import sailpoint.provisioning.PlanCompiler;
+
+    
+      try {
+        Identity identity = context.getObjectByName(Identity.class, identityName);
+        batchProvisioningPlan = batchSansNativeIDProvisioningPlan;
+        batchProvisioningPlan.setIdentity(identity);
+        lcmProvisioningPlan.setIdentity(identity);
+
+        PlanCompiler compy = new PlanCompiler(context);
+        ProvisioningProject batchProject = compy.compile(args, batchProvisioningPlan, scriptArgs);
+        ProvisioningProject lcmProject = compy.compile(args, lcmProvisioningPlan, scriptArgs);
+
+        List retList = new ArrayList();
+        retList.add (batchProject.toXml());
+        retList.add (lcmProject.toXml());
+
+        return retList;
+     } catch (Exception e) {
+        log.warn (e.getMessage(), e);
+     }
+
+        ]]>
+    </Source>
+</Rule>

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Test Parameters">
+
+    <Source>
+      <![CDATA[
+      import sailpoint.object.QueryOptions;
+      import sailpoint.object.Filter;
+
+      QueryOptions opts = new QueryOptions(Filter.eq("donkey", "heehaw"));
+      return opts;
+        ]]>
+    </Source>
+</Rule>

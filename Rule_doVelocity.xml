@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<!-- (c) Copyright 2014 SailPoint Technologies, Inc., All Rights Reserved. -->
+<!--
+IMPORTANT NOTICE - rule logic and settings come as-is
+without fore-knowledge of any environemnt-specific
+implementation and/or customizations.
+To avoid adverse side-effects, Support recommends
+testing all rule settings before running in production,
+and active monitoring immediately after execution.
+-->
+<sailpoint>
+<Rule language="beanshell" name="doVelocity">
+  <Source>
+<![CDATA[
+import sailpoint.object.ApprovalItem;
+import sailpoint.tools.GeneralException;
+import sailpoint.tools.VelocityUtil;
+
+        Map args = new HashMap();
+        ApprovalItem item = new ApprovalItem();
+        item.setAccountDisplayName("displayFart");
+        item.setAnnotation("annotationFart");
+        item.setAttribute("description", "describableFart");
+        
+        args.put("approvalItem", item);
+        
+        String renderMe = "Display: $approvalItem.accountDisplayName\n" + 
+                "Annotation: $approvalItem.annotation\n" +
+                "Description: $approvalItem.getAttribute(\"description\")";
+        String rendered = VelocityUtil.render(renderMe, args, null, null);
+        
+        String retString = "renderMe: " + renderMe + "\n\nrendered: " + rendered;
+        return retString;
+
+]]>
+   </Source>
+</Rule>
+</sailpoint>

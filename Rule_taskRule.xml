@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+
+<Rule name="Do Task">
+    <Source>
+
+        import sailpoint.object.Rule;
+        import sailpoint.object.ResourceObject;
+
+        String ruleName = config.get("rule");
+
+        Rule r = context.getObjectByName(Rule.class, ruleName);
+        log.warn("Tasking rule: " + r);
+        Map args = new HashMap();
+        args.put("object", new ResourceObject());
+        return context.runRule(r, args);
+
+    </Source>
+</Rule>

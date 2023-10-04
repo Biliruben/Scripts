@@ -1,43 +1,65 @@
 @if not defined doEcho set doEcho=off
 @echo %doEcho%
+setlocal EnableDelayedExpansion
 
-if [%1]==[] (
-    echo A major version or 'develop' must be passed in!
-    exit /b 1
-)
-rem set the defaults first and then process the switch
-rem So the first call to switch_6.4 is in the event I call this using
-rem a version that i've not defined. My assumption is that it's new and
-rem I've not yet updated this script to accomodate.
-call :switch_develop >nul 2>&1
-call :switch_%1 >nul 2>&1
+:: Clear CHOICE everytime
+set CHOICE=
+if [%1] EQU [] goto CmdLineDone
+:: Else %1 is something...
+set /a CHOICE=%1 2>nul
+:: If there was an error, it's NOT an integer. Set CHOICE to the literal value
+if ERRORLEVEL 1 set CHOICE=%1
+:: There may not have been an error and weird math was attempted... so one last
+:: try
+if %CHOICE% LEQ 0 set CHOICE=%1
+
+:CmdLineDone
+REM Convience utility script to swap between various JDKS. When switching, will
+REM change the JAVA_HOME variable to the desired JDK and update the PATH to
+REM point to the java executable (and not point to any other java executable)
+
+set IIQ80="8.0 or lower"
+set IIQ81=8.1-8.3
+set IIQ84="8.4 or higher"
+
+set IIQ_LIST=%IIQ80% %IIQ81% %IIQ84%
+
+call %SCRIPT_HOME%\makeChoice %IIQ_LIST%
+rem echo if not defined CHOICE choice /t 60 /D 1 /C %choiceStr% /M "Which JDK (%promptStr%)?"
+if not defined choice choice /t 60 /d 1 /c %choicestr% /m "which IIQ (%promptstr%)?"
+if not defined choice set choice=%errorlevel%
+
+call :IIQ_%CHOICE%
+endlocal & set path=%path%& set java_home=%java_home%& set CATALINA_HOME=%CATALINA_HOME%
+goto EOF
+
+:IIQ_1
+:IIQ_7.0
+:IIQ_7.1
+:IIQ_8.0
+rem 8.0 or lower
+call switchjdk 1
+call switchnode 1
+call switchtomcat 1
 goto eof
-rem %1 has the version
-rem 
-rem define a mapping between versions and JDK/node versions
-rem Default on JDK 7 / Node 0.12.7
 
-:switch_
-echo naw, we shouldn't be here
+:IIQ_2
+:IIQ_8.1
+:IIQ_8.2
+:IIQ_8.3
+rem 8.1 through 8.3
+call switchjdk 1
+call switchnode 2
+call switchtomcat 1
 goto eof
 
-:switch_develop
-:switch_7.3
-call %scriptsdir%\switchjdk 8
-call %scriptsdir%\switchnode 5
+:IIQ_3
+:IIQ_develop
+:IIQ_8.4
+rem 8.4 or above
+call switchjdk 2
+call switchnode 2
+call switchtomcat 2
 goto eof
 
-:switch_7.2
-:switch_7.1
-call %scriptsdir%\switchjdk 7
-call %scriptsdir%\switchnode 0
-goto eof
-
-:switch_7.0
-:switch_6.4
-call %scriptsdir%\switchjdk 6
-call %scriptsdir%\switchnode 0
-goto eof
-
-
-:eof
+:EOF

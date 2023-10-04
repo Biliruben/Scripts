@@ -1,156 +1,17 @@
-
-( 9:53:49.84)() C:\scripts>
-$ setlocal
-
-( 9:53:49.84)() C:\scripts>
-$ set errMsg= 
-
-( 9:53:49.84)() C:\scripts>
-$ if ["-donkey"] EQU [] set errMsg=getOpts: key [options] 
-
-( 9:53:49.84)() C:\scripts>
-$ if defined errMsg echo  
-
-( 9:53:49.84)() C:\scripts>
-$ if defined errMsg exit /b 1 
-
-( 9:53:49.84)() C:\scripts>
-$ endlocal
-
-( 9:53:49.84)() C:\scripts>
-$ set _OPTS=-donkey 
-
-( 9:53:49.84)() C:\scripts>
-$ setlocal EnableDelayedExpansion 
-
-( 9:53:49.84)() C:\scripts>
-$ call c:\scripts\log.cmd Options key: -donkey 
-Options key: -donkey
-
-
-( 9:53:49.85)() C:\scripts>
-$ for %i in (-donkey) do (
-call c:\scripts\log.cmd Parsing %i  
- for /F "tokens=1,* delims=:" %a in ("%i") do set "%a=%~b" 
-) 
-
-( 9:53:49.85)() C:\scripts>
-$ (
-call c:\scripts\log.cmd Parsing -donkey  
- for /F "tokens=1,* delims=:" %a in ("-donkey") do set "%a=%~b" 
-) 
-Parsing -donkey
-
-
-( 9:53:49.85)() C:\scripts>
-$ set "-donkey=" 
-
-( 9:53:49.85)() C:\scripts>
-$ call c:\scripts\log.cmd Evaluating option: -dumpling:cumpet 
-Evaluating option: -dumpling:cumpet
-
-
-( 9:53:49.85)() C:\scripts>
-$ if not "-dumpling:cumpet" == "" (
-set test=!_OPTS:*-dumpling:cumpet:=!  
- call c:\scripts\log.cmd test = "~_OPTS:*-turkish:delight:=! "  
- if "~_OPTS:*-turkish:delight:=! " == "-donkey " (
-rem Error!  
- echo Error: Invalid option -dumpling:cumpet 
-)  else if "!test:~0,1!" == " " (
-call c:\scripts\log.cmd "~_OPTS:*-turkish:delight:=! " is a flag  
- rem Set the flag option using the option name.  
- rem The value doesn't matter, it just needs to be defined.  
- set "-dumpling:cumpet=1" 
-)  else (
-call c:\scripts\log.cmd "~_OPTS:*-turkish:delight:=! " is an option with value "-donkey"  
- rem Set the option value using the option as the name  
- rem and the next arg as the value.  
- set "-dumpling:cumpet=-donkey"  
- shift /2 
-)  
- shift /2  
- goto :loop 
-) 
-test = "~_OPTS:*-turkish:delight:= "
-
-"~_OPTS:*-turkish:delight:= " is an option with value "-donkey"
-
-
-( 9:53:49.86)() C:\scripts>
-$ call c:\scripts\log.cmd Evaluating option: -turkish:delight 
-Evaluating option: -turkish:delight
-
-
-( 9:53:49.86)() C:\scripts>
-$ if not "-turkish:delight" == "" (
-set test=!_OPTS:*-turkish:delight:=!  
- call c:\scripts\log.cmd test = "-donkey"  
- if "-donkey" == "-donkey " (
-rem Error!  
- echo Error: Invalid option -turkish:delight 
-)  else if "!test:~0,1!" == " " (
-call c:\scripts\log.cmd "-donkey" is a flag  
- rem Set the flag option using the option name.  
- rem The value doesn't matter, it just needs to be defined.  
- set "-turkish:delight=1" 
-)  else (
-call c:\scripts\log.cmd "-donkey" is an option with value ""  
- rem Set the option value using the option as the name  
- rem and the next arg as the value.  
- set "-turkish:delight="  
- shift /2 
-)  
- shift /2  
- goto :loop 
-) 
-test = "-donkey"
-
-"-donkey" is an option with value ""
-
-
-( 9:53:49.87)() C:\scripts>
-$ call c:\scripts\log.cmd Evaluating option:  
-Evaluating option:
-
-
-( 9:53:49.87)() C:\scripts>
-$ if not "" == "" (
-set test=!_OPTS:*:=!  
- call c:\scripts\log.cmd test = "-donkey"  
- if "-donkey" == "-donkey " (
-rem Error!  
- echo Error: Invalid option  
-)  else if "!test:~0,1!" == " " (
-call c:\scripts\log.cmd "-donkey" is a flag  
- rem Set the flag option using the option name.  
- rem The value doesn't matter, it just needs to be defined.  
- set "=1" 
-)  else (
-call c:\scripts\log.cmd "-donkey" is an option with value ""  
- rem Set the option value using the option as the name  
- rem and the next arg as the value.  
- set "="  
- shift /2 
-)  
- shift /2  
- goto :loop 
-) 
-
-( 9:53:49.87)() C:\scripts>
-$ call c:\scripts\log.cmd Final options are: 
-Final options are:
-
-
-( 9:53:49.88)() C:\scripts>
-$ for /F "delims=:" %i in ('set -') do call c:\scripts\log.cmd %i 
-
-( 9:53:49.94)() C:\scripts>
-$ call c:\scripts\log.cmd -dumpling=cumpet 
--dumpling=cumpet
-
-
-( 9:53:49.95)() C:\scripts>
-$ call c:\scripts\log.cmd -dumpling 
--dumpling
-
+        <div><label class="detail"><input id="acrobatics-bonus" name="acrobatics-bonus" class="short-input" />acrobatics</label></div>
+        <div><label class="detail"><input id="animal-handling-bonus" name="animal-handling-bonus" class="short-input" />animal-handling</label></div>
+        <div><label class="detail"><input id="arcana-bonus" name="arcana-bonus" class="short-input" />arcana</label></div>
+        <div><label class="detail"><input id="athletics-bonus" name="athletics-bonus" class="short-input" />athletics</label></div>
+        <div><label class="detail"><input id="deception-bonus" name="deception-bonus" class="short-input" />deception</label></div>
+        <div><label class="detail"><input id="history-bonus" name="history-bonus" class="short-input" />history</label></div>
+        <div><label class="detail"><input id="insight-bonus" name="insight-bonus" class="short-input" />insight</label></div>
+        <div><label class="detail"><input id="intimidation-bonus" name="intimidation-bonus" class="short-input" />intimidation</label></div>
+        <div><label class="detail"><input id="medicine-bonus" name="medicine-bonus" class="short-input" />medicine</label></div>
+        <div><label class="detail"><input id="nature-bonus" name="nature-bonus" class="short-input" />nature</label></div>
+        <div><label class="detail"><input id="perception-bonus" name="perception-bonus" class="short-input" />perception</label></div>
+        <div><label class="detail"><input id="performance-bonus" name="performance-bonus" class="short-input" />performance</label></div>
+        <div><label class="detail"><input id="persuasion-bonus" name="persuasion-bonus" class="short-input" />persuasion</label></div>
+        <div><label class="detail"><input id="religion-bonus" name="religion-bonus" class="short-input" />religion</label></div>
+        <div><label class="detail"><input id="slight-of-hand-bonus" name="slight-of-hand-bonus" class="short-input" />slight-of-hand</label></div>
+        <div><label class="detail"><input id="stealth-bonus" name="stealth-bonus" class="short-input" />stealth</label></div>
+        <div><label class="detail"><input id="survival-bonus" name="survival-bonus" class="short-input" />survival</label></div>

@@ -3,7 +3,7 @@
 ) else (
     @echo off
 )
-if not defined IIQ_CMD choice /t 7 /D N /M "Persist variables"
+if not defined AFTER_CMD choice /t 7 /D N /M "Persist variables"
 set persistVars=%ERRORLEVEL%
 call %scriptsdir%\SetScriptID.cmd
 set persistFileName=%TEMP%\persist_%ScrID%.cmd
@@ -45,8 +45,8 @@ if not defined IIQ_DEMO_DATA (
         set /p DEMO_DATA=DEMO_DATA file name $ 
     )
 )
-if not defined IIQ_CMD (
-    set /p IIQ_CMD=IIQ_CMD $ 
+if not defined AFTER_CMD (
+    set /p AFTER_CMD=AFTER_CMD $ 
 )
 
 if %persistVars% EQU 1 (
@@ -56,7 +56,7 @@ if %persistVars% EQU 1 (
     echo set CATALINA_HOME=%CATALINA_HOME%>> %persistFileName%
     echo set SCRIPT_HOME=%SCRIPT_HOME%>> %persistFileName%
     echo set START_TOMCAT=%START_TOMCAT%>> %persistFileName%
-    if defined IIQ_CMD echo set IIQ_CMD=%IIQ_CMD%>> %persistFileName%
+    if defined AFTER_CMD echo set AFTER_CMD=%AFTER_CMD%>> %persistFileName%
 )
 rem Convert DEMO_DATA to IIQ_DEMO_DATA to merge two competing conventions
 if not defined IIQ_DEMO_DATA set IIQ_DEMO_DATA=%demoDataBasePath%\%DEMO_DATA%
@@ -65,7 +65,7 @@ call %SCRIPT_HOME%\quickSetupStatus.cmd
 
 pushd %REPO_HOME%
 call %SCRIPT_HOME%\workstationutil.cmd convertIIQProperties %REPO_HOME%\src %IIQ_TAG%
-call %SCRIPT_HOME%\increaseBuildMem 2048m
+rem call %SCRIPT_HOME%\increaseBuildMem 2048m
 call ant %ANT_TASK%
 if ERRORLEVEL 1 goto error
 pushd %REPO_HOME%\build
@@ -73,7 +73,7 @@ if defined IIQ_DEMO_DATA jar -xvf %IIQ_DEMO_DATA%
 if ERRORLEVEL 1 goto error
 pushd %REPO_HOME%\build\web-inf\bin
 call %SCRIPT_HOME%\initiiq.cmd %IIQ_TAG%
-if defined IIQ_CMD call iiq.bat console -c "%IIQ_CMD%"
+if defined AFTER_CMD call %AFTER_CMD%
 
 popd
 popd

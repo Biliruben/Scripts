@@ -1,0 +1,1 @@
+        <div><label class="detail"><input id="SKILL-bonus" name="SKILL-bonus" class="short-input" />SKILL</label></div>

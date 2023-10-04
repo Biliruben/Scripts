@@ -20,7 +20,6 @@ if [%2]==[--noStash] (
 ) else (
     set NO_STASH=false
 )
-set DIFF_DIRECTORY=c:\etn_data
 
 if not defined local_branch set ERROR_MSG=%%local_branch%% must be defined
 if defined ERROR_MSG goto error
@@ -77,8 +76,8 @@ if not defined IIQ_STASH (
         set IIQ_STASH=
         call :findMerge
     ) else (
-        echo Applying ^(git stash apply^) stash %IIQ_STASH%
-        git stash apply %IIQ_STASH%
+        echo Popping ^(git stash pop^) stash %IIQ_STASH%
+        git stash pop %IIQ_STASH%
     )
 )
 
@@ -111,25 +110,7 @@ goto end
 :findMerge
 rem This should be a surpurfulous, but just in case
 if defined IIQ_STASH goto end
-set iiqVersionP=%IIQ_VERSION%p
-if /I %IIQ_VERSION% EQU develop set iiqVersionP=%IIQ_VERSION%
-rem Find the suggested diff and merge it
-set diffFile=%DIFF_DIRECTORY%\%iiqVersionP%-BaseConfig.diff
-echo Merging diff file: %diffFile%
-rem Set your env variables outside of the weird 'if' block. In CMD,
-rem scopes are fucking weird
-set _tempDiff=%TEMP%\%BASE_CD%_%ScrID%.diff
-echo tempDiff: %_tempDiff%
-if exist "%diffFile%" (
-    rem Do a search and replace of {GIT_REPO} into a temp difffile
-    call sed "s/{GIT_REPO}/%BASE_CD%/g" %diffFile% > %_tempDiff%
-    dos2unix %_tempDiff%
-    git apply --whitespace nowarn --reject %_tempDiff%
-    del /f /q %_tempDiff%
-) else (
-    echo Diff file not found!
-    echo.
-)
+call %SCRIPT_HOME%\mergeBaseDiff.cmd
 echo %msg% | findstr /c:"%iiqVersionP%-BaseConfig" > NUL
 if not ERRORLEVEL 1 set IIQ_STASH=%stash%
 goto end

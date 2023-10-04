@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Get Original Revision">
+  <Description>
+	  Decrypts a string I hate
+  </Description>
+  <Source>
+      <![CDATA[
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.lang.reflect.Field;
+
+        String theClassName = "sailpoint.api.Certificationer";
+        log.warn("Getting the file, y'all");
+        File iiqJar = new File ("../lib/identityiq.jar");
+        File aspectJar = new File ("../lib/aspectjrt-1.9.4.jar");
+        File aspectToolsJar = new File ("../lib/aspectjtools-1.9.4.jar");
+        Object r = null;
+        try {
+            log.warn("Now I'm gonna get the urls");
+            URL[] urls = new URL[] {
+                    iiqJar.toURI().toURL(), 
+                    aspectJar.toURI().toURL(),
+                    aspectToolsJar.toURI().toURL()};
+            log.warn("Oh, look at my urls: " + Arrays.toString(urls));
+            log.warn("Y'all, I'm getting my classloader");
+            ClassLoader cl = new URLClassLoader(urls);
+            log.warn("this is cl: " + cl);
+            log.warn("test class gets");
+            Class versionCls = cl.loadClass(theClassName);
+            log.warn("And now I'm gonna get that class!");
+            log.warn("this is versionCls: " + versionCls);
+            log.warn("this is versionCls.cl: " + versionCls.getClassLoader());
+            log.warn("And then we're gonna get that field");
+            Field f = versionCls.getDeclaredField("REVISION");
+            r = f.get(null);
+            System.out.println("r = " + r);
+
+        } catch (Throwable t) {
+            log.error("Oh, no!");
+            log.error(t.getMessage(), t);
+        } finally {}
+        return r;
+    }
+      ]]>
+  </Source>
+</Rule>
+

@@ -1,0 +1,1 @@
+@git branch --format %%(refname:lstrip=2)| findstr /c:%1

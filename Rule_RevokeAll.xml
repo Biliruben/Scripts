@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Revoke All">
+  <Description>
+	  Revokes all items in a given cert
+  </Description>
+  <Source>
+import sailpoint.api.Certificationer;
+import sailpoint.api.IncrementalObjectIterator;
+import sailpoint.api.SailPointContext;
+import sailpoint.api.certification.CertificationDecisioner;
+import sailpoint.api.certification.CertificationDecisioner.Decision;
+import sailpoint.object.CertificationAction;
+import sailpoint.object.CertificationEntity;
+import sailpoint.object.CertificationItem;
+import sailpoint.object.Filter;
+import sailpoint.object.Identity;
+import sailpoint.object.QueryOptions;
+import sailpoint.service.SelectionCriteria;
+
+// Not done yet! Needs threadding
+
+        Identity jimmy = context.getObjectByName(Identity.class, "james.smith");
+        String CERT_ID = "c0a801a875f6190d8175f74d43794172";
+        
+        Certificationer certificationer = new Certificationer(context);
+        
+        CertificationDecisioner decider = new CertificationDecisioner(context, CERT_ID, jimmy);
+        
+        QueryOptions opts = new QueryOptions();
+        opts.add(Filter.eq("certification.id", CERT_ID));
+        IncrementalObjectIterator entityIt = new IncrementalObjectIterator(context, CertificationEntity.class, opts);
+        
+        int entityCount = 0;
+        int itemCount = 0;
+        while (entityIt.hasNext()) {
+            
+            entityCount++;
+            List decisions = new ArrayList();
+            CertificationEntity entity = entityIt.next();
+            log.warn ("Revoking entity: " + entity);
+            for (CertificationItem item : entity.getItems()) {
+                itemCount++;
+                SelectionCriteria crit = new SelectionCriteria (Arrays.asList(item.getId()));
+                Decision d = new Decision(CertificationAction.Status.Remediated.name(), crit);
+                decisions.add(d);
+            }
+            decider.decide(decisions);
+        }
+
+        return "Revoked " + itemCount + " items on " + entityCount + " entities";
+  </Source>
+</Rule>
+

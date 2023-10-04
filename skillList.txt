@@ -1,0 +1,17 @@
+acrobatics
+animal-handling
+arcana
+athletics
+deception
+history
+insight
+intimidation
+medicine
+nature
+perception
+performance
+persuasion
+religion
+slight-of-hand
+stealth
+survival

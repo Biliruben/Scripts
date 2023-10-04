@@ -37,6 +37,7 @@ goto error
 git bugz
 call %scriptsdir%\gitBuildStatus.cmd
 goto endcomment
+
 :comment
 !!! These are no longer called here in this script, left just for
 documentation sake.
@@ -56,6 +57,8 @@ echo local_branch=%local_branch%
 echo JAVA_HOME=%JAVA_HOME%
 echo.
 :endcomment
+
+if defined NO_BRANCH_SETUP echo NO BRANCH SETUP
 choice /C YN /M "Ready?" /T 300 /D N
 if ERRORLEVEL 2 (
 set ERROR_MSG=You said 'naw'
@@ -65,7 +68,7 @@ goto error
 rem first, a little house cleaning
 call c:\scripts\cleanGitRej.cmd
 @echo %doEcho%
-call %scriptsdir%\setupBranch.cmd noPull %NO_STASH%
+if not defined NO_BRANCH_SETUP call %scriptsdir%\setupBranch.cmd noPull %NO_STASH%
 if ERRORLEVEL 1 set ERROR_MSG="Branch setup failed"
 if defined ERROR_MSG goto error
 
@@ -83,7 +86,7 @@ popd
 popd
 call %SCRIPT_HOME%\workstationutil.cmd convertDDL %REPO_HOME%\build %IIQ_TAG%
 
-endlocal
+endlocal & set PATH=%PATH%& set JAVA_HOME=%JAVA_HOME%
 goto end
 
 :noDemoData

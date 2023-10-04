@@ -2,121 +2,279 @@
 <!DOCTYPE Map PUBLIC "sailpoint.dtd" "sailpoint.dtd">
 
 <Map>
-    <entry key="argDecrypt" value="0:pQKuG97HBA6kyFDgR4dd8wx/v0pw6+VWzliVKpHQRI4z7+FGAn68X/C3k8E2T/ACipunVvZOhQTNdTeT1tvQw2d/NiLROkjZThj/gTcIqTZMDcia91BN4P7zlULadyoOxpqo6nF2LOjSW/ue0w2JPp2MDX8TjuyPKyQxTAK5uUn3vIUBmS/smu69lNYzfCfnHFIlnW6ba2gogdqRDt/m3cfkxq9rjEaiCLDZfYxAvDgZfaRM1tGS+4JLQ1CS2sVqN0zNTWbzDzXvxQKr3HaK5aWpRYNecyTkyxUydrDJHqTuuX/Dg+vSIhsRyW7CAG2OEHCrW1mXZk0HgzVJtKQeTpvS3puC9X35GQ0ArXENCv5ZEhTtcTwGojJws1zAACltx18UC/Qe5iJoEE7WAIiOD2hRjLy7xtCeoF4hGSEBihu9Dh4BgSSALdwaY7R3elnHcpqSBSoSiCQp2JHs64iuvsFy39gdrnDsyCtRQlrHqwt9GjLQ8e85IfSyYx3AH8PvVnO5Hg8tM7Y1DM6ejjceU6nycTJqf4iO8d2ueJ7T7cJf+ptjUFEkFO0CX8P0HILiSchBPmUwNYn22e4cQZIHtAXd0n9tTKmluSUVhvRpxU6qN+9SQt3WK8WYwVqF7lbWfwJMA1koUjVX7z6F9xsmwqnngkQ/YinHqgqVFv1iTJIeV5hBeOovFxn+tLAjbCbQj9FugLyQDpbLoeHF/k2VuwsM0yrExkeFToqd/t49NdYz3ITxcdlHYe76zpIKA+9JtAmA65+mTGI+qIS0ysTOS8P8A/zEK27noGi2OzRrJIKFD3I5whgCgf5T/BS1RTllXkbn55KxRuIMO+nwS15BSzF7IdrOU7/QdzpUnTy2sviKQ91EcsEG7XWFmh5iJj3s/8YF4oVK6b3suX03K9gWiDywIKfnLEtD7U5aDwIO7ilqwfDwDXKbP9Qw59WN5hixAcq4BvlYmYr+WRw0midVuDpbZg1ni0k+ZrZU85M25na6MUHZeiJapX+VhvjLYm4/3SAJJsz8qltoPuZeEM6Nwp1hjkc8KXBxI+PsnuVDLbkyNP+KTYAalENSefwD6fYQbaEIW1cl71qAYGIxgyyMRDtRDH7Gm6RjjFbbnJcteLxl0qxPu/YxSPn2wI8n7h3XjmqI05H7BChOzxok02Ar9Lud3LoCINpbMTDII0JjBUrHcyZREv7wf+SNhHnnUdaFgzyv3bDH/5qGAsfHrWnwjTWA+jXkl53fpk4dtGhNuRUw65El0cgaXQAs1pBdA0qET3auKf6+Cnb+Il0g+QF2jA=="/>
-    <entry key="args">
-        <value>
-            <Attributes><Map/></Attributes>
-        </value>
-    </entry>
-    <entry key="project">
-        <value>
-<ProvisioningProject identity="Alan.Bradley">
-  <Attributes>
-    <Map>
-      <entry key="disableRetryRequest">
-        <value>
-          <Boolean>true</Boolean>
-        </value>
-      </entry>
-      <entry key="identityRequestId" value="0000000009"/>
-      <entry key="optimisticProvisioning" value="false"/>
-      <entry key="requester" value="James.Smith"/>
-      <entry key="source" value="LCM"/>
-    </Map>
-  </Attributes>
-  <ExpansionItems>
-    <ExpansionItem application="RealLDAPWithDemoData" cause="Role" name="groups" operation="Add" sourceInfo="ANZ Biz 2" value="CN=Buyer_LDP,OU=demoGroups,OU=DemoData,DC=test,DC=sailpoint,DC=com"/>
-    <ExpansionItem application="RealLDAPWithDemoData" cause="Role" name="pager" operation="Set" sourceInfo="ANZ Biz 2" value="123-2"/>
-    <ExpansionItem application="RealLDAPWithDemoData" cause="Role" name="postalAddress" operation="Set" sourceInfo="ANZ Biz 2" value="The address of Alan.Bradley"/>
-    <ExpansionItem application="RealLDAPWithDemoData" cause="Role" name="mail" operation="Set" sourceInfo="ANZ Biz 2" value="Alan.Bradley@demo.com"/>
-    <ExpansionItem application="RealLDAPWithDemoData" cause="Role" name="CN" operation="Add" sourceInfo="ANZ Biz 2" value="Alan.Bradley-2"/>
-    <ExpansionItem application="RealLDAPWithDemoData" cause="ProvisioningPolicy" name="password" nativeIdentity="cn=Alan.Bradley-2,ou=Tim,dc=test,dc=sailpoint,dc=com" operation="Add" sourceInfo="RealLDAPWithDemoData" value="xyzzy"/>
-    <ExpansionItem application="RealLDAPWithDemoData" cause="ProvisioningPolicy" name="givenName" nativeIdentity="cn=Alan.Bradley-2,ou=Tim,dc=test,dc=sailpoint,dc=com" operation="Set" sourceInfo="RealLDAPWithDemoData" value="Alan"/>
-    <ExpansionItem application="RealLDAPWithDemoData" cause="ProvisioningPolicy" name="SN" nativeIdentity="cn=Alan.Bradley-2,ou=Tim,dc=test,dc=sailpoint,dc=com" operation="Add" sourceInfo="RealLDAPWithDemoData" value="Bradley"/>
-  </ExpansionItems>
-  <MasterPlan>
-    <ProvisioningPlan>
-      <AccountRequest application="IIQ" op="Modify">
-        <Attributes>
-          <Map>
-            <entry key="flow" value="AccessRequest"/>
-            <entry key="id" value="4028b881645cd8c101645cdbb9df0019"/>
-            <entry key="interface" value="LCM"/>
-            <entry key="operation" value="RoleAdd"/>
-          </Map>
-        </Attributes>
-        <AttributeRequest assignmentId="9674e482cf56443eb80d94424cd46039" name="assignedRoles" op="Add" value="ANZ Biz 2"/>
-      </AccountRequest>
+  <entry key="config">
+    <value>
+      <Map>
+        <entry key="rule" value="The Deferring Rule"/>
+      </Map>
+    </value>
+  </entry>
+  <entry key="object">
+    <value>
+      <ResourceObject/>
+    </value>
+  </entry>
+  <entry key="identityName" value="Amy.Cox"/>
+  <entry key="argDecrypt"
+    value="0:pQKuG97HBA6kyFDgR4dd8wx/v0pw6+VWzliVKpHQRI4z7+FGAn68X/C3k8E2T/ACipunVvZOhQTNdTeT1tvQw2d/NiLROkjZThj/gTcIqTZMDcia91BN4P7zlULadyoOxpqo6nF2LOjSW/ue0w2JPp2MDX8TjuyPKyQxTAK5uUn3vIUBmS/smu69lNYzfCfnHFIlnW6ba2gogdqRDt/m3cfkxq9rjEaiCLDZfYxAvDgZfaRM1tGS+4JLQ1CS2sVqN0zNTWbzDzXvxQKr3HaK5aWpRYNecyTkyxUydrDJHqTuuX/Dg+vSIhsRyW7CAG2OEHCrW1mXZk0HgzVJtKQeTpvS3puC9X35GQ0ArXENCv5ZEhTtcTwGojJws1zAACltx18UC/Qe5iJoEE7WAIiOD2hRjLy7xtCeoF4hGSEBihu9Dh4BgSSALdwaY7R3elnHcpqSBSoSiCQp2JHs64iuvsFy39gdrnDsyCtRQlrHqwt9GjLQ8e85IfSyYx3AH8PvVnO5Hg8tM7Y1DM6ejjceU6nycTJqf4iO8d2ueJ7T7cJf+ptjUFEkFO0CX8P0HILiSchBPmUwNYn22e4cQZIHtAXd0n9tTKmluSUVhvRpxU6qN+9SQt3WK8WYwVqF7lbWfwJMA1koUjVX7z6F9xsmwqnngkQ/YinHqgqVFv1iTJIeV5hBeOovFxn+tLAjbCbQj9FugLyQDpbLoeHF/k2VuwsM0yrExkeFToqd/t49NdYz3ITxcdlHYe76zpIKA+9JtAmA65+mTGI+qIS0ysTOS8P8A/zEK27noGi2OzRrJIKFD3I5whgCgf5T/BS1RTllXkbn55KxRuIMO+nwS15BSzF7IdrOU7/QdzpUnTy2sviKQ91EcsEG7XWFmh5iJj3s/8YF4oVK6b3suX03K9gWiDywIKfnLEtD7U5aDwIO7ilqwfDwDXKbP9Qw59WN5hixAcq4BvlYmYr+WRw0midVuDpbZg1ni0k+ZrZU85M25na6MUHZeiJapX+VhvjLYm4/3SAJJsz8qltoPuZeEM6Nwp1hjkc8KXBxI+PsnuVDLbkyNP+KTYAalENSefwD6fYQbaEIW1cl71qAYGIxgyyMRDtRDH7Gm6RjjFbbnJcteLxl0qxPu/YxSPn2wI8n7h3XjmqI05H7BChOzxok02Ar9Lud3LoCINpbMTDII0JjBUrHcyZREv7wf+SNhHnnUdaFgzyv3bDH/5qGAsfHrWnwjTWA+jXkl53fpk4dtGhNuRUw65El0cgaXQAs1pBdA0qET3auKf6+Cnb+Il0g+QF2jA=="/>
+  <entry key="scriptArgs">
+    <value>
       <Attributes>
-        <Map>
-          <entry key="identityRequestId" value="0000000009"/>
-          <entry key="requester" value="James.Smith"/>
-          <entry key="source" value="LCM"/>
-        </Map>
+        <Map/>
       </Attributes>
-      <ProvisioningTargets>
-        <ProvisioningTarget assignmentId="9674e482cf56443eb80d94424cd46039" role="ANZ Biz 2">
-          <AccountSelection applicationId="4028b881645cd21401645cd2f80f06c8" applicationName="RealLDAPWithDemoData" doCreate="true" roleName="ANZ Biz 2"/>
-        </ProvisioningTarget>
-      </ProvisioningTargets>
-      <Requesters>
-        <Reference class="sailpoint.object.Identity" id="4028b881645cd21401645cd2ef220603" name="James.Smith"/>
-      </Requesters>
-    </ProvisioningPlan>
-  </MasterPlan>
-  <ProvisioningPlan targetIntegration="IIQ">
-    <AccountRequest application="IIQ" op="Modify">
-      <AttributeRequest assignmentId="9674e482cf56443eb80d94424cd46039" name="assignedRoles" op="Add" value="ANZ Biz 2"/>
-    </AccountRequest>
-    <Attributes>
-      <Map>
-        <entry key="identityRequestId" value="0000000009"/>
-        <entry key="requester" value="James.Smith"/>
-        <entry key="source" value="LCM"/>
-      </Map>
-    </Attributes>
-    <Requesters>
-      <Reference class="sailpoint.object.Identity" id="4028b881645cd21401645cd2ef220603" name="James.Smith"/>
-    </Requesters>
-  </ProvisioningPlan>
-  <ProvisioningPlan targetIntegration="RealLDAPWithDemoData">
-    <AccountRequest application="RealLDAPWithDemoData" assignmentIds="9674e482cf56443eb80d94424cd46039" nativeIdentity="cn=Alan.Bradley-2,ou=Tim,dc=test,dc=sailpoint,dc=com" op="Create" sourceRole="ANZ Biz 2">
-      <AttributeRequest name="groups" op="Add">
-        <Value>
-          <List>
-            <String>CN=Buyer_LDP,OU=demoGroups,OU=DemoData,DC=test,DC=sailpoint,DC=com</String>
-          </List>
-        </Value>
-      </AttributeRequest>
-      <AttributeRequest name="pager" op="Set" value="123-2"/>
-      <AttributeRequest name="postalAddress" op="Set" value="The address of Alan.Bradley"/>
-      <AttributeRequest name="mail" op="Set" value="Alan.Bradley@demo.com"/>
-      <AttributeRequest name="CN" op="Add" value="Alan.Bradley-2"/>
-      <AttributeRequest name="password" op="Add" value="xyzzy">
+    </value>
+  </entry>
+  <entry key="args">
+    <value>
+      <Attributes>
+        <Map/>
+      </Attributes>
+    </value>
+  </entry>
+  <entry key="lcmProvisioningPlanSansNativeID">
+    <value>
+      <ProvisioningPlan>
+        <AccountRequest application="Active_Directory" op="Modify">
+          <Attributes>
+            <Map>
+              <entry key="attachmentConfigList"/>
+              <entry key="attachments"/>
+              <entry key="id" value="c0a801a8795613f3817956c4c8ad0492"/>
+            </Map>
+          </Attributes>
+          <AttributeRequest name="groupmbr" op="Remove" value="Administrators">
+            <Attributes>
+              <Map>
+                <entry key="assignment" value="true"/>
+              </Map>
+            </Attributes>
+          </AttributeRequest>
+        </AccountRequest>
+        <AccountRequest application="Active_Directory" op="Modify">
+          <Attributes>
+            <Map>
+              <entry key="attachmentConfigList"/>
+              <entry key="attachments"/>
+              <entry key="id" value="c0a801a8795613f3817956c4c7e60486"/>
+            </Map>
+          </Attributes>
+          <AttributeRequest name="groupmbr" op="Remove" value="BenefitCommittee">
+            <Attributes>
+              <Map>
+                <entry key="assignment" value="true"/>
+              </Map>
+            </Attributes>
+          </AttributeRequest>
+        </AccountRequest>
+        <AccountRequest application="Active_Directory" op="Modify">
+          <Attributes>
+            <Map>
+              <entry key="attachmentConfigList"/>
+              <entry key="attachments"/>
+              <entry key="id" value="c0a801a8795613f3817956c4cb7504b3"/>
+            </Map>
+          </Attributes>
+          <AttributeRequest name="groupmbr" op="Remove" value="campusAccess">
+            <Attributes>
+              <Map>
+                <entry key="assignment" value="true"/>
+              </Map>
+            </Attributes>
+          </AttributeRequest>
+        </AccountRequest>
         <Attributes>
           <Map>
-            <entry key="secret" value="true"/>
+            <entry key="requester" value="James.Smith"/>
+            <entry key="source" value="LCM"/>
           </Map>
         </Attributes>
-      </AttributeRequest>
-      <AttributeRequest name="givenName" op="Set" value="Alan"/>
-      <AttributeRequest name="SN" op="Add" value="Bradley"/>
-    </AccountRequest>
-    <Attributes>
-      <Map>
-        <entry key="identityRequestId" value="0000000009"/>
-        <entry key="requester" value="James.Smith"/>
-        <entry key="source" value="LCM"/>
-      </Map>
-    </Attributes>
-    <Requesters>
-      <Reference class="sailpoint.object.Identity" id="4028b881645cd21401645cd2ef220603" name="James.Smith"/>
-    </Requesters>
-  </ProvisioningPlan>
-  <ProvisioningTarget assignmentId="9674e482cf56443eb80d94424cd46039" role="ANZ Biz 2">
-    <AccountSelection applicationId="4028b881645cd21401645cd2f80f06c8" applicationName="RealLDAPWithDemoData" doCreate="true" roleName="ANZ Biz 2"/>
-  </ProvisioningTarget>
-</ProvisioningProject>
-</value>
-</entry>
+        <Requesters>
+          <Reference class="sailpoint.object.Identity" id="c0a801a8795613f3817956c5209d064a"
+            name="James.Smith"/>
+        </Requesters>
+      </ProvisioningPlan>
+
+    </value>
+  </entry>
+  <entry key="lcmProvisioningPlan">
+    <value>
+      <ProvisioningPlan>
+        <AccountRequest application="Active_Directory" nativeIdentity="163" op="Modify">
+          <Attributes>
+            <Map>
+              <entry key="attachmentConfigList"/>
+              <entry key="attachments"/>
+              <entry key="id" value="c0a801a8795613f3817956c4c8ad0492"/>
+            </Map>
+          </Attributes>
+          <AttributeRequest name="groupmbr" op="Remove" value="Administrators">
+            <Attributes>
+              <Map>
+                <entry key="assignment" value="true"/>
+              </Map>
+            </Attributes>
+          </AttributeRequest>
+        </AccountRequest>
+        <AccountRequest application="Active_Directory" nativeIdentity="163" op="Modify">
+          <Attributes>
+            <Map>
+              <entry key="attachmentConfigList"/>
+              <entry key="attachments"/>
+              <entry key="id" value="c0a801a8795613f3817956c4c7e60486"/>
+            </Map>
+          </Attributes>
+          <AttributeRequest name="groupmbr" op="Remove" value="BenefitCommittee">
+            <Attributes>
+              <Map>
+                <entry key="assignment" value="true"/>
+              </Map>
+            </Attributes>
+          </AttributeRequest>
+        </AccountRequest>
+        <AccountRequest application="Active_Directory" nativeIdentity="163" op="Modify">
+          <Attributes>
+            <Map>
+              <entry key="attachmentConfigList"/>
+              <entry key="attachments"/>
+              <entry key="id" value="c0a801a8795613f3817956c4cb7504b3"/>
+            </Map>
+          </Attributes>
+          <AttributeRequest name="groupmbr" op="Remove" value="campusAccess">
+            <Attributes>
+              <Map>
+                <entry key="assignment" value="true"/>
+              </Map>
+            </Attributes>
+          </AttributeRequest>
+        </AccountRequest>
+        <Attributes>
+          <Map>
+            <entry key="requester" value="James.Smith"/>
+            <entry key="source" value="LCM"/>
+          </Map>
+        </Attributes>
+        <Requesters>
+          <Reference class="sailpoint.object.Identity" id="c0a801a8795613f3817956c5209d064a"
+            name="James.Smith"/>
+        </Requesters>
+      </ProvisioningPlan>
+
+    </value>
+  </entry>
+  <entry key="basicProvisioningPlan">
+    <value>
+      <ProvisioningPlan>
+        <AccountRequest application="Active_Directory" nativeIdentity="163" op="Modify">
+          <!--
+          <Attributes>
+            <Map>
+              <entry key="attachmentConfigList"/>
+              <entry key="attachments"/>
+              <entry key="flow" value="AccessRequest"/>
+              <entry key="id" value="c0a8563e80a915c38180a9f6244a0493"/>
+              <entry key="interface" value="LCM"/>
+              <entry key="operation" value="EntitlementAdd"/>
+            </Map>
+          </Attributes>
+          -->
+          <AttributeRequest assignmentId="2e59e46e3660479a91ed7d9952acf135" displayValue="SecCompliance" name="groupmbr" op="Add" trackingId="95057b4e093c4c00939d6ebf150dcfb1" value="ENG_Mgmt">
+            <!--
+            <Attributes>
+              <Map>
+                <entry key="assignment" value="true"/>
+              </Map>
+            </Attributes>
+            -->
+          </AttributeRequest>
+        </AccountRequest>
+        <Attributes>
+          <Map>
+            <entry key="requester" value="James.Smith"/>
+            <entry key="source" value="Rule"/>
+          </Map>
+        </Attributes>
+        <Requesters>
+          <Reference class="sailpoint.object.Identity" name="James.Smith"/>
+        </Requesters>
+      </ProvisioningPlan>
+    </value>
+  </entry>
+  <entry key="batchSansNativeIDProvisioningPlan">
+    <value>
+      <ProvisioningPlan>
+        <AccountRequest application="Active_Directory" op="Modify">
+          <AttributeRequest name="groupmbr" op="Remove" value="Administrators">
+            <Attributes>
+              <Map>
+                <entry key="assignment" value="true"/>
+              </Map>
+            </Attributes>
+          </AttributeRequest>
+          <AttributeRequest name="groupmbr" op="Remove" value="BenefitCommittee">
+            <Attributes>
+              <Map>
+                <entry key="assignment" value="true"/>
+              </Map>
+            </Attributes>
+          </AttributeRequest>
+          <AttributeRequest name="groupmbr" op="Remove" value="campusAccess">
+            <Attributes>
+              <Map>
+                <entry key="assignment" value="true"/>
+              </Map>
+            </Attributes>
+          </AttributeRequest>
+        </AccountRequest>
+        <Attributes>
+          <Map>
+            <entry key="requester" value="James.Smith"/>
+            <entry key="source" value="Batch"/>
+          </Map>
+        </Attributes>
+        <Requesters>
+          <Reference class="sailpoint.object.Identity" id="c0a801a8795613f3817956c5209d064a"
+            name="James.Smith"/>
+        </Requesters>
+      </ProvisioningPlan>
+    </value>
+  </entry>
+  <entry key="batchProvisioningPlan">
+    <value>
+      <ProvisioningPlan>
+        <AccountRequest nativeIdentity="163" application="Active_Directory" op="Modify">
+          <AttributeRequest name="groupmbr" op="Remove" value="Administrators">
+            <Attributes>
+              <Map>
+                <entry key="assignment" value="true"/>
+              </Map>
+            </Attributes>
+          </AttributeRequest>
+          <AttributeRequest name="groupmbr" op="Remove" value="BenefitCommittee">
+            <Attributes>
+              <Map>
+                <entry key="assignment" value="true"/>
+              </Map>
+            </Attributes>
+          </AttributeRequest>
+          <AttributeRequest name="groupmbr" op="Remove" value="campusAccess">
+            <Attributes>
+              <Map>
+                <entry key="assignment" value="true"/>
+              </Map>
+            </Attributes>
+          </AttributeRequest>
+        </AccountRequest>
+        <Attributes>
+          <Map>
+            <entry key="requester" value="James.Smith"/>
+            <entry key="source" value="Batch"/>
+          </Map>
+        </Attributes>
+        <Requesters>
+          <Reference class="sailpoint.object.Identity" id="c0a801a8795613f3817956c5209d064a"
+            name="James.Smith"/>
+        </Requesters>
+      </ProvisioningPlan>
+    </value>
+  </entry>
 </Map>

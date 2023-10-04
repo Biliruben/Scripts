@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Test stack trace">
+
+    <Source>
+      <![CDATA[
+
+      boolean isMethod() {
+        log.error("splode", new RuntimeException ("Blammo!"));
+        return true;
+      }
+
+      String getString() {
+        try {
+            while (true) {
+                if (isMethod()) {
+                    return "donkey";
+                }
+            }
+        } finally {
+            log.warn ("finally");
+        }
+      }
+      if (true) {
+        if (true) {
+            String donkey = getString();
+        }
+      }
+        ]]>
+    </Source>
+</Rule>

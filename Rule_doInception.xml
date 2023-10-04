@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<sailpoint>
+    <Rule language="beanshell" name="Do Decrypt">
+        <Description>This is a rule to just do something randomly stupid, like decrypt super secret passwords</Description>
+        <Source>
+            <![CDATA[
+            
+            try {
+                List decrypts = new ArrayList();
+                decrypts.add("1:ACP:vvAti9QuhN5Vmt45uYo4t/gtI4qYvdttmfDZKq48s3fHj+Eu8lQKz2T7Gt0pDbdM");
+
+                if (void != argDecrypt && null != argDecrypt) {
+                    decrypts.add(argDecrypt);
+                }
+
+                StringBuilder buff = new StringBuilder();
+                buff.append("\n");
+                for (String decrypt : decrypts) {
+                    buff.append(decrypt).append(":\"").append(context.decrypt(decrypt)).append("\"\n");
+                }
+                log.warn(buff.toString());
+
+            } catch (Throwable t) {
+                log.error (t.getMessage(), t);
+            }
+            ]]>
+        </Source>
+    </Rule>
+    <Rule language="beanshell" name="Do Inception">
+        <Description> Calls a rule from within a rule... whoa! </Description>
+        <Source>
+            <![CDATA[
+            import sailpoint.object.Rule;
+            import sailpoint.object.Script;
+            String retVal = null;
+      try {
+            log.warn("Incepting...");
+            Rule doRule = context.getObjectByName(Rule.class, "Do Customization");
+            retVal = context.runRule(doRule, null);
+            //String src = "sailpoint.object.Rule doRule = context.getObjectByName(sailpoint.object.Rule.class, \"Do Decrypt\");";
+            //src = src + "String retVal = context.runRule(doRule, null);";
+            //Script script = new Script(src);
+            //retVal = context.runScript(script, null);
+            log.warn (retVal);
+        } catch (Throwable t) {
+            log.error (t.getMessage(), t);
+        }
+        return retVal;
+            ]]>
+        </Source>
+    </Rule>
+
+</sailpoint>

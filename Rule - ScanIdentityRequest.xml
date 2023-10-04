@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<!-- (c) Copyright 2014 SailPoint Technologies, Inc., All Rights Reserved. -->
+<!--
+IMPORTANT NOTICE - rule logic and settings come as-is
+without fore-knowledge of any environemnt-specific
+implementation and/or customizations.
+To avoid adverse side-effects, Support recommends
+testing all rule settings before running in production,
+and active monitoring immediately after execution.
+-->
+<sailpoint>
+<Rule language="beanshell" name="SupportRuleScanIR">
+  <Source>
+<![CDATA[
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import sailpoint.api.IdentityRequestProvisioningScanner;
+import sailpoint.object.Attributes;
+import sailpoint.object.Filter;
+import sailpoint.object.QueryOptions;
+import sailpoint.object.IdentityRequest;
+import sailpoint.tools.Message;
+import sailpoint.tools.Util;
+
+Log log = LogFactory.getLog("sailpoint.rule.SupportRuleScanIR");
+
+///
+/// for tracing purposes, add line to "log4j.properties" file 
+/// log4j trace: log4j.logger.sailpoint.rule.SupportRuleScanIR=all
+///
+/// @version: $Revision: 52967 $; $Date: 2018-05-03 12:20:05 -0500 (Thu, 03 May 2018) $;
+/////////////////////////////////////////////////////////////////////////////////////
+/// TOUCH ABOVE THIS LINE AT OWN PERIL!!!
+
+///
+/// OPTION 1) Filter-string to select identity-request
+/// PIRM uses: "(endDate.notNull() || (executionStatus == \"Terminated\")) && verified.isNull()"
+///
+String strFilterIR = "name == \"0000000001\"";
+
+/// TOUCH BELOW THIS LINE AT OWN PERIL!!!
+/////////////////////////////////////////////////////////////////////////////////////
+///
+
+///
+/// (private) global flag for executions with TaskResult (vs rule's direct invocation)
+///
+boolean flagTR = ((void != taskResult) && (null != taskResult)) ? true : false;
+
+///
+/// funcVoid_TaskRunRuleCfg()
+/// detect task invocation and update options
+/// note: "sailpoint.task.RuleExecutor" passes "config" as built-in map
+/// note: option0 confirms "config" type
+///
+void funcVoid_TaskRunRuleCfg() {
+  if ((void != config) && (config instanceof Map)) {
+    String UI_CFG_KEY_0 = "SupportRuleScanIR";
+    String UI_CFG_KEY_1 = "strFilterIR";
+
+    log.debug("ruleconfig = " + config.toString());
+
+    if ((null == config.get(UI_CFG_KEY_0)) || !Boolean.parseBoolean((String) config.get(UI_CFG_KEY_0))) return;
+    if (null != config.get(UI_CFG_KEY_1)) strFilterIR = ((String) config.get(UI_CFG_KEY_1)).trim();
+  }
+}
+
+///
+/// main()
+///
+    funcVoid_TaskRunRuleCfg();
+
+    String retStr = "starting Identity Request Scan failed";
+    try {
+// initialize scanner
+        IdentityRequestProvisioningScanner scanner = new IdentityRequestProvisioningScanner(context, new Attributes());            
+
+// get list of obj-ids from filter-string
+        retStr = "compiling Identity Request filter failed";
+        List filters = new ArrayList(); filters.add(Filter.compile(strFilterIR));
+
+        retStr = "applying Identity Request filter failed";
+        QueryOptions ops = new QueryOptions(); ops.setRestrictions(filters);
+        List props = new ArrayList(); props.add("id");
+        Iterator tmpLstA = context.search(IdentityRequest.class, ops, props);
+
+        ArrayList lstObjId = new ArrayList();
+        if (null != tmpLstA) while (tmpLstA.hasNext()) { Object[] nextObj = (Object[]) tmpLstA.next(); lstObjId.add((String)nextObj[0]); }
+        Iterator tmpLstB = lstObjId.iterator();
+
+// get and scan each obj
+        retStr = "iterating Identity Request(s) failed";
+        int objsDone = 0, objsTotal = lstObjId.size();
+        while (tmpLstB.hasNext()) {
+            String tmpObjId = tmpLstB.next();
+            IdentityRequest tmpObj = (IdentityRequest) context.getObject(IdentityRequest.class, tmpObjId);
+
+            if (null == tmpObj) log.warn("null identity request in list [" + tmpObjId + "]");
+            else {
+                try { scanner.scan(tmpObj); context.decache(); objsDone++;
+                } catch(Exception e) {
+                    log.warn("failing Identity Request in list [" + tmpObj.getName() + "]");
+                    if (flagTR) taskResult.addMessage( new Message(Message.Type.Warn,MessageKeys.ERR_LCM_SCAN_FAILED_ON_REQUEST, tmpObj.getName(), e) );
+                }
+                if (flagTR) {
+                    taskResult.setProgress("completing " + objsDone + " of " + objsTotal + " Identity Requests");
+                    context.saveObject(taskResult); context.commitTransaction();
+                }
+            }
+        }
+
+// all done and dusted!!!
+        retStr = "completed " + objsDone + " of " + objsTotal + " Identity Requests";
+    } catch (Exception e) {
+        log.error("Exception scanning Identity Request: ", e);
+        if (flagTR) taskResult.addMessage(new Message(Message.Type.Error,MessageKeys.ERR_LCM_SCAN_FAILED, e));
+    }
+
+    return retStr;
+]]>
+   </Source>
+</Rule>
+<TaskDefinition executor="sailpoint.task.RuleExecutor" name="Support ScanIR Rule" resultAction="Delete" template="true" type="Generic">
+   <Attributes>
+      <Map>
+         <entry key="ruleName" value="SupportRuleScanIR"/>
+         <!-- "hidden" options to rule -->
+         <entry key="ruleConfig">
+            <value>
+               <Map>
+                  <entry key="SupportRuleScanIR" value="true"/>
+               </Map>
+            </value>
+         </entry>
+      </Map>
+   </Attributes>
+   <Signature>
+    <Inputs>
+      <Argument defaultValue="name == &quot;0000000001&quot;" helpKey="Identity Request filter" name="strFilterIR" required="true" type="string">
+        <Prompt>Filter string to constrain Identity Requests scanned</Prompt>
+      </Argument>
+    </Inputs>
+    <Returns> <Argument name="Result: " type="string"> <Prompt>Summary</Prompt> </Argument> </Returns>
+   </Signature>
+   <Description>Task to process some Identity Requests</Description>
+  <Owner> <Reference class="sailpoint.object.Identity" name="spadmin"/> </Owner>
+</TaskDefinition>
+<TaskDefinition name="Support Task to Scan Identity Request" resultAction="Delete" type="Generic">
+   <Owner> <Reference class="sailpoint.object.Identity" name="spadmin"/> </Owner>
+   <Parent> <Reference class="sailpoint.object.TaskDefinition" name="Support ScanIR Rule"/> </Parent>
+</TaskDefinition>
+</sailpoint>

@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Do Some Token">
+
+    <Source>
+      <![CDATA[
+
+      import sailpoint.object.*;
+      import sailpoint.api.Terminator;
+
+      String TOKEN_ID = "Donkey Nuts";
+      Date now = new Date();
+      SAMLToken token = context.getObjectById(SAMLToken.class, TOKEN_ID);
+      Terminator arnold = new Terminator(context);
+      if (token != null) {
+        arnold.deleteObject(token);
+        context.commitTransaction();
+      }
+        
+      token = new SAMLToken (TOKEN_ID, now);
+      context.saveObject(token);
+      context.commitTransaction();
+      context.decache();
+      token = context.getObjectById(SAMLToken.class, TOKEN_ID);
+      String tokenString = token.toString();
+
+      arnold.deleteObject(token);
+      context.commitTransaction();
+
+      return tokenString;
+        ]]>
+    </Source>
+</Rule>

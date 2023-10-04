@@ -6,4 +6,4 @@
 setlocal
 set JIRA_PREFIX=IIQSR
 call %scriptsdir%\setupJira.cmd %*
-endlocal
+endlocal & set PATH=%PATH%& set JAVA_HOME=%JAVA_HOME%

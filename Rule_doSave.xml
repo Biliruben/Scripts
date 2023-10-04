@@ -1,0 +1,87 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Do Some Shit">
+
+    <Source>
+      <![CDATA[
+
+      import sailpoint.object.*;
+      import sailpoint.api.Terminator;
+
+
+      Link makeyLinky () {
+        Link l1 = new Link();
+        l1.setNativeIdentity ("Reese");
+        return l1;
+      }
+
+
+      long stampy = System.currentTimeMillis();
+      log.warn ("LET'S DO THIS!! - " + stampy);
+      String saraName = "sara.conner";
+      Identity sara = context.getObjectByName (Identity.class, saraName);
+      if (sara == null) {
+        sara = new Identity();
+        sara.setName("sara.conner");
+        context.saveObject(sara);
+        context.commitTransaction();
+      }
+
+      Link l1 = makeyLinky();
+      log.warn ("l1Id = " + l1Id);
+      sara.add(l1);
+      log.warn ("Fucking New Link");
+      context.saveObject(sara);
+      context.commitTransaction();
+      String l1Id = l1.getId();
+      context.decache();
+      log.warn ("Done with Fucking New Link");
+
+      l1 = context.getObjectById(Link.class, l1Id);
+      log.warn ("l1 later = " + l1);
+
+
+      l1.setAttribute ("farts", "A lot!");
+      log.warn ("Fucking old Link");
+      context.saveObject(l1);
+      context.commitTransaction();
+      log.warn ("Done with fucking old Link");
+      context.decache();
+
+      log.warn ("Fucking get Identity");
+      sara = context.getObjectByName(Identity.class, saraName);
+      sara.setAttribute("Farts", "A Little");
+      context.saveObject(sara);
+      context.commitTransaction();
+      log.warn ("Fucking done with Identity");
+      context.decache();
+
+      log.warn ("Fucking Reese");
+      Terminator arnold = new Terminator(context);
+      l1 = context.getObjectById (Link.class, l1Id);
+      arnold.deleteObject(l1);
+      context.commitTransaction();
+      log.warn ("Done with Fucking Reese");
+
+      l1 = makeyLinky();
+      l1Id = l1.getId();
+      sara = context.getObjectByName(Identity.class, saraName);
+      sara.add(l1);
+      context.saveObject(sara);
+      context.commitTransaction();
+      context.decache();
+      sara = context.getObjectByName(Identity.class, saraName);
+
+      log.warn ("Fucking Sara Conner");
+      sara = context.getObjectByName(Identity.class, saraName);
+      arnold.deleteObject(sara);
+      context.commitTransaction();
+      log.warn ("Fucking done with Sara Conner");
+
+
+
+      log.warn ("ALL FUCKING DONE!!! - " + stampy);
+
+        ]]>
+    </Source>
+</Rule>

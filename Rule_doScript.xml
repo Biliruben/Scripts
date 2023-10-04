@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Do Hash">
+
+    <Source>
+      <![CDATA[
+      import org.apache.commons.codec.digest.DigestUtils;
+
+      String appId = "2c9079ff693b169401693b172c760352";
+      String type = "group";
+      String value = "telecom";
+      String src = appId + "|" + type + "|" + value;
+
+      String hash = DigestUtils.sha1Hex(src);
+      return hash;
+        ]]>
+    </Source>
+</Rule>

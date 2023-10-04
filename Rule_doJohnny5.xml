@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Do Brand">
+  <Description>
+	  Decrypts a string I hate
+  </Description>
+  <Source>
+      <![CDATA[
+
+      // https://www.youtube.com/watch?v=yA9WhYnsD_4
+      String entCertId = "ac10d30e80901fcd818090950b3b16d5";
+      String bundleCertId = "
+      ]]>
+  </Source>
+</Rule>
+

@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+
+<sailpoint>
+  <Rule language='beanshell' name='Log4j 2 Version'>
+    <Signature returnType='String'>
+      <Inputs>
+        <Argument name='context'>
+          <Description>
+            A sailpoint.api.SailPointContext object that can be used to
+            query the database to aid in correlation.
+          </Description>
+        </Argument>
+        <Argument name='log'>
+          <Description>
+            log for debugging
+          </Description>
+        </Argument>
+      </Inputs>
+      <Returns>
+        <Argument name='version'>
+          <Description>
+            The Log4j 2.x version
+          </Description>
+        </Argument>
+      </Returns>
+    </Signature>
+    <Source>
+      <![CDATA[
+        String version = org.apache.logging.log4j.util.PropertiesUtil.class.getPackage().getImplementationVersion();
+
+        System.out.println("Found IdentityIQ Log4j version " + version);
+
+        return version;
+      ]]>
+    </Source>
+  </Rule>
+
+  <TaskDefinition name="Log4j 2 Version" resultAction="Delete" subType="task_item_type_generic" type="Generic">
+    <Attributes>
+      <Map>
+        <entry key="TaskDefinition.runLengthAverage" value="0"/>
+        <entry key="TaskDefinition.runLengthTotal" value="0"/>
+        <entry key="TaskDefinition.runs" value="1"/>
+        <entry key="TaskSchedule.host"/>
+        <entry key="ruleName" value="Log4j 2 Version"/>
+        <entry key="taskCompletionEmailNotify" value="Disabled"/>
+        <entry key="taskCompletionEmailRecipients"/>
+        <entry key="taskCompletionEmailTemplate"/>
+      </Map>
+    </Attributes>
+    <Description>A task that will log the Log4j 2 version.</Description>
+    <Owner>
+      <Reference class="sailpoint.object.Identity" name="spadmin"/>
+    </Owner>
+    <Parent>
+      <Reference class="sailpoint.object.TaskDefinition" name="Run Rule"/>
+    </Parent>
+    <Signature>
+        <Returns>
+            <Argument name="Result: " type="string">
+                <Prompt>Result</Prompt>
+            </Argument>
+        </Returns>
+    </Signature>
+  </TaskDefinition>
+
+</sailpoint>

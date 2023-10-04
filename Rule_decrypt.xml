@@ -1,27 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
 <Rule language="beanshell" name="Decrypt String">
-  <Description>
-	  Decrypts a string I hate
-  </Description>
   <Source>
-      List decrypts = new ArrayList();
-      decrypts.add("1:Ge4kyL1/XMFabfs8Hn9xDg==");
-      decrypts.add("1:8+zgQjp6l5/0hVQFlySwjA==");
-      decrypts.add("1:g0aYZ8BvRqrfCyAPgu85kQ==");
 
-      if (void != argDecrypt &amp;&amp; null != argDecrypt) {
-        decrypts.add(argDecrypt);
-      }
+      String encrypt = "1:iCAlakm5CVUe7+Q6hVJIBA==";
 
-      StringBuilder buff = new StringBuilder();
-      buff.append("\n");
-      for (String decrypt : decrypts) {
-        buff.append(decrypt).append(":\"").append(context.decrypt(decrypt)).append("\"\n");
-      }
+      String decrypted = context.decrypt(encrypt);
+      System.out.println("decrypted: " + decrypted);
 
-      return buff.toString();
-    
   </Source>
 </Rule>
 

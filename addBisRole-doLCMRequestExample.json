@@ -1,0 +1,42 @@
+{
+  "identities": [
+    "c0a85667863d132881863d4179654064"
+  ],
+  "addedRoles": [
+    {
+      "id": "c0a8566d870a1ed681870a626a520002",
+      "permittedById": null,
+      "comment": null,
+      "assignmentNote": null,
+      "sunrise": null,
+      "sunset": null,
+      "accountSelections": null,
+      "assignmentId": null,
+      "attachments": []
+    },
+    {
+      "id": "c0a8566d870a1ed681870a6245e40000",
+      "permittedById": "c0a8566d870a1ed681870a626a520002",
+      "comment": null,
+      "assignmentNote": null,
+      "sunrise": null,
+      "sunset": null,
+      "accountSelections": [
+        {
+          "identityId": "c0a85667863d132881863d4179654064",
+          "roleName": null,
+          "applicationName": "ADDirectDemodata",
+          "nativeIdentity": "CN=mandyRoss,OU=Sucks,DC=test,DC=sailpoint,DC=com",
+          "instance": null
+        }
+      ],
+      "assignmentId": null,
+      "attachments": []
+    }
+  ],
+  "removedRoles": [],
+  "addedEntitlements": [],
+  "removedEntitlements": [],
+  "priority": null,
+  "quickLink": "Request Access"
+}

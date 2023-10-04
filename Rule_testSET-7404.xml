@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Test 7404">
+
+    <Source>
+      <![CDATA[
+import sailpoint.object.Application;
+import sailpoint.object.Custom;
+import sailpoint.tools.Util;
+
+        String APPLICATION_NAME = "ADDirectDemoData";
+        String CUSTOM_CONTROLLER = "Controller";
+        long THREAD_SLEEP = 50;
+
+        Custom controller = context.getObjectByName (Custom.class, CUSTOM_CONTROLLER);
+        if (controller == null) {
+            controller = new Custom();
+            controller.setName(CUSTOM_CONTROLLER);
+            controller.put("Running", false);
+            context.saveObject(controller);
+            context.commitTransaction();
+        }
+        boolean isRunning = true;
+        controller.put("Running", isRunning);
+        
+        while (isRunning) {
+            Application app = context.getObjectByName(Application.class, APPLICATION_NAME);
+            int count = app.getAttributes().getInt("ruleCounter");
+            count++;
+            app.setAttribute("ruleCounter", count);
+            context.commitTransaction();
+            context.decache();
+            Thread.sleep(THREAD_SLEEP);
+            controller = context.getObjectByName(Custom.class, CUSTOM_CONTROLLER);
+            isRunning = Util.otob(controller.get("Running"));
+        }
+        ]]>
+    </Source>
+</Rule>

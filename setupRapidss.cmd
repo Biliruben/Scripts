@@ -51,7 +51,7 @@ echo IIQ_DEMO_DATA=%IIQ_DEMO_DATA%
 echo REPO_HOME=%REPO_HOME%
 echo IIQ_TAG=%IIQ_TAG%
 echo local_branch=%local_branch%
-echo IIQ_CMD=%IIQ_CMD%
+echo AFTER_CMD=%AFTER_CMD%
 echo JAVA_HOME=%JAVA_HOME%
 echo.
 rem Debug

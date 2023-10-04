@@ -9,7 +9,8 @@ goto doIt
 goto end
 
 :doIt
-set SSH_BIN=C:\Program Files\Git\usr\bin
+rem set SSH_BIN=C:\Program Files\Git\usr\bin
+set SSH_BIN=C:\Git\usr\bin
 if DEFINED FORCE echo Resetting GIT SSH environment
 rem call setScriptId.cmd
 set SSH-AGENT-TEMPFILE=%TEMP%\_ssh-agent.%RANDOM%

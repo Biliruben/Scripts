@@ -1,0 +1,49 @@
+[14/03/2021 22:41:14] Starting...
+[14/03/2021 22:41:14] Running on Windows NT 6.2
+[14/03/2021 22:41:14] Debug: Reg [The operation completed successfully.]
+[14/03/2021 22:41:14] Could not open keyword file 'c:\scripts\keywords.cfg'
+[14/03/2021 22:41:14] Using file change notification on 'C:\Users\trey.kirk\.maptool-rptools\logs\maptool.log' to detect file changes. (fch = 00000460)
+[14/03/2021 22:41:14] Debug: CreateEvent (hDie) succeeded
+[14/03/2021 22:41:14] Debug: Allocating 1980739 bytes for buffer
+[14/03/2021 22:41:47] Terminating...
+[04/04/2021 13:36:20] Starting...
+[04/04/2021 13:36:20] Running on Windows NT 6.2
+[04/04/2021 13:36:20] Debug: Reg [The operation completed successfully.]
+[04/04/2021 13:36:20] Could not open keyword file 'c:\scripts\keywords.cfg'
+[04/04/2021 13:36:20] Using file change notification on 'C:\GITRoot\maptool-macros\output\content.xml' to detect file changes. (fch = 000003e4)
+[04/04/2021 13:36:20] Debug: CreateEvent (hDie) succeeded
+[04/04/2021 13:36:20] Debug: Allocating 150047 bytes for buffer
+[04/04/2021 13:36:27] Terminating...
+[04/04/2021 13:36:32] Starting...
+[04/04/2021 13:36:32] Running on Windows NT 6.2
+[04/04/2021 13:36:32] Debug: Reg [The operation completed successfully.]
+[04/04/2021 13:36:32] Could not open keyword file 'c:\scripts\keywords.cfg'
+[04/04/2021 13:36:32] Using file change notification on 'C:\GITRoot\maptool-macros\output\content.xml' to detect file changes. (fch = 000003fc)
+[04/04/2021 13:36:32] Debug: CreateEvent (hDie) succeeded
+[04/04/2021 13:36:32] Debug: Allocating 150047 bytes for buffer
+[04/04/2021 13:36:36] Terminating...
+[21/04/2021 09:17:37] Starting...
+[21/04/2021 09:17:37] Running on Windows NT 6.2
+[21/04/2021 09:17:37] Debug: Reg [The operation completed successfully.]
+[21/04/2021 09:17:37] Could not open keyword file 'c:\scripts\keywords.cfg'
+[21/04/2021 09:17:37] Using file change notification on 'c:\Users\trey.kirk\.maptool-rptools\logs\maptool.log' to detect file changes. (fch = 00000474)
+[21/04/2021 09:17:37] Debug: CreateEvent (hDie) succeeded
+[21/04/2021 09:17:37] Debug: Allocating 101358 bytes for buffer
+[21/04/2021 09:18:00] Terminating...
+[21/04/2021 09:18:12] Starting...
+[21/04/2021 09:18:12] Running on Windows NT 6.2
+[21/04/2021 09:18:12] Debug: Reg [The operation completed successfully.]
+[21/04/2021 09:18:12] Could not open keyword file 'c:\scripts\keywords.cfg'
+[21/04/2021 09:18:12] Using file change notification on 'c:\Users\trey.kirk\.maptool-rptools\logs\maptool.log' to detect file changes. (fch = 000002e8)
+[21/04/2021 09:18:12] Debug: CreateEvent (hDie) succeeded
+[21/04/2021 09:18:12] Debug: Allocating 106716 bytes for buffer
+[21/04/2021 09:18:21] Debug: Allocating 109416 bytes for buffer
+[21/04/2021 09:18:39] Terminating...
+[21/04/2021 09:18:41] Starting...
+[21/04/2021 09:18:41] Running on Windows NT 6.2
+[21/04/2021 09:18:41] Debug: Reg [The operation completed successfully.]
+[21/04/2021 09:18:41] Could not open keyword file 'c:\scripts\keywords.cfg'
+[21/04/2021 09:18:41] Using file change notification on 'c:\Users\trey.kirk\.maptool-rptools\logs\maptool.log' to detect file changes. (fch = 000002e8)
+[21/04/2021 09:18:41] Debug: CreateEvent (hDie) succeeded
+[21/04/2021 09:18:41] Debug: Allocating 112096 bytes for buffer
+[21/04/2021 09:18:56] Terminating...

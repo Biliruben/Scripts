@@ -1,4 +1,4 @@
-@set doEcho=off
+@call %scriptsdir%\doEcho.cmd
 @echo %doEcho%
 setlocal
 set JIRA_PREFIX=EFIX
