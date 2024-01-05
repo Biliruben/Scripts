@@ -1,23 +1,66 @@
 Cursed
 Masterwork
-Masterwork
-Masterwork
-Masterwork
-Masterwork
-Masterwork
-+1
-+1
-+1
-+1
-+1
 +1
 +2
-+2
-+2
-+2
-+3
-+3
 +3
 +4
 +4
 +5
+Common
+Abyssal Bloodiron
+Adamantine
+Alchemical Silver
+Arandur
+Astral Driftmetal
+Aururum
+Baatorian Steel
+Baatorian Green Steel
+Blended Quartz
+Blood glass
+Blue Ice
+Bronzewood
+Byeshk
+Calomel
+Chitin
+Cold Iron
+Crysteel
+Darkleaf
+Darkwood
+Deep Coral
+Deep Crystal
+Dendritic
+Densewood
+Dlarun
+Dragonhide
+Duskwood
+Elukian Clay
+Entropium
+Fever Iron
+Firebrass
+Flametouched Iron
+Fyrite
+Frystalline
+Gehennan Morghuth Iron
+Githsilver
+Green Starmetal
+Hizagkuur
+Ironbark
+Kheferu
+Livewood
+Mithral
+Mudane Crystal
+Orichalcum
+Pandemonic Silver
+Pearl Steel
+Purple Mournlode
+Rimfire Ice
+Riverine
+Serren
+Soarwood
+Solarian Truesteel
+Starmetal
+Stygian ice
+Targath
+Thinaun
+Truesteel
+Urdukar

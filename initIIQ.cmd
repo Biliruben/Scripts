@@ -1,6 +1,7 @@
 rem @echo off
 setlocal
 set IIQ_TAG=%1
+if not defined INIT_IMPORT_FILE set INIT_IMPORT_FILE=c:\scripts\initIIQ-import.iiq
 if not defined INIT_EXEC_FILE set INIT_EXEC_FILE=c:\scripts\initIIQ-executeSetup.iiq
 if not defined SCRIPT_HOME set SCRIPT_HOME=c:\scripts
 if defined IIQ_TAG (
@@ -14,7 +15,7 @@ if defined IIQ_TAG (
 )
 rem choice /C NY /T 10 /D Y /M "Setup demo data?"
     echo Import and execute
-    call iiq console < c:\scripts\initIIQ-import.iiq
+    call iiq console < %INIT_IMPORT_FILE%
     call iiq console < %INIT_EXEC_FILE%
 goto end
 endlocal

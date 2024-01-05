@@ -3,7 +3,7 @@
 <Rule language="beanshell" name="Decrypt String">
   <Source>
 
-      String encrypt = "1:iCAlakm5CVUe7+Q6hVJIBA==";
+      String encrypt = "1:ACP:9RkU00sVC07DvYHdgAV5/lyP5P45MEg5hQ69ronPT/aacMnwJg3PAv4AkT5Cgikg";
 
       String decrypted = context.decrypt(encrypt);
       System.out.println("decrypted: " + decrypted);

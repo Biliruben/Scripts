@@ -1,4 +1,9 @@
-@echo off
+@if defined doEcho (
+    @echo %doEcho%
+) else (
+    @echo off
+)
+
 rem Copy utility that deep copies files with the archive bit set
 rem Unsets the bit upon copy
 rem Reads from the file provided in %1

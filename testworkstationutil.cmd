@@ -6,5 +6,6 @@ set JARPATH=%~p0\lib
 setlocal
 if not defined JAVA_HOME set JAVA_HOME=c:\jdk1.6.0_23
 set CLASSPATH=%CLASSPATH%;%JARPATH%\WorkstationUtil_1.17.jar
-call %JAVA_HOME%\bin\java -cp "%CLASSPATH%" %JAVA_OPTS% biliruben.sailpoint.WorkstationUtil %*
+rem set CLASSPATH=%CLASSPATH%;%JARPATH%\WorkstationUtil_1.14.jar
+call %JAVA_HOME%\bin\java -cp "%CLASSPATH%" -Xrunjdwp:transport=dt_socket,address=5008,server=y %JAVA_OPTS% biliruben.sailpoint.WorkstationUtil %*
 endlocal
