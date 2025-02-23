@@ -1,3 +1,4 @@
+@call %SCRIPT_HOME%\doEcho.cmd
 rem @echo off
 setlocal
 set JARPATH=%~d0\%~p0\lib

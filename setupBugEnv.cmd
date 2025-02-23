@@ -5,7 +5,7 @@ rem
 rem Do not use setlocal in this script, others should wrap this with that
 
 
-set pause=
+if not defined pause set pause=
 if defined git_remote (
     echo GIT_REMOTE already set! -- %git_remote%
     set pause=pause
@@ -48,6 +48,13 @@ if not defined GIT_HOME set GIT_HOME=c:\GITRoot
 if not defined IIQ_TEST_HOME set IIQ_TEST_HOME=%GIT_HOME%\iiq-test
 if not defined IIQ_DEMO_DATA set IIQ_DEMO_DATA=%IIQ_TEST_HOME%\demodata\previousVersions\DemoData-%IIQ_VERSION%.zip
 
+rem Set the init Import
+if not defined INIT_IMPORT_FILE (
+    rem Do the "else" clause as the default
+    set INIT_IMPORT_FILE=c:\scripts\initIIQ-import.iiq
+    rem 8.4 import version
+    if %IIQ_VERSION_NO_DOT% GEQ 84 set INIT_IMPORT_FILE=c:\scripts\initIIQ-import84.iiq
+)
 if not defined pull_branch (
     set pull_branch=%IIQ_VERSION%p-develop
     if /I develop EQU %IIQ_VERSION% (

@@ -18,5 +18,7 @@ echo IIQ_TAG=%IIQ_TAG%
 echo AFTER_CMD=%AFTER_CMD%
 echo local_branch=%local_branch%
 echo JAVA_HOME=%JAVA_HOME%
+echo INIT_IMPORT_FILE=%INIT_IMPORT_FILE%
+echo INIT_EXEC_FILE=%INIT_EXEC_FILE%
 echo.
 endlocal

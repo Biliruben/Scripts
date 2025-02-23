@@ -1,0 +1,17 @@
+NewEngland
+Mideast
+GreatLakes
+Plains
+Southeast
+Southwest
+RockyMountain
+FarWest
+Africa
+Asia
+CentralAmerica
+EuropeanUnion
+MiddleEast
+NorthAmericaNonUS
+Oceania
+SouthAmerica
+TheCarribbean

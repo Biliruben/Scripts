@@ -23,8 +23,6 @@ set JAVA_OPTS=!JAVA_OPTS:8080=%httpPort%!
 set JAVA_OPTS=!JAVA_OPTS:8009=%ajcPort%!
 set JAVA_OPTS=!JAVA_OPTS:8443=%httpsPort%!
 set JAVA_OPTS=!JAVA_OPTS:8005=%shutdownPort%!
-if defined doEcho (
-    if doEcho==on echo %JAVA_OPTS%
-)
+echo %JAVA_OPTS%
 call %SCRIPT_HOME%\doTC.cmd start
 endlocal

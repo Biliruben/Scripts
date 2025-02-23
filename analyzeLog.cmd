@@ -9,7 +9,8 @@ REM set CLASSPATH=%CLASSPATH%;%JARPATH%\LogAnalyzer_2.96.jar
 REM set CLASSPATH=%CLASSPATH%;%JARPATH%\LogAnalyzer_2.98.jar
 REM set CLASSPATH=%CLASSPATH%;%JARPATH%\LogAnalyzer_2.99.jar
 REM set CLASSPATH=%CLASSPATH%;%JARPATH%\LogAnalyzer_2.991.jar
-set CLASSPATH=%CLASSPATH%;%JARPATH%\LogAnalyzer_3.01.jar
+REM set CLASSPATH=%CLASSPATH%;%JARPATH%\LogAnalyzer_3.1.jar
+set CLASSPATH=%CLASSPATH%;%JARPATH%\LogAnalyzer_3.2.jar
 set CLASSPATH=%CLASSPATH%;C:\DropBox\JavaAPI\log4j-1.2.16\log4j-1.2.16.jar
 call %JAVA_HOME%\bin\java -cp "%CLASSPATH%" %JAVA_OPTS% sailpoint.services.tools.LogAnalyzerApp -properties c:\scripts\analyzeLog.properties %*
 endlocal

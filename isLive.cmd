@@ -1,4 +1,4 @@
-rem @echo off
+@call doEcho
 rem checks if a port is listening
 setlocal
 set PORT=%1

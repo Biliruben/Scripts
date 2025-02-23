@@ -9,6 +9,7 @@ if not exist %DEPLOY_DIR%\bu goto NoBackupDirectoryExists
 move %undeployFile% %DEPLOY_DIR%\bu
 shift
 goto parseArgs
+
 :argsParsed
 dir %DEPLOY_DIR%
 endlocal
@@ -16,10 +17,12 @@ goto end
 
 :NoDeploymentExists
 echo %undeployFile% does not exist
+call :argsParsed
 exit /b 1
 
 :NoBackupDirectoryExists
 echo %DEPLOY_DIR%\bu does not exist
+call :argsParsed
 exit /b 2
 
 :end

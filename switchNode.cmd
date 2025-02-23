@@ -16,7 +16,7 @@ if %CHOICE% LEQ 0 set CHOICE=%1
 
 :CmdLineDone
 
-call %SCRIPT_HOME%\makeChoice 6.17.1 10.24.1
+call %SCRIPT_HOME%\makeChoice 6.17.1 10.24.1 22.11.0
 if not defined choice choice /t 60 /d 1 /c %choicestr% /m "which NodeJS (%promptstr%)?"
 if not defined choice set choice=%errorlevel%
 
@@ -31,6 +31,11 @@ goto EOF
 :NVM_2
 rem 10.24.1
 nvm use 10.24.1
+goto EOF
+
+:NVM_3
+rem 22.11.0
+nvm use 22.11.0
 goto EOF
 
 :EOF

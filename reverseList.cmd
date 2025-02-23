@@ -1,4 +1,4 @@
-rem @echo off
+@echo off
 rem Reverses the incoming file.  If no incoming file, then reverses
 rem the list in the environment variable REVERSE_LIST.  Note, list can
 rem be a multi-line value (good luck on that) or a single value with

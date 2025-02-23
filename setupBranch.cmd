@@ -21,6 +21,9 @@ if [%2]==[--noStash] (
     set NO_STASH=false
 )
 
+rem Override to checkout instead of create the branch
+if defined OVERRIDE_CREATE_BRANCH set NO_PULL=%OVERRIDE_CREATE_BRANCH%
+
 if not defined local_branch set ERROR_MSG=%%local_branch%% must be defined
 if defined ERROR_MSG goto error
 

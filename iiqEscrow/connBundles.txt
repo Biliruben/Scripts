@@ -1,0 +1,15 @@
+connector-bundle-directories
+connector-bundle-misc
+connector-bundle-healthcare-epic
+connector-bundle-jdbc
+connector-sdk-webservices
+connector-bundle-mainframe
+connector-bundle-filebased
+connector-bundle-identityiq
+connector-bundle-openconnector
+connector-common-config
+connector-logging
+connector-bundle-webservices
+connector-bundle-common
+connector-bundle-collaboration-connectors
+conn-integrations

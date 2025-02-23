@@ -9,19 +9,18 @@ rem Initiates backing up of a selected list of directories to the NAS
 setlocal
 rem Set this variable to be a file that lists relative paths to skip
 set EXCLUDE_FILE=
-set NAS_USER=admin
-set NAS_PASSWORD=fuckCovid2020too!
-set NAS_HOST=buffy
-set NAS_SHARE=Trey-FTP
 set SHARED_DRIVE=K:
 set NAS_TGT_DIR=%SHARED_DRIVE%\sp_backup
 set SRC_LIST_FILE=%SCRIPT_HOME%\NASBackup.src
+
+call %SCRIPT_HOME%\connectBuffNas.cmd
 
 call :setupBackupReport
 call :reportTime
 call :verifySource
 if defined EXIT_CODE exit /b %EXIT_CODE%
-call :mapNas
+rem call :mapNas
+call %SCRIPT_HOME%\connectBuffNas.cmd
 if defined EXIT_CODE exit /b %EXIT_CODE%
 call :performBackup
 if defined EXIT_CODE exit /b %EXIT_CODE%

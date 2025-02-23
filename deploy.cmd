@@ -15,7 +15,7 @@ goto end
 
 :NoDeploymentExists
 echo %deployFile% does not exist
-dir %DEPLOY_DIR%
+call :argsParsed
 exit /b 1
 
 :end

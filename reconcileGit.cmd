@@ -19,6 +19,7 @@ set TEMP_BRANCH_BUG_FILE=%temp%\_bug-branches.%executionId%
 
 
 :step1
+REM This needs to be updated to get closed JIRA tickets
 call c:\scripts\runBugzQuery c:\scripts\sql\closedBugs.sql > %TEMP_BUG_FILE%
 
 rem pull our list of branches

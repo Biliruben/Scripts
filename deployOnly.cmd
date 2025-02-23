@@ -1,0 +1,2 @@
+call undeploy *
+call deploy %*

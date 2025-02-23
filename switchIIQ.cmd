@@ -20,9 +20,10 @@ REM point to the java executable (and not point to any other java executable)
 
 set IIQ80="8.0 or lower"
 set IIQ81=8.1-8.3
-set IIQ84="8.4 or higher"
+set IIQ84="8.4"
+set IIQ85="8.5 or higher"
 
-set IIQ_LIST=%IIQ80% %IIQ81% %IIQ84%
+set IIQ_LIST=%IIQ80% %IIQ81% %IIQ84% %IIQ85%
 
 call %SCRIPT_HOME%\makeChoice %IIQ_LIST%
 rem echo if not defined CHOICE choice /t 60 /D 1 /C %choiceStr% /M "Which JDK (%promptStr%)?"
@@ -54,11 +55,18 @@ call switchtomcat 1
 goto eof
 
 :IIQ_3
-:IIQ_develop
 :IIQ_8.4
-rem 8.4 or above
+rem 8.4
 call switchjdk 2
 call switchnode 2
+call switchtomcat 2
+goto eof
+
+:IIQ_develop
+:IIQ_4
+:IIQ_8.5
+call switchjdk 2
+call switchnode 3
 call switchtomcat 2
 goto eof
 
