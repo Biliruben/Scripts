@@ -1,2 +1,0 @@
-iqservice
-iiq-msteams

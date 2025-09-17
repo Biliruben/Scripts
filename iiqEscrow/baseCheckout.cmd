@@ -1,7 +1,11 @@
 rem @echo off
 setlocal
-set gitRepo=%~1
-set targetDir=%~2
+set gitOrg=%~1
+set gitRepo=%~2
+set targetDir=%~3
+set checkoutTag=%~4
+set cloneArg=
+if [%5] NEQ [] set cloneArg=%~5
 
 set EXIT_CODE=0
 
@@ -18,14 +22,24 @@ if not exist "%GIT_HOME%" (
 if %EXIT_CODE% GTR 0 goto exit
 
 pushd "%GIT_HOME%"
-call git clone git@github.com:sailpoint/%gitRepo%.git %targetDir%
+call git clone %cloneArg% git@github.com:%gitOrg%/%gitRepo%.git %targetDir%
 if ERRORLEVEL 1 (
-    echo Checkout failed
+    echo Clone failed
     set EXIT_CODE=4
 )
 if %EXIT_CODE% GTR 0 goto exit
 
 pushd %targetDir%
+
+call git checkout -f %checkoutTag%
+
+if ERRORLEVEL 1 (
+    echo Checkout failed
+    set EXIT_CODE=4
+)
+
+if %EXIT_CODE% GTR 0 goto exit
+
 rd /s /q .git
 popd
 popd
