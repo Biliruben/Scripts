@@ -47,7 +47,7 @@ echo GIT_REMOTE=%GIT_REMOTE%
 echo PULL_BRANCH=%PULL_BRANCH%
 if defined MERGE_HASH echo MERGE_HASH=%MERGE_HASH%
 echo ANT_HOME=%ANT_HOME%
-echo ANT_TASKS=%ANT_TASKS%
+echo ANT_TASK=%ANT_TASK%
 echo SCRIPT_HOME=%SCRIPT_HOME%
 echo IIQ_TEST_HOME=%IIQ_TEST_HOME%
 echo IIQ_DEMO_DATA=%IIQ_DEMO_DATA%
@@ -107,6 +107,7 @@ call %SCRIPT_HOME%\initiiq.cmd
 popd
 :endcomment2
 
+call %SCRIPT_HOME%\setBugPrompt %JIRA_PREFIX%-%IIQ_BUG%
 rem - Last thing: if we had a hash to merge, git status
 if defined MERGE_HASH git status
 

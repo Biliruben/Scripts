@@ -8,6 +8,7 @@ if [%1] EQU [] (
     set INCR=1
 ) else (
     set INCR=%1
+    shift
 )
 if not defined IIQ_HOSTNAME set IIQ_HOSTNAME=ALTTC
 set IIQ_HOSTNAME=!IIQ_HOSTNAME:%IIQ_HOSTNAME%=%IIQ_HOSTNAME%_%INCR%!
@@ -24,5 +25,5 @@ set JAVA_OPTS=!JAVA_OPTS:8009=%ajcPort%!
 set JAVA_OPTS=!JAVA_OPTS:8443=%httpsPort%!
 set JAVA_OPTS=!JAVA_OPTS:8005=%shutdownPort%!
 echo %JAVA_OPTS%
-call %SCRIPT_HOME%\doTC.cmd start
+call %SCRIPT_HOME%\doTC.cmd start %1
 endlocal

@@ -6,6 +6,8 @@ setlocal EnableDelayedExpansion
 set CHOICE=
 if [%1] EQU [] goto CmdLineDone
 :: Else %1 is something...
+if %1 EQU here goto :jdkHere
+
 set /a CHOICE=%1 2>nul
 :: If there was an error, it's NOT an integer. Set CHOICE to the literal value
 if ERRORLEVEL 1 set CHOICE=%1
@@ -33,10 +35,16 @@ if not defined choice set choice=%errorlevel%
 
 REM labels
 call :JDK_%CHOICE%
+:resumeUpdate
 call :UPDATE_PATH %JAVA_HOME%
 call %JAVA_HOME%\bin\java -version
 endlocal & set path=%path%& set java_home=%java_home%
 goto EOF
+
+:jdkHere
+:: We are in one of the non-standard JDK home directories and just want to use it
+set JAVA_HOME=%CD%
+goto resumeUpdate
 
 REM Generic path fixer upper
 :UPDATE_PATH

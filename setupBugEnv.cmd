@@ -53,7 +53,7 @@ if not defined INIT_IMPORT_FILE (
     rem Do the "else" clause as the default
     set INIT_IMPORT_FILE=c:\scripts\initIIQ-import.iiq
     rem 8.4 import version
-    if %IIQ_VERSION_NO_DOT% GEQ 84 set INIT_IMPORT_FILE=c:\scripts\initIIQ-import84.iiq
+    if %IIQ_VERSION_NO_DOT% EQU 84 set INIT_IMPORT_FILE=c:\scripts\initIIQ-import84.iiq
 )
 if not defined pull_branch (
     set pull_branch=%IIQ_VERSION%p-develop

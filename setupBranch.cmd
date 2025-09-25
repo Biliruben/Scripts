@@ -25,6 +25,12 @@ rem Override to checkout instead of create the branch
 if defined OVERRIDE_CREATE_BRANCH set NO_PULL=%OVERRIDE_CREATE_BRANCH%
 
 if not defined local_branch set ERROR_MSG=%%local_branch%% must be defined
+
+if defined ERROR_MSG goto error
+
+rem check if bisecting and abort if so
+git status | findstr /c:"You are currently bisecting"
+if %ERRORLEVEL%==0 set ERROR_MSG=You are currently bisecting!
 if defined ERROR_MSG goto error
 
 cd /d %REPO_HOME%

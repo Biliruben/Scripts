@@ -6,8 +6,15 @@
 rem This is the "do-er" script for start/stopTC
 setlocal EnableDelayedExpansion
 set TC_CMD=%1
+shift
 if [%TC_CMD%] EQU [] set TC_CMD=start
 if not defined CATALINA_HOME set CATALINA_HOME=c:\tomcat-7.0.69
+
+:doWhile
+if [%1] NEQ [] call :doItem %1
+shift
+if [%1] NEQ [] goto doWhile
+
 pushd %CATALINA_HOME%\bin
 rem defaults
 set TITLE=Tomcat %httpPort%
@@ -17,3 +24,11 @@ if defined doEcho (
 call catalina.bat %TC_CMD%
 popd
 endlocal
+goto eof
+
+:doItem
+if %1 EQU debug call %SCRIPT_HOME%\setJDWPOpts CATALINA_OPTS
+
+goto eof
+
+:eof

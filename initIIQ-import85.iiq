@@ -1,0 +1,2 @@
+source "c:\scripts\initIIQ-import84-core.iiq"
+import demo\importAll.xml
