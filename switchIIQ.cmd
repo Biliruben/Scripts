@@ -70,4 +70,10 @@ call switchnode 3
 call switchtomcat 2
 goto eof
 
+rem for now, Jakarta is only switchable via cmd line: switchiiq jakarta
+:IIQ_jakarta
+call switchjdk 4
+call switchnode 3
+call switchtomcat 3
+goto eof
 :EOF

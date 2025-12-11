@@ -22,6 +22,10 @@ if defined pull_branch (
     echo PULL_BRANCH already set! -- %pull_branch%
     set pause=pause
 )
+if defined SWITCH_IIQ (
+    echo SWITCH_IIQ already set! -- %SWITCH_IIQ%
+    set pause=pause
+)
 if defined pause (
     echo.
     echo %SCRIPT_HOME%\clearBugEnv.cmd will clear these values

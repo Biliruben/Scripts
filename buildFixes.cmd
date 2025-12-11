@@ -10,17 +10,17 @@ rem Must execute from a git repo
 
 setlocal
 if [%1] EQU [] goto noFile
-set branchesFile=%~1
+set branchesFile=%~s1
 
 if not exist .git goto noRepository
 
 rem g2g - just validate from the user if the branches file looks good
-for /f "tokens=1,2,3 delims=," %%i in (%branchesFile%) do echo %%i %%j %%k
+for /f "eol=# tokens=1,2,3 delims=," %%i in (%branchesFile%) do echo %%i %%j %%k
 
 choice /C YN /M "Ready?" /T 300 /D N
 if ERRORLEVEL 2 goto notReady
 
-for /f "tokens=1,2,3 delims=," %%i in (%branchesFile%) do call :doBranch %%i %%j %%k
+for /f "eol=# tokens=1,2,3 delims=," %%i in (%branchesFile%) do call :doBranch %%i %%j %%k
 
 
 

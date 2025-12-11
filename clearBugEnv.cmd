@@ -6,3 +6,4 @@ set local_branch_prefix=
 set local_branch=
 set pull_branch=
 set IIQ_TAG=
+set SWITCH_IIQ=

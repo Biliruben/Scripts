@@ -1,12 +1,17 @@
-@set doEcho=off
-@echo %doEcho%
-rem setlocal
+@call %scriptsdir%\doEcho.cmd
+setlocal
 set JIRA_PREFIX=SET
-if not DEFINED GIT_REMOTE (
-set /p setTag=Tag for SET? 
-    set PULL_BRANCH=%setTag%
-    set GIT_REMOTE=tags/%setTag%
-)
+if not DEFINED GIT_REMOTE call :promptGit
+
 set noPause=true
 call %scriptsdir%\setupJira.cmd %*
-rem endlocal
+endlocal
+goto eof
+
+:promptGit
+set /p setTag=Tag for SET? 
+set PULL_BRANCH=%setTag%
+set GIT_REMOTE=tags/%setTag%
+goto eof
+
+:eof

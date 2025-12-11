@@ -20,8 +20,9 @@ REM point to the java executable (and not point to any other java executable)
 
 set CAT7=c:\tomcat-7.0.69
 set CAT9=c:\apache-tomcat-9.0.73
+set CAT10=c:\apache-tomcat-10.1.49
 
-set CAT_LIST=%CAT7% %CAT9%
+set CAT_LIST=%CAT7% %CAT9% %CAT10%
 
 call %SCRIPT_HOME%\makeChoice %CAT_LIST%
 rem echo if not defined CHOICE choice /t 60 /D 1 /C %choiceStr% /M "Which JDK (%promptStr%)?"
@@ -47,9 +48,14 @@ REM CAT7
 set CATALINA_HOME=%CAT7%
 goto EOF
 
-REM CAT7
+REM CAT9
 :CAT_2
 set CATALINA_HOME=%CAT9%
+goto EOF
+
+REM CAT10
+:CAT_3
+set CATALINA_HOME=%CAT10%
 goto EOF
 
 :EOF

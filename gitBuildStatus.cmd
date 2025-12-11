@@ -3,6 +3,7 @@ setlocal
 @echo %doEcho%
 echo.
 echo IIQ_VERSION=%IIQ_VERSION%
+if defined SWITCH_IIQ echo SWITCH_IIQ=%SWITCH_IIQ%
 echo IIQ_BUG=%IIQ_BUG%
 echo GIT_REMOTE=%GIT_REMOTE%
 echo PULL_BRANCH=%PULL_BRANCH%

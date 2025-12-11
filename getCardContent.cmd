@@ -6,5 +6,5 @@ if [%2] NEQ [] set DEST_FILE=%~2
 set cmd=jq .content %JSON_FILE%
 echo %cmd% ^> "%DEST_FILE%"
 call %cmd% > "%DEST_FILE%"
-call "%DEST_FILE%"
+rem call "%DEST_FILE%"
 endlocal

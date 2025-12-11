@@ -28,6 +28,7 @@ goto eof
 
 :doItem
 if %1 EQU debug call %SCRIPT_HOME%\setJDWPOpts CATALINA_OPTS
+if %1 EQU jdb call %SCRIPT_HOME%\setJDWPOpts-JDB CATALINA_OPTS
 
 goto eof
 
