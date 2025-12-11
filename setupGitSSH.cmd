@@ -5,12 +5,13 @@
 )
 set FORCE=%1
 if DEFINED SSH_AUTH_SOCK goto alreadySet
+setlocal
 goto doIt
 goto end
 
 :doIt
 rem set SSH_BIN=C:\Program Files\Git\usr\bin
-set SSH_BIN=C:\Git\usr\bin
+if not DEFINED SSH_BIN set SSH_BIN=C:\Git\usr\bin
 if DEFINED FORCE echo Resetting GIT SSH environment
 rem call setScriptId.cmd
 set SSH-AGENT-TEMPFILE=%TEMP%\_ssh-agent.%RANDOM%
