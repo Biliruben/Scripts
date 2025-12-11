@@ -1,13 +1,14 @@
-ajcPort=8009
-DIRCMD=/ogn /tc /4
-doEcho=off
-EDITOR=gvim
-GIT_EDITOR=gvim
-GIT_HOME=c:\GITRoot
-httpPort=8080
-httpsPort=8443
-JAVA_OPTS=-Xmx4096m -Dsun.lang.ClassLoader.allowArraySyntax=true -Dport.shutdown=8005 -Dport.http=8080 -Dport.ajp=8009 -Dhost.xmlBase=c:/localhost
-PROMPT=$C$T$S$F$C$S$M$F$S$P$G$_$$$S
-scriptsdir=c:\scripts
-SCRIPT_HOME=c:\scripts
-shutdownPort=8005
+# Usage: for /f "eol=# delims=~" %i in (baseEnv.txt) do setx %i
+ajcPort "8009"
+DIRCMD "/ogn /tc /4"
+doEcho "off"
+EDITOR "gvim"
+GIT_EDITOR "gvim"
+GIT_HOME "c:\GITRoot"
+httpPort "8080"
+httpsPort "8443"
+JAVA_OPTS "-Xmx4096m -Dsun.lang.ClassLoader.allowArraySyntax=true -Dport.shutdown=8005 -Dport.http=8080 -Dport.ajp=8009 -Dhost.xmlBase=c:/localhost"
+PROMPT "$C$T$S$F$C$S$M$F$S$P$G$_$$$S"
+scriptsdir "c:\scripts"
+SCRIPT_HOME "c:\scripts"
+shutdownPort "8005"
