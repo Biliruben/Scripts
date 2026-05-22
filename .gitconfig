@@ -1,0 +1,37 @@
+[user]
+[credential]
+[core]
+	autocrlf = false
+	pager = cat
+    whitespace = tab-in-indent
+	editor = vim
+	editor = gvim
+	excludesFile = c:\\etn_data\\tk_git.ignore
+[user]
+	name = trey-kirk-sp
+	email = trey.kirk@sailpoint.com
+[alias]
+    sl = stash list
+	bugz = show --reverse --name-only --format=\"%nHash: %H%nAuthor: %an <%ae>%nDate:   %cd%n%n     %s\"
+    jira-old = show --reverse --name-only --format=\"%n-------------------------------------------------%nHash: [%h|https://github.com/sailpoint/identityiq/commit/%H]%nCommitter: %cn <%ce>%nAuthor: %an <%ae>%nDate:   %cd%n%n     %s%n\"
+    jira = show --reverse --name-only --format=\"%n-------------------------------------------------%nHash: [%h](https://github.com/sailpoint/identityiq/commit/%H)%nCommitter: %cn <%ce>%nAuthor: %an <%ae>%nDate:   %cd%n%n     %s%n\"
+    zlog = log -z --reverse --format=\"%H:%s%b%n\"
+	findpull = desribe --all --contains
+    branches = show --reverse --name-only --format=\"%nBranches: %d%nHash: %H%nAuthor: %an <%ae>%nDate:   %cd%n%n     %s\"
+    tug = pull origin
+    whenadded = log --diff-filter=A
+[push]
+	default = current
+[diff]
+    tool = bc3
+[difftool "bc3"]
+    cmd = bcompare \"$LOCAL\" \"$REMOTE\"
+[difftool]
+    prompt = false
+[url "git://"]
+	insteadOf = https://
+[merge]
+	renamelimit = 5882
+[pack]
+	windowMemory = 512m
+	threads = 8
