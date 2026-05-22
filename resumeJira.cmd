@@ -22,7 +22,8 @@ rem setup our env vars
 call %scriptsdir%\setupBugEnv.cmd %*
 
 rem Switch to the appropriate JDK / NodeJS before confirming setup
-call %scriptsdir%\switchIIQ.cmd %IIQ_VERSION%
+if not defined SWITCH_IIQ set SWITCH_IIQ=%IIQ_VERSION%
+call %scriptsdir%\switchIIQ.cmd %SWITCH_IIQ%
 rem A little opp for our caller to complain
 if not defined bugSearchTerm set bugSearchTerm %IIQ_BUG%
 echo Finding previous instances of bug: %bugSearchTerm%

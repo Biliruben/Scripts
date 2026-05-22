@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Make Searches">
+  <Description>Makes some saved searches for Jimmy</Description>
+  <Source>
+import sailpoint.object.Filter;
+import sailpoint.object.Identity;
+import sailpoint.object.SearchItem;
+import sailpoint.object.SearchItemFilter;
+import sailpoint.object.UIPreferences;
+
+        String IDENTITY_NAME = "james.smith";
+        // Create a UI pref w/ saved searches
+        Identity jimmy = context.getObjectByName(Identity.class, IDENTITY_NAME);
+        UIPreferences jimmyPref = jimmy.getUIPreferences();
+        if (jimmyPref == null) {
+            jimmyPref = new UIPreferences();
+            jimmyPref.setOwner(jimmy);
+            jimmy.setUIPreferences(jimmyPref);
+            context.saveObject(jimmyPref);
+        }
+        List identityFields = Arrays.asList(new String[]{"userName"});
+        List searchItems = new ArrayList();
+        SearchItem item = new SearchItem("Hi");
+        item.setType(SearchItem.Type.AdvancedIdentity);
+        SearchItemFilter hiFilter = new SearchItemFilter(Filter.eq("administrator.name", "true"));
+        item.addSearchFilter(hiFilter);
+        item.setIdentityFields(identityFields);
+        searchItems.add(item);
+        item = new SearchItem("K Bye");
+        item.setType(SearchItem.Type.AdvancedIdentity);
+        SearchItemFilter byeFilter = new SearchItemFilter(Filter.eq("administrator.name", "false"));
+        item.addSearchFilter(byeFilter);
+        item.setIdentityFields(identityFields);
+        searchItems.add(item);
+
+        // Add it to Jimmy Smits
+        jimmyPref.put("advancedIdentitySearchItemList", searchItems);
+        context.saveObject(jimmy);
+        context.commitTransaction();
+
+        return jimmyPref.toXml();
+   </Source>
+</Rule>

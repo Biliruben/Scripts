@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Send Email">
+  <Source>
+
+      import bsh.Primitive;
+      import sailpoint.object.EmailTemplate;
+      import sailpoint.object.EmailOptions;
+      import sailpoint.object.Identity;
+      import sailpoint.tools.GeneralException;
+
+      // Provide these in the arguments file, instead
+      String EMAIL_TEMPLATE="Joiner Completed Notification";
+      String TO_IDENTITY="Amy.Cox";
+      String DEFAULT_EMAIL_ADDY = "admin@example.com";
+      log.warn("Deets:\n\tEMAIL_TEMPLATE: " + EMAIL_TEMPLATE + 
+            "\n\tTO_IDENTITY: " + TO_IDENTITY + 
+            "\n\tDEFAULT_EMAIL_ADDY: " + DEFAULT_EMAIL_ADDY);
+
+      // In addition, an argument file must be provided that defines 'emailArgs'
+      
+      Identity identity = context.getObjectByName(Identity.class, TO_IDENTITY);
+      String emailAddy = DEFAULT_EMAIL_ADDY;
+      if (identity != null) {
+         emailAddy = identity.getEmail();
+      }
+
+      if (emailAddy == null || emailAddy.trim().equals("")) {
+         emailAddy = DEFAULT_EMAIL_ADDY;
+      }
+      log.warn("actual email: " + emailAddy);
+
+      EmailTemplate template = context.getObjectByName(EmailTemplate.class, EMAIL_TEMPLATE);
+      if (template == null) {
+         throw new GeneralException("Can't not find email template: " + EMAIL_TEMPLATE);
+      }
+      // did the user provide arguments for the email template?
+      Map emailVars = new HashMap();
+      Object objVal = global.namespace.getVariable("emailArgs");
+      if (objVal != null &amp;&amp; objVal != Primitive.VOID &amp;&amp; objVal instanceof Map) {
+        emailVars = (Map)objVal;
+      }
+
+      EmailOptions options = new EmailOptions();
+      options.setTo(TO_IDENTITY);
+      options.addVariables(emailVars);
+      context.sendEmailNotification(template, options);
+
+  </Source>
+</Rule>
+

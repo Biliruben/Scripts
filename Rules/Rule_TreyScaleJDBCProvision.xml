@@ -1,0 +1,434 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="TreyScaleJDBCProvisioning" type="JDBCProvision">
+  <Description>Just loads a buttload of shit in the session and commits</Description>
+  <Source>
+    <![CDATA[
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.commons.logging.LogFactory;
+
+import sailpoint.object.ProvisioningPlan;
+import sailpoint.object.ProvisioningPlan.AccountRequest;
+import sailpoint.object.ProvisioningPlan.AttributeRequest;
+import sailpoint.object.ProvisioningPlan.Operation;
+import sailpoint.object.ProvisioningResult;
+import sailpoint.object.Schema;
+import sailpoint.tools.Util;
+
+
+    String TABLE_NAME = "tk_scale_acct_50";
+    String COL_ACCTID = "acctId";
+    String COL_SRC_APPLICATION = "IIQSourceApplication";
+    String COL_INDEX = "indexCol";
+    String COL_ENTITLEMENT = "entitlement";
+
+        /**
+        *
+        * Author: Trey Kirk (cribbed from DemoData's "JDBCProvision" rule for JDBCDirectDemoData
+        * Purpose: "Trey Scale 50k" Provisioning rule for JDBC multi-plexed sources. Multiple generated Applications all read from a common
+        *          JDBC connection, requiring special handling.
+        *
+        * Sample queries:
+             INSERT INTO tk_scale_acct_50 (acctId, IIQSourceApplication, indexCol, entitlement) 
+                    VALUES ('NzingaMalaika.Mirrione-1', 'Application2', 'NzingaMalaika.Mirrione-1Application2', 'HappyEntitlement');
+
+             DELETE FROM tk_scale_acct_50 where indexCol = 'NzingaMalaika.Mirrione-1Application2' and entitlement = 'SadEntitlement';
+        **/
+
+/**
+*
+* The methods go here
+*
+**/
+
+    private void printDebugInfo() {
+        // Dump the namespace
+        log.debug("Dumping args...");
+        for (String var : global.namespace.getVariableNames()) {
+           log.warn(var + ": " + global.namespace.getVariable(var));
+        }
+
+    }
+
+    private void printStatement(PreparedStatement statement) {
+        log.debug(statement);
+    }
+
+    private void processAccountRequests(ProvisioningPlan plan, ProvisioningResult result, Connection connection) throws IllegalArgumentException {
+        List<AccountRequest> accounts = plan.getAccountRequests();
+        String nativeIdentity = plan.getNativeIdentity();
+
+        //  Get all Account Requests out of the plan
+        if ( ( accounts != null ) && ( accounts.size() > 0 ) ) {
+
+            //
+            // If the plan contains one or more account requests, we'll iterate through them
+            //
+            for ( AccountRequest account : accounts ) {
+                if (account.getNativeIdentity() == null) {
+                    account.setNativeIdentity(nativeIdentity + account.getApplicationName());
+                }
+                try {
+
+                    // 
+                    // All of the account operations will reside in a try block in case we have any errors, we can mark the provisioningresult as "Failed" if we have an issue.
+                    //
+
+                    AccountRequest.Operation op = account.getOperation();
+                    log.debug("Account operation: " + op);
+                    if (op == AccountRequest.Operation.Create) {
+                        // ensure all required values are present
+                        account.put(COL_SRC_APPLICATION, account.getApplicationName());
+                        account.put(COL_ACCTID, nativeIdentity);
+                        handleCreate(account, result, connection);
+                        if (account.getAttributeRequests() != null &&
+                            account.getAttributeRequests().size() > 0) {
+                                // now do the attributes
+                                handleModify(account, result, connection);
+                            }
+                    } else if (op == AccountRequest.Operation.Modify) {
+                        handleModify(account, result, connection);
+                    } else if (op == AccountRequest.Operation.Delete) {
+                        handleDelete(account, result, connection);
+                    } else  {
+                        throw new IllegalArgumentException("Account Operation: " + account.getOperation() + " is not supported");
+                    }
+                    result.setStatus(ProvisioningResult.STATUS_COMMITTED);
+                } catch (SQLException e) {
+                    log.error("Error: " + e);
+                    result.setStatus(ProvisioningResult.STATUS_FAILED);
+                    result.addError(e);
+                }
+            }    // account request loop
+        }     // if account requests exist
+    }
+
+    private void handleDelete(AccountRequest account, ProvisioningResult result, Connection connection) throws SQLException {
+
+        //
+        // DELETE ACCOUNT Operation
+        // 
+
+        log.debug("Account Request Operation = Delete");
+        PreparedStatement statement = null; 
+        try {
+            statement = connection.prepareStatement("delete from " + TABLE_NAME + "  where " + COL_INDEX + " = ?");
+            statement.setString(1, (String) account.getNativeIdentity());
+            statement.executeUpdate(); 
+        } finally {
+            statement.close();
+        }
+
+    }
+
+    private void handleModify(AccountRequest account, ProvisioningResult result, Connection connection) throws IllegalArgumentException, SQLException {
+
+        //
+        // MODIFY Operation
+        // 
+
+        log.debug("Account Request Operation = Modify");
+
+        for (AttributeRequest attribute : account.getAttributeRequests()) {
+            Operation attOp = attribute.getOperation();
+            if (attOp == Operation.Add) {
+                handleAttributeAdd(attribute, account, connection);
+            } else if (attOp == Operation.Remove) {
+                log.debug("Using Revoke for Remove");
+                handleAttributeRevoke(attribute, account, connection);
+            } else if (attOp == Operation.Revoke) {
+                handleAttributeRevoke(attribute, account, connection);
+            } else if (attOp == Operation.Set) {
+                handleAttributeSet(attribute, account, connection);
+            } else if (attOp == Operation.Retain) {
+                log.debug("Retain operation is a no-op");
+            } else {
+                throw new IllegalArgumentException("Attribute operation " + attOp + " is not supported");
+            }
+        }
+    }
+
+    private void handleAttributeSet(AttributeRequest attribute, AccountRequest account, Connection connection) throws SQLException, IllegalArgumentException {
+        String attrName = attribute.getName();
+        String attrValue = (String)attribute.getValue();
+        String indexVal = account.getNativeIdentity();
+        if (COL_ENTITLEMENT.equals(attrName)) {
+            throw new IllegalArgumentException("Cannot Set entitlement value");
+        }
+        PreparedStatement statement = null; 
+        try {
+            statement = connection.prepareStatement("update " + TABLE_NAME + " SET " + getColumnName(attrName) + " = ? where " + COL_INDEX + " = ?");
+            statement.setString(1, attrValue);
+            statement.setString(2, indexVal);
+            statement.executeUpdate();
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+        }
+    }
+
+    private String getColumnName(String attrName) {
+        // This isn't anything fancy. Right now, the attribute
+        // names match the column names. But if we wanna get more
+        // abstract some day, cool!
+        return attrName;
+    }
+
+    private void handleAttributeRevoke(AttributeRequest attribute, AccountRequest account, Connection connection) throws SQLException, IllegalArgumentException {
+        log.debug("handleAttributeRevoke");
+        String attrName = attribute.getName();
+        Map originalValues = getExistingValues(account, connection);
+        if (COL_ENTITLEMENT.equals(attrName)) {
+            delete(attribute, account, connection);
+        } else {
+            clear(attribute, account, connection);
+        }
+        Map newValues = getExistingValues(account, connection);
+        if (newValues == null || newValues.isEmpty()) {
+            log.debug("Inserting original values: " + originalValues);
+            // When revoking entitlements, we might remove all rows for an account. If we do, add a new one w/ a blank
+            // entitlement
+            innerInsert(originalValues, connection);
+        }
+    }
+
+    private void handleAttributeAdd(AttributeRequest attribute, AccountRequest account, Connection connection) throws IllegalArgumentException, SQLException {
+        log.debug("handleAttributeAdd");
+        String attrName = attribute.getName();
+        if (COL_ENTITLEMENT.equals(attrName)) {
+            insert(attribute, account, connection);
+        } else {
+            update(attribute, account, connection);
+        }
+    }
+
+    private void clear(AttributeRequest attribute, AccountRequest account, Connection connection) throws IllegalArgumentException, SQLException {
+        log.debug("clear");
+        String attrName = attribute.getName();
+        if (COL_INDEX.equals(getColumnName(attrName))) {
+            throw new IllegalArgumentException("Cannot CLEAR " + COL_INDEX);
+        }
+        String indexVal = account.getNativeIdentity();
+        PreparedStatement statement = null;
+        try {
+            String baseSql = "upate " + TABLE_NAME + " SET " + getColumnName(attrName) + " = NULL where " + COL_INDEX + " = ?";
+            statement = connection.prepareStatement(baseSql);
+            statement.setString(1, indexVal);
+            statement.executeUpdate();
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+        }
+    }
+
+    private void delete(AttributeRequest attribute, AccountRequest account, Connection connection) throws SQLException {
+        log.debug("delete");
+        String attrName = attribute.getName();
+        Object attrValueObj = attribute.getValue();
+        List attrValues = Util.otol(attrValueObj);
+        log.debug("attrValues: " + attrValues);
+        String indexVal = account.getNativeIdentity();
+        PreparedStatement statement = null;
+        for (String attrValue : attrValues) {
+            try {
+            
+                String baseSql = "delete from " + TABLE_NAME + " where " + COL_INDEX + " = ?";
+                if (COL_INDEX.equals(getColumnName(attrName))) {
+                    // where clause is rather simple
+                    statement = connection.prepareStatement(baseSql);
+                } else {
+                    statement = connection.prepareStatement(baseSql + " and " + getColumnName(attrName) + " = ?");
+                    statement.setString(2, attrValue);
+                }
+                statement.setString(1, indexVal);
+                if (log.isDebugEnabled()) printStatement(statement);
+                int res = statement.executeUpdate();
+                log.debug("res: " + res);
+            } finally {
+                if (statement != null) {
+                    statement.close();
+                }
+            }
+        }
+    }
+
+    private void update(AttributeRequest attribute, AccountRequest account, Connection connection) throws SQLException, IllegalArgumentException {
+        log.debug("update");
+        String attrName = attribute.getName();
+        if (COL_ENTITLEMENT.equals(getColumnName(attrName))) {
+            throw new IllegalArgumentException("Cannot Update entitlement");
+        }
+        String attrValue = (String)attribute.getValue();
+        String indexVal = account.getNativeIdentity();
+        PreparedStatement statement = null;
+        try {
+            String baseSql = "upate " + TABLE_NAME + " SET " + getColumnName(attrName) + " = ? where " + COL_INDEX + " = ?";
+            statement = connection.prepareStatement(baseSql);
+            statement.setString(1, attrValue);
+            statement.setString(2, indexVal);
+            statement.executeUpdate();
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+        }
+    }
+
+    private void insert(AttributeRequest attribute, AccountRequest account, Connection connection) throws IllegalArgumentException, SQLException {
+        log.debug("update");
+        String attrName = attribute.getName();
+        if (!COL_ENTITLEMENT.equals(getColumnName(attrName))) {
+            throw new IllegalArgumentException("Cannot Insert non-entitlement values");
+        }
+        Object attrValueObj = (String)attribute.getValue();
+        List attrValues = Util.otol(attrValueObj);
+        String indexVal = account.getNativeIdentity();
+        // get an existing row. If there is none, throw non-op
+        Map existingValues = getExistingValues(account, connection);
+        for (String attrValue : attrValues) {
+            existingValues.put(getColumnName(attrName), attrValue);
+            innerInsert(existingValues, connection);
+        }
+    }
+
+    private void innerInsert(Map existingValues, Connection connection) throws SQLException {
+        log.debug("innerInsert");
+        StringBuilder columnNameBuff = new StringBuilder();
+        int count = 0;
+        String[] valueArry = new String[existingValues.size()];
+        for (Object entryObj : existingValues.entrySet()) {
+            Entry e = (Entry)entryObj;
+            columnNameBuff.append(e.getKey()).append(",");
+            valueArry[count] = (String)e.getValue();
+            count++;
+        }
+        columnNameBuff.deleteCharAt(columnNameBuff.length() - 1);
+        PreparedStatement statement = null;
+        StringBuilder sqlBuff = new StringBuilder();
+        sqlBuff.append("insert into ").append(TABLE_NAME).append(" (").append(columnNameBuff.toString()).append(") values (");
+        for (int i = 0; i < count; i++) {
+            sqlBuff.append("?");
+            if (i < count - 1) {
+                sqlBuff.append(",");
+            }
+        }
+        sqlBuff.append(")");
+        try {
+            statement = connection.prepareStatement(sqlBuff.toString());
+            for (int i = 1; i <= count; i++) {
+                statement.setString(i, valueArry[i - 1]);
+            }
+            if (log.isDebugEnabled()) printStatement(statement);
+            statement.executeUpdate();
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+        }
+    }
+
+    private Map getExistingValues(AccountRequest account, Connection connection) throws SQLException {
+        log.debug("getExistingValues");
+        String indexVal = account.getNativeIdentity();
+        String sql = "select " + COL_ACCTID + ", " + COL_SRC_APPLICATION + ", " + COL_INDEX + " from " + TABLE_NAME + " where " + COL_INDEX + " = ?";
+        PreparedStatement statement = null;
+        Map existingValues = new HashMap();
+        try {
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, indexVal);
+            ResultSet results = statement.executeQuery();
+            if (results.next()) {
+                existingValues.put(COL_ACCTID, results.getString(COL_ACCTID));
+                existingValues.put(COL_SRC_APPLICATION, results.getString(COL_SRC_APPLICATION));
+                existingValues.put(COL_INDEX, results.getString(COL_INDEX));
+            } else {
+                log.debug("No exising values found for " + indexVal);
+            }
+            while(results.next()) { // let the cursor run its course 
+            } 
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+        }
+        return existingValues;
+    }
+
+    private void handleCreate(AccountRequest account, ProvisioningResult result, Connection connection) throws SQLException {
+
+        //
+        // CREATE Operation
+        //              
+
+        if (log.isDebugEnabled()) log.debug("Account Request Operation = Create: " + account.toXml());
+
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement("insert into " + TABLE_NAME + " (" + COL_ACCTID + ", " + COL_SRC_APPLICATION + ", " + COL_INDEX + ", " + COL_ENTITLEMENT + ") values (?, ?, ?, ?)");
+            statement.setString(1, account.get(COL_ACCTID));
+            statement.setString(2, account.get(COL_SRC_APPLICATION));
+            statement.setString(3, account.getNativeIdentity());
+            statement.setString(4, null);
+            log.debug("Preparing to execute: " + statement);
+            statement.executeUpdate();
+        }   finally {
+            if (statement != null) {
+                statement.close();
+            }
+        }
+    }
+
+        //
+        // Provisioning Rule Body
+        //
+
+
+        // Overwrite the log object with our own classname so we can turn on
+        // logging on for just this rule. Add a line like this to log4j props file:
+        // log4j.logger.sailpoint.rule.JDBCDemoDataProvisioning=debug
+        log = LogFactory.getLog("sailpoint.rule.TreyScaleJDBCProvisioning");
+
+        if (log.isDebugEnabled()) printDebugInfo();
+
+        log.debug("\n\n\n\n\n");
+        log.debug("****************************************");
+        log.debug("Entering Provisioning Rule for " + application);
+        log.debug("****************************************");
+
+
+        // The ProvisioningResult is the return object for this type of rule. We'll create it here and then populate it later
+        ProvisioningResult result = new ProvisioningResult();
+
+        if (log.isDebugEnabled()) {
+            log.debug("*** \n The Provisioning Plan being passed in = \n***\n" + plan != null ? plan.toXml() : plan + "\n****************************************");
+        }
+
+        // Check if the plan is null or not, if not null, process it... 
+        if ( plan != null && Schema.TYPE_ACCOUNT.equals(schema.getObjectType())) {
+            processAccountRequests(plan, result, connection);
+        } else {
+            throw new IllegalArgumentException("Only Account provisioning is supported");
+        }
+
+        log.debug("****************************************");
+        log.debug("****************************************");
+        log.debug("Exiting Provisioning Rule for JDBCDirectDemoData. \n  Result=  \n" + result.toXml(false));
+        log.debug("****************************************");
+        log.debug("****************************************");
+
+        return result;
+
+
+    ]]>
+  </Source>
+</Rule>

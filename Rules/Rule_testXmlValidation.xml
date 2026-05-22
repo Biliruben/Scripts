@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Test XML Validation">
+    <Source>
+		<![CDATA[
+        import sailpoint.tools.xml.XMLObjectFactory;
+        import sailpoint.tools.XmlUtil;
+
+        // Provide sample XML strings to parse and test validation (probably through trace or debugger)
+        // Sample XML will come from an args file via a List<String> xmlStrings
+
+        try {
+            for (String xml : xmlStrings) {
+                int len = xml.length() >= 200 ? 200 : xml.length() - 1;
+                System.out.println("Parsing " + xml.substring(0, len) + "...\n");
+                // XMLObjectFactory.getInstance().parseXml(context, xml, true);
+                XmlUtil.parse(xml);
+            }
+        } catch (Throwable t) {
+            log.error(t.getMessage(), t);
+        }
+		]]>
+    </Source>
+</Rule>    

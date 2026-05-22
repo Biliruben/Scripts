@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Run Partition Manager Cert">
+    <Source>
+        import sailpoint.api.Terminator;
+        import sailpoint.api.SailPointContext;
+        import sailpoint.api.TaskManager;
+        import sailpoint.object.RequestDefinition;
+        import sailpoint.request.RequestProcessor;
+        import sailpoint.request.ManagerCertificationPartitionRequestExecutor;
+        import sailpoint.object.TaskDefinition;
+        import sailpoint.object.Certification;
+        import sailpoint.object.TaskResult;
+        import sailpoint.object.TaskSchedule;
+        import sailpoint.object.CertificationGroup;
+        import sailpoint.object.Request;
+        import sailpoint.object.CertificationGroup.Status;
+        import sailpoint.task.PartitionedManagerCertificationTaskExecutor;
+        import sailpoint.request.ManagerCertificationPartitionRequestExecutor.PhaseExecutor;
+        import sailpoint.request.ManagerCertificationPartitionRequestExecutor.Phase;
+        import sailpoint.api.certification.ManagerCertificationPartitionerTests.TerminateInterceptor;
+        import sailpoint.tools.GeneralException;
+        import sailpoint.server.Environment;
+        import sailpoint.server.Service;
+        import org.apache.commons.logging.Log;
+
+        public TaskResult awaitTask(SailPointContext context, TaskResult result,
+                                int seconds)
+            throws GeneralException {
+
+            int iterations;
+
+            for (iterations = 0 ; iterations &lt; seconds ; iterations++) {
+                log.warn("AwaitingTask: " + iterations + " of " + seconds);
+                Thread.sleep(1000L * seconds);
+                context.reconnect();
+                result = context.getObjectById(TaskResult.class, result.getId());
+
+                if (result == null)
+                    throw new GeneralException("TaskResult went away!");
+
+                if (result.isComplete())
+                    break;
+            }
+
+            if (iterations >= seconds)
+                throw new GeneralException("Timeout waiting for task completion: " + result.getName());
+
+            return result;
+        }
+
+        public TaskResult awaitTaskResult(SailPointContext context, TaskSchedule sched,
+                                      int seconds)
+            throws GeneralException {
+
+            TaskResult result = null;
+            int iterations;
+    
+            // allow increasing this in eclipse
+            seconds = 10;
+
+            for (iterations = 0 ; iterations &lt; seconds ; iterations++) {
+
+                log.warn("AwaitingTaskResult: " + iterations + " of " + seconds);
+                Thread.sleep(1000L * seconds);
+                context.reconnect();
+                result = sched.getLatestResult();
+                if (result != null)
+                    break;
+            }
+
+            if (result == null)
+                throw new GeneralException("Timeout waiting for TaskResult: " + sched.getName());
+
+            return result;
+        }
+
+        public TaskSchedule runTask(SailPointContext context, TaskDefinition def,
+                                Map args)
+            throws Exception {
+
+            TaskResult res = context.getObject(TaskResult.class, def.getName());
+            if (res != null) {
+                context.removeObject(res);
+                context.commitTransaction();
+        }
+
+            TaskManager tm = new TaskManager(context);
+            return tm.run(def, args);
+    }
+
+
+        public void suspendRequestProcessor() throws GeneralException {
+
+            Environment env = Environment.getEnvironment();
+            Service s = env.getRequestService();
+            s.suspend();
+        }
+
+        public void resumeRequestProcessor() throws GeneralException {
+
+            Environment env = Environment.getEnvironment();
+            Service s = env.getRequestService();
+            s.start();
+        }
+
+        public TaskResult startTask(SailPointContext context, TaskDefinition def,
+                                Map args)
+            throws Exception {
+
+            TaskResult result = null;
+            TaskSchedule sched = runTask(context, def, args);
+            if (sched != null)
+                result = awaitTaskResult(context, sched, 10);
+            return result;
+        }
+
+
+        Terminator terminator = new Terminator(context);
+        terminator.deleteObjects(Certification.class, null);
+
+        RequestDefinition requestDefinition = context.getObjectByName(RequestDefinition.class, PartitionedManagerCertificationTaskExecutor.REQUEST_DEFINITION_NAME);
+        requestDefinition.setArgument(ManagerCertificationPartitionRequestExecutor.ARG_NUM_PARTITIONS, 3);
+        context.saveObject(requestDefinition);
+        context.commitTransaction();
+        
+        RequestProcessor.setMaxThreads(RequestDefinition.REQ_MANAGER_CERT, 3);
+        
+        // ManagerCertificationPartitionRequestExecutor.setInterceptor(new TerminateInterceptor(context));
+
+        ManagerCertificationPartitionRequestExecutor.setInterceptor(new sailpoint.request.ManagerCertificationPartitionRequestExecutor.Interceptor() {
+        
+            int count = 0;
+            boolean done = false;
+            SailPointContext innerContext = context;
+            Log innerLog = log;
+        
+            public void intercept(PhaseExecutor phaseExecutor)
+                    throws GeneralException {
+
+                ++count;
+                    innerLog.warn("INTERCEPTING request: " + phaseExecutor.getRequest().getName() + ", count: " + count);
+                if (done == false &amp;&amp; phaseExecutor.getPhase() == Phase.GenerateCerts &amp;&amp; count == 2) {
+                        innerLog.warn("terminating!!!");
+                    done = true;
+                    terminate(phaseExecutor.getRequest());
+                } else {
+                    if (phaseExecutor.getPhase() == Phase.GenerateCerts) {
+                        try {
+                                innerLog.warn(phaseExecutor.getRequest().getName() + ", sleeping...");
+                            Thread.sleep(5000);
+                        } catch (InterruptedException ex) {
+                        }
+                    }
+                }
+            }
+            
+            private void terminate(Request request) throws GeneralException {
+                
+                TaskManager taskManager = new TaskManager(innerContext);
+                taskManager.terminate(request.getTaskResult());
+            }
+        });
+
+        try {
+            TaskDefinition taskDefinition = context.getObject(TaskDefinition.class, "Partitioned Global Manager Cert");
+    
+            suspendRequestProcessor();
+            TaskResult result = null;
+            try {
+                result = startTask(context, taskDefinition, null);
+            } finally {
+                resumeRequestProcessor();
+            }
+    
+            if (result == null) {
+                throw new IllegalStateException("Could not launch task.");
+            }
+            awaitTask(context, result, 15);
+            
+            String groupId = result.getString(PartitionedManagerCertificationTaskExecutor.RET_CERT_GROUP_ID);
+            CertificationGroup group = context.getObjectById(CertificationGroup.class, groupId);
+            Status status = group.getStatus();
+            return ("Expected status: " + Status.Error + "; Actual status: " + status);
+        } finally {
+            ManagerCertificationPartitionRequestExecutor.setInterceptor(null);
+        }
+
+    </Source>
+</Rule>

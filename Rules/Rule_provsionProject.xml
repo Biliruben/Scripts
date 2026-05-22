@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Provision Project">
+  <Source>
+    <![CDATA[
+import sailpoint.api.Provisioner;
+import sailpoint.object.Identity;
+import sailpoint.object.ProvisioningPlan;
+import sailpoint.object.ProvisioningPlan.AccountRequest;
+import sailpoint.object.ProvisioningPlan.AttributeRequest;
+import sailpoint.object.ProvisioningPlan.Operation;
+import sailpoint.object.ProvisioningProject;
+import sailpoint.provisioning.PlanCompiler;
+    
+        String BUNDLE_NAME = "ADDirect-Accounting General Access";
+        // String BUNDLE_NAME = "BR Buddy";
+        String IDENTITY_NAME = "Amy.Cox";
+
+        try {
+            Identity identity = context.getObjectByName(Identity.class, IDENTITY_NAME);
+            ProvisioningPlan plan = new ProvisioningPlan();
+            plan.setIdentity(identity);
+            AccountRequest acctReq = new AccountRequest();
+    
+            acctReq.setApplication(ProvisioningPlan.APP_IIQ);
+            acctReq.setOperation(sailpoint.object.ProvisioningPlan.AccountRequest.Operation.Modify);
+            AttributeRequest attr = new AttributeRequest();
+            attr.setName(ProvisioningPlan.ATT_IIQ_ASSIGNED_ROLES);
+            attr.setOp(Operation.Add);
+            attr.setValue(BUNDLE_NAME);
+            acctReq.add(attr);
+            plan.add(acctReq);
+            
+            PlanCompiler compy = new PlanCompiler(context);
+            ProvisioningProject proj = compy.compile(null, plan, null);
+            proj.setIdentity(identity);
+            Provisioner prov = new Provisioner(context);
+            prov.execute(proj);
+        } catch (Throwable t) {
+            log.error (t.getMessage(), t);
+        }
+
+    ]]>
+  </Source>
+</Rule>

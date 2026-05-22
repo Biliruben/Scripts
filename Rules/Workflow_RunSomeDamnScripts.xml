@@ -1,0 +1,265 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Workflow PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Workflow created="1715208138781" explicitTransitions="true" id="0a0a64328f5a1453818f5a5f301c0103" modified="1715208291030" name="Run Some Damn Scripts" type="">
+  <Step icon="Start" name="Start" posX="28" posY="10">
+    <Transition to="Generic Step"/>
+  </Step>
+  <Step icon="Stop" name="Stop" posX="1014" posY="10"/>
+  <Step icon="Default" name="Generic Step" posX="98" posY="10">
+    <Script>
+      <Source>import sailpoint.object.Application;
+import sailpoint.object.AttributeAssignment;
+import sailpoint.object.Attributes;
+import sailpoint.object.Identity;
+import sailpoint.object.Link;
+import sailpoint.object.ManagedAttribute.Type;
+import sailpoint.object.Source;
+
+
+        Identity aaden = context.getObjectByName(Identity.class, "Amy.Cox");
+        List&lt;Link> allLinks = aaden.getLinks();
+        for (Link link : allLinks) {
+            String appName = link.getApplicationName();
+            if (appName != null &amp;&amp; appName.startsWith("ApplicationProfile")) {
+                Application app = link.getApplication();
+                String nativeId = link.getNativeIdentity();
+                Attributes entitlementAttributes = link.getEntitlementAttributes();
+                Object entitlementValuesObj = entitlementAttributes.get("entitlement");
+                List entitlementValues = null;
+                if (entitlementValuesObj instanceof List) {
+                    entitlementValues = (List)entitlementValuesObj;
+                } else {
+                    entitlementValues = Collections.singletonList(entitlementValuesObj);
+                }
+                for (Object entitlementValue : entitlementValues) {
+                    AttributeAssignment ass = new AttributeAssignment(app, nativeId, null, "entitlement", entitlementValue,"James.Smith", Source.LCM, Type.Entitlement);;
+                    aaden.add(ass);
+                }
+            }
+        }
+
+        return aaden.toXml();
+</Source>
+    </Script>
+    <Transition to="Generic Step (1)"/>
+  </Step>
+  <Step icon="Default" name="Generic Step (1)" posX="224" posY="10">
+    <Script>
+      <Source>      import bsh.Primitive;
+      import sailpoint.object.EmailTemplate;
+      import sailpoint.object.EmailOptions;
+      import sailpoint.object.Identity;
+      import sailpoint.tools.GeneralException;
+
+      // Provide these in the arguments file, instead
+      String EMAIL_TEMPLATE="Joiner Completed Notification";
+      String TO_IDENTITY="Amy.Cox";
+      String DEFAULT_EMAIL_ADDY = "admin@example.com";
+      log.warn("Deets:\n\tEMAIL_TEMPLATE: " + EMAIL_TEMPLATE + 
+            "\n\tTO_IDENTITY: " + TO_IDENTITY + 
+            "\n\tDEFAULT_EMAIL_ADDY: " + DEFAULT_EMAIL_ADDY);
+
+      // In addition, an argument file must be provided that defines 'emailArgs'
+      
+      Identity identity = context.getObjectByName(Identity.class, TO_IDENTITY);
+      String emailAddy = DEFAULT_EMAIL_ADDY;
+      if (identity != null) {
+         emailAddy = identity.getEmail();
+      }
+
+      if (emailAddy == null || emailAddy.trim().equals("")) {
+         emailAddy = DEFAULT_EMAIL_ADDY;
+      }
+      log.warn("actual email: " + emailAddy);
+
+      EmailTemplate template = context.getObjectByName(EmailTemplate.class, EMAIL_TEMPLATE);
+      if (template == null) {
+         throw new GeneralException("Can't not find email template: " + EMAIL_TEMPLATE);
+      }
+      // did the user provide arguments for the email template?
+      Map emailVars = new HashMap();
+
+
+      EmailOptions options = new EmailOptions();
+      options.setTo(TO_IDENTITY);
+      options.addVariables(emailVars);
+      context.sendEmailNotification(template, options);
+</Source>
+    </Script>
+    <Transition to="Generic Step (2)"/>
+  </Step>
+  <Step icon="Default" name="Generic Step (2)" posX="382" posY="10">
+    <Script>
+      <Source>    import sailpoint.api.ObjectUtil;
+    import sailpoint.object.Identity;
+
+    Boolean hasName = null;
+    boolean bHasName = ObjectUtil.hasName(Identity.class);
+    hasName = Boolean.valueOf(bHasName);
+    return "hasName: " + hasName;</Source>
+    </Script>
+    <Transition to="Generic Step (3)"/>
+  </Step>
+  <Step icon="Default" name="Generic Step (3)" posX="540" posY="10">
+    <Script>
+      <Source>import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
+import java.lang.management.ThreadMXBean;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import sailpoint.web.DebugBean;
+import sailpoint.object.Custom;
+
+    long DEFAULT_SLEEP = 10000; // 10 seconds
+    boolean INLINE = true;
+
+
+	// directory where the stack files are written
+	String fileNameBase = "/temp/ThreadDumps/ThreadDump";
+
+	void dumpStacks(String fileName) throws IOException {
+		ThreadMXBean mxBean = ManagementFactory.getThreadMXBean();
+		ThreadInfo[] threadInfos = mxBean.getThreadInfo(mxBean.getAllThreadIds(), 0);
+		Map threadInfoMap = new HashMap();
+		for (ThreadInfo threadInfo : threadInfos) {
+			threadInfoMap.put(threadInfo.getThreadId(), threadInfo);
+		}
+
+		// choose our dump-file
+		File dumpFile = new File(fileName);
+		Writer writer = new BufferedWriter(new FileWriter(dumpFile));
+		try {
+			dumpTraces(mxBean, threadInfoMap, writer);
+            writer.write("Connections: " + connections + "\n");
+		} finally {
+            writer.flush();
+			writer.close();
+		}
+	}
+
+	void dumpTraces(ThreadMXBean mxBean, Map threadInfoMap, Writer writer)
+			throws IOException {
+		Map stacks = Thread.getAllStackTraces();
+		writer.write("Dump of " + stacks.size() + " threads at "
+				+ new SimpleDateFormat("yyyy/MM/dd HH:mm:ss z").format(new Date(System.currentTimeMillis())) + "\n\n");
+		for (Map.Entry entry : stacks.entrySet()) {
+			Thread thread = entry.getKey();
+			writer.write("\"" + thread.getName() + "\" prio=" + thread.getPriority() + " tid=" + thread.getId() + " "
+					+ thread.getState() + " " + (thread.isDaemon() ? "deamon" : "worker") + "\n");
+			ThreadInfo threadInfo = threadInfoMap.get(thread.getId());
+			if (threadInfo != null) {
+				writer.write("    native=" + threadInfo.isInNative() + ", suspended=" + threadInfo.isSuspended()
+						+ ", block=" + threadInfo.getBlockedCount() + ", wait=" + threadInfo.getWaitedCount() + "\n");
+				writer.write("    lock=" + threadInfo.getLockName() + " owned by " + threadInfo.getLockOwnerName()
+						+ " (" + threadInfo.getLockOwnerId() + "), cpu="
+						+ (mxBean.getThreadCpuTime(threadInfo.getThreadId()) / 1000000L) + ", user="
+						+ (mxBean.getThreadUserTime(threadInfo.getThreadId()) / 1000000L) + "\n");
+			}
+			for (StackTraceElement element : entry.getValue()) {
+				writer.write("        ");
+				writer.write(element.toString());
+				writer.write("\n");
+			}
+			writer.write("\n");
+		}
+	}
+
+
+      // faux main method
+      String customName = "ThreadDumpConfig";
+      String fileName = "";
+      DebugBean dBean = new DebugBean();
+      int i = 0;
+      int connections = 0;
+      Custom cfg = context.getObject(Custom.class, customName);
+      if (cfg == null) {
+        cfg = new Custom();
+        cfg.setName(customName);
+        cfg.put("sleep", DEFAULT_SLEEP);
+        cfg.put("dump", true);
+      }
+      cfg.put("ctrl", true);
+      context.saveObject(cfg);
+      context.commitTransaction();
+      boolean control = true;
+      while (control) {
+        control = cfg.getBoolean("ctrl");
+        boolean dump = cfg.getBoolean("dump");
+        int sleep = cfg.getInt("sleep");
+
+        // always do this
+        connections = context.getEnvironment().getActiveConnections();
+        if (dump) {
+            String fileName = fileNameBase + System.currentTimeMillis() + "-" + i + ".txt";
+            log.warn("Dumping threads: " + fileName);
+            dumpStacks(fileName);
+        }
+
+        context.decache();
+        cfg = context.getObject(Custom.class, customName);
+
+        log.warn("Sleep: " + sleep);
+        log.warn("Control: " + control);
+        log.warn("Connections: " + connections);
+        i++;
+
+        control = false;
+
+}
+</Source>
+    </Script>
+    <Transition to="Generic Step (4)"/>
+  </Step>
+  <Step icon="Default" name="Generic Step (4)" posX="698" posY="10">
+    <Script>
+      <Source>        log.warn(new File(".").toString());
+try {
+log.warn("start");
+            String toDecrypt = "1:7qu+XvQvQHsmirRAPzhCBw==";
+            log.warn("context = " + context);
+            String decrypted = context.decrypt(toDecrypt);
+            return decrypted;
+
+     } catch (Throwable t) {
+            t.printStackTrace();
+            throw t;
+     }
+</Source>
+    </Script>
+    <Transition to="Generic Step (5)"/>
+  </Step>
+  <Step icon="Default" name="Generic Step (5)" posX="856" posY="10">
+    <Script>
+      <Source>import sailpoint.api.DynamicScopeMatchmaker;
+import sailpoint.object.Identity;
+
+String IDENTITY_NAME_OR_ID = "Amy.Cox";
+
+Identity identity = context.getObject(Identity.class, IDENTITY_NAME_OR_ID);
+Object result = null;
+if (identity != null) {
+    DynamicScopeMatchmaker yente = new DynamicScopeMatchmaker(context);
+    try {
+        result = yente.getMatches(identity);
+    } catch (Throwable t) {
+        t.printStackTrace();
+        throw t;
+    }
+} else {
+    log.warn ("Naw, " + IDENTITY_NAME_OR_ID + " ain't not exists");
+    return;
+}
+return result;</Source>
+    </Script>
+    <Transition to="Stop"/>
+  </Step>
+</Workflow>
+

@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Get Object">
+  <Source>
+    <![CDATA[
+    import sailpoint.object.Filter;
+    import sailpoint.object.Identity;
+    import sailpoint.object.QueryOptions;
+
+    String name = "james.smith";
+
+    QueryOptions opts = new QueryOptions();
+    Filter f = Filter.eq("name", name);
+    opts.add(f);
+    List<Identity> identities = context.getObjects(Identity.class, opts);
+    Identity jimmy = null;
+    for (Identity id : identities) {
+        jimmy = id;
+    }
+    return jimmy;
+    ]]>
+  </Source>
+</Rule>

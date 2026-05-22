@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Generate Bundles">
+  <Description>Generates some number of random IT Roles</Description>
+  <Source>
+    <![CDATA[
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+
+import sailpoint.api.SailPointContext;
+import sailpoint.api.SailPointFactory;
+import sailpoint.object.Bundle;
+import sailpoint.object.Filter;
+import sailpoint.object.ManagedAttribute;
+import sailpoint.object.Profile;
+import sailpoint.object.QueryOptions;
+import sailpoint.tools.GeneralException;
+
+    int TOTAL_BUNDLES = 25000;
+    int TOTAL_THREADS = 6;
+    int REPORT_INCR = 100;
+    String MAIN_ORG_NAME = "One Org To Rule Them All";
+
+    int PROFILE_MA_MIN = 7;
+    int PROFILE_MA_MAX = 20;
+
+    // use a timestamp for base name so we can run this rule multiple
+    // times without resetting the entire role base
+    long baseTime = System.currentTimeMillis() >> 8;
+
+    public class GenWorker extends Thread {
+
+        private int _total;
+        private ArrayList _maList;
+        private Random _random;
+        private boolean _running;
+        private String _parent;
+
+        import org.apache.commons.logging.Log;
+        import org.apache.commons.logging.LogFactory;
+
+
+        private Log workerLog = LogFactory.getLog("rule.GenWorkerLog");
+
+        public GenWorker(int total, List managedAttributeIds, String parentOrg) {
+            this._total = total;
+            this._maList = new ArrayList(managedAttributeIds);
+            this._random = new Random();
+            this._parent = parentOrg;
+        }
+
+        log.warn("Creating " + bundlesPerThread + " Roles per thread");
+        public void run() {
+            this._running = true;
+            SailPointContext ctx = null;
+            try {
+                ctx = SailPointFactory.createContext();
+                Bundle parentBundle = ctx.getObject(Bundle.class, this._parent);
+                for (int i = 0; i <= this._total; i++) {
+                    try {
+                        // Create a random role. Use thread name + i for unique name
+                        String name = currentThread().getName() + "-" + baseTime + "-" + i;
+                        // Create a random profile by selecting some random ManagedAttributes
+                        int maNum = this._random.nextInt(PROFILE_MA_MAX - PROFILE_MA_MIN) + PROFILE_MA_MIN;
+                        List profileMAIds = new ArrayList();
+                        for (int j = 0; j <= maNum; j++) {
+                            String nextMa = this._maList.get(this._random.nextInt(this._maList.size()));
+                            profileMAIds.add(nextMa);
+                        }
+                        Bundle genBundle = generateBundle(ctx, name, profileMAIds);
+                        genBundle.setInheritance(Collections.singletonList(parentBundle));
+                        ctx.saveObject(genBundle);
+                        if (i != 0 && i % 20 == 0) {
+                            ctx.commitTransaction();
+                            ctx.decache();
+                        }
+                        if (i % REPORT_INCR == 0) {
+                            workerLog.warn("Generated " + i);
+                        }
+                    } catch (Throwable t) {
+                        workerLog.error(t.getMessage(), t);
+                        // deacache, but don't let the party stop
+                        ctx.decache();
+                    }
+                }
+                ctx.commitTransaction();
+                ctx.decache();
+            } catch (Throwable t) {
+                workerLog.error(t.getMessage(), t);
+            } finally {
+                this._running = false;
+                if (ctx != null) {
+                    try {
+                        SailPointFactory.releaseContext(ctx);
+                    } catch (Throwable t) {
+                        workerLog.error(t.getMessage(), t);
+                    }
+                }
+            }
+        }
+
+        public boolean isRunning() {
+            return this._running;
+        }
+
+        private Bundle generateBundle(SailPointContext ctx, String name, List profileMAIds) throws GeneralException {
+            Bundle b = new Bundle();
+            b.setType("it");
+            b.setName(name);
+            for (String profileMAId : profileMAIds) {
+                ManagedAttribute ma = ctx.getObjectById(ManagedAttribute.class, profileMAId);
+                Profile p = new Profile();
+                p.setApplication(ma.getApplication());
+                Filter f = Filter.contains(ma.getAttribute(), ma.getValue());
+                p.addConstraint(f);
+                b.add(p);
+            }
+            return b;
+        }
+    }
+
+    Bundle getMainOrgBundle() {
+        String MAIN_ORG_NAME = "One Org To Rule Them All";
+        Bundle mainOrg = context.getObjectByName(Bundle.class, MAIN_ORG_NAME);
+        if (mainOrg == null) {
+            log.warn("Creating Org Role: " + MAIN_ORG_NAME);
+            mainOrg = new Bundle();
+            mainOrg.setName(MAIN_ORG_NAME);
+            mainOrg.setType("organizational");
+            context.saveObject(mainOrg);
+            context.commitTransaction();
+        }
+
+        return mainOrg;
+    }
+
+        Bundle mainOrg = getMainOrgBundle();
+
+        List maIds = new ArrayList();
+        QueryOptions opts = new QueryOptions();
+        opts.add(Filter.eq("type", "Entitlement"));
+        Iterator maIdIter = context.search(ManagedAttribute.class, opts, "id");
+        while (maIdIter.hasNext()) {
+            maIds.add((String)maIdIter.next()[0]);
+        }
+        context.decache();
+
+        int bundlesPerThread = TOTAL_BUNDLES / TOTAL_THREADS;
+        log.warn("Creating " + bundlesPerThread + " Roles per thread");
+        List threads = new ArrayList();
+
+        for (int i = 0; i < TOTAL_THREADS; i++)  {
+            GenWorker worker = new GenWorker(bundlesPerThread, maIds, mainOrg.getName());
+            threads.add(worker);
+            worker.start();
+            // a little pause between each Thread.start
+            Thread.sleep(250);
+        }
+        
+        Thread.sleep(1000);
+        
+        boolean doWhile = true;
+        while (doWhile) {
+            log.warn("Waiting for workers...");
+            Thread.sleep(10000);
+            boolean allFinished = true;
+            for (GenWorker worker : threads) {
+                allFinished &= !worker.isRunning();
+            }
+            doWhile = !allFinished;
+        }
+        log.warn("Finished");
+
+    ]]>
+  </Source>
+</Rule>

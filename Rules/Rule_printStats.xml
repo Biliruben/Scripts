@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Print Stats">
+    <Source>
+		<![CDATA[
+        import sailpoint.object.*;
+        import java.lang.reflect.Method;
+
+        // cleanse the pallette
+
+        String objName = "c0a8563e80a915c38180a9f5e4410174";
+        Class objClass = Rule.class;
+
+        SailPointObject obj = context.getObject(objClass, objName);
+        if (obj == null) {
+            log.warn ("Naw, null dawg: " + objClass + ":" + objName);
+            return;
+        } else {
+            log.warn(obj);
+        }
+        // load it - use a load method, if we can find it
+        Method method = null;
+        try {
+            method = obj.getClass().getMethod("load");
+            log.warn ("Loading!");
+            method.invoke(obj);
+        } catch (NoSuchMethodException nsme) {
+            log.warn("No load method!");
+        }
+
+        log.warn ("Pre-cache print");
+        context.printStatistics();
+        log.warn ("De-la-cache");
+        context.decache(obj);
+        log.warn ("Post-cache print");
+        context.printStatistics();
+        ]]>
+    </Source>
+</Rule>    

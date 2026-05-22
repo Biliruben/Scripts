@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Do Message Config">
+  <Source>
+    <![CDATA[
+
+    import sailpoint.messagebus.impl.ActiveMQConfiguration;
+    import sailpoint.object.Attributes;
+    import sailpoint.object.Configuration;
+
+
+    Configuration mbCfg = context.getObjectByName(Configuration.class, "MessageBusConfiguration");
+    log.warn ("mbCfg: " + mbCfg != null ? mbCfg.toXml() : mbCfg);
+
+    Object activeMQCfgObj = mbCfg.get("activemqConfiguration");
+    try {
+        Attributes activeMQCfgAttr = (Attributes)activeMQCfgObj;
+        log.warn("activeMQCfgAttr: " + activeMQCfgAttr);
+    } catch (Throwable t) {
+        log.warn("Can't get as Attributes: " + t.getMessage());
+    }
+
+    try {
+        ActiveMQConfiguration activeMQCfg = (ActiveMQConfiguration)activeMQCfgObj;
+        log.warn("activeMQCfg: " + activeMQCfg);
+    } catch (Throwable t) {
+        log.warn("Can't get as ActiveMQConfiguration: " + t.getMessage());
+    }
+
+    return activeMQCfgObj;
+    ]]>
+  </Source>
+</Rule>

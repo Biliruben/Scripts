@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Drop memberships">
+    <Source>
+		<![CDATA[
+        import java.io.File;
+        try {
+            String command = "ldifde -b Administrator test sailpoint -f WEB-INF/removeGroups.ldif -i -q 4 -z -k";
+            Runtime r = Runtime.getRuntime();
+            Process p = r.exec(command, null, new File("C:\\apache-tomcat-9.0.38\\webapps\\iiq8211\\WEB-INF"));
+            log.warn("Executing removeGroups");
+            log.warn("Result: " + p.waitFor());
+        } catch (Throwable t) {
+            throw new sailpoint.tools.GeneralException(t);
+        }
+
+		]]>
+    </Source>
+</Rule>    

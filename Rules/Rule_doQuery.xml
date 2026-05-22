@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule name="Do Query">
+	<Source>
+		<![CDATA[	
+        import sailpoint.object.Filter;
+        import sailpoint.object.QueryOptions;
+        import sailpoint.object.Identity;
+
+        String IDENTITY_ID = "8a852bb7677743bc016779a50b290467";
+        String APPLICATION_NAME = "OKTA";
+
+        QueryOptions opts = new QueryOptions();
+        Filter f1 = Filter.and(
+            Filter.eq("links.application.name", APPLICATION_NAME),
+            Filter.not(Filter.eq("id", IDENTITY_ID)));
+        opts.add(f1);
+        Filter f2 = Filter.ne("id", IDENTITY_ID);
+        opts.add(f2);
+        log.warn("QueryOptions: " + opts);
+
+        StringBuilder buff = new StringBuilder();
+        Iterator results = context.search(Identity.class, opts, "id");
+        while (results.hasNext()) {
+            buff.append(results.next()[0]).append("\n");
+        }
+        return buff.toString();
+]]></Source>
+</Rule>

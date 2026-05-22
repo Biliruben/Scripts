@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<!-- This rule is used with the Rule Task Executor to cause some time
+     to pass without much ado about nothing -->
+<Rule language="beanshell" name="Sequential Timeout">
+    <Source>
+		<![CDATA[
+
+        int sleepTimeout = Integer.valueOf(config.get("sleepTimeout"));
+        log.warn ("Sleeping for: " + sleepTimeout);
+        Thread.sleep(sleepTimeout);
+        log.warn ("All rested 'n shit");
+        return runResult;
+
+		]]>
+    </Source>
+</Rule>    

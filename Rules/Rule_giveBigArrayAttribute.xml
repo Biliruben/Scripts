@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Give Big Array Attribute">
+  <Description>Assigns a yuuuuge array to a victim</Description>
+  <Source>
+    <![CDATA[
+    import sailpoint.object.Identity;
+
+    String VICTIM_NAME = "Amy.Cox";
+    int    ARRAY_SIZE = 30000;
+
+    Identity victim = context.getObjectByName(Identity.class, VICTIM_NAME);
+    if (victim != null) {
+        String[] theBits = new String[ARRAY_SIZE];
+        victim.setAttribute("yugeArray", theBits);
+        context.saveObject(victim);
+        context.commitTransaction();
+    }
+    return "That was really fun.";
+    ]]>
+  </Source>
+</Rule>

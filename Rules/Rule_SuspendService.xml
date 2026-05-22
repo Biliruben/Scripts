@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Suspend Service">
+    <Source>
+    
+    import sailpoint.server.Environment;
+    import sailpoint.server.Service;
+    import sailpoint.tools.GeneralException;
+
+    public void suspendRequestProcessor() throws GeneralException {
+        Environment env = Environment.getEnvironment();
+        Service s = env.getRequestService();
+        s.suspend();
+    }
+
+    long SLEEP = 2000L;
+    int MAX_TRIES = 35;
+
+    suspendRequestProcessor();
+
+    Service rps = Environment.getEnvironment().getRequestService();    
+    int tries = 0;
+    while (!rps.isStarted() &amp;&amp; tries &lt; MAX_TRIES) {
+        log.warn("Sleeping for " + SLEEP);
+        Thread.sleep(SLEEP);
+        tries++;
+    }
+    if (rps.isStarted()) {
+        throw new GeneralException("Suspended service restarted! sleep: " + SLEEP + "; tries: " + tries);
+    }
+    log.warn("sleep: " + SLEEP + "; tries: " + tries);
+    return tries;
+    </Source>
+</Rule>

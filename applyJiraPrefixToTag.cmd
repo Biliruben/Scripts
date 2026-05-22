@@ -12,3 +12,4 @@ if %_u_JIRA_PREFIX%==IIQTC set tagPrefix=t
 if %_u_JIRA_PREFIX%==IIQETN set tagPrefix=e
 if %_u_JIRA_PREFIX%==IIQMAG set tagPrefix=m
 if %_u_JIRA_PREFIX%==IIQCB set tagPrefix=c
+if %_u_JIRA_PREFIX%==IIQHH set tagPrefix=h

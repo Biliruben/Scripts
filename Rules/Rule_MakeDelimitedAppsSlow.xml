@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Make Delimited Apps Slow">
+  <Description>Sets App Profile apps to use the slow boat</Description>
+  <Source>
+import sailpoint.object.Application;
+import sailpoint.object.Filter;
+import sailpoint.object.Filter.MatchMode;
+import sailpoint.object.QueryOptions;
+
+        QueryOptions opts = new QueryOptions();
+        opts.add(Filter.like("name", "ApplicationProfile", MatchMode.START));
+        Iterator results = context.search(Application.class, opts, "name");
+        List names = new ArrayList();
+        while (results.hasNext()) {
+            Object[] next = results.next();
+            String name = (String)next[0];
+            names.add(name);
+        }
+        for (String name : names) {
+            Application app = context.getObjectByName(Application.class, name);
+            String conn = app.getConnector();
+            if ("sailpoint.connector.DelimitedFileConnector".equals(conn)) {
+                app.setConnector("sailpoint.connector.SlowerDelimitedFileConnector");
+                context.saveObject(app);
+                context.commitTransaction();
+            }
+            context.decache();
+        }
+        return "Yay! You broke it all!";
+
+   </Source>
+</Rule>

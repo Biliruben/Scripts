@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule name="IsHtml">
+	<Source>
+<![CDATA[	
+
+import sailpoint.web.util.WebUtil;
+import sailpoint.object.EmailTemplate;
+
+String emailTemplateName = "Work Item Reminder";
+
+EmailTemplate template = context.getObjectByName(EmailTemplate.class, emailTemplateName);
+String body = template.getBody();
+log.warn("body: " + body);
+String sanitized = WebUtil.sanitizeHTML(body);
+
+log.warn("sanitized: " + sanitized);
+
+]]></Source>
+</Rule>

@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Refresh Object">
+  <Description>Reresh Object</Description>
+  <Source>
+      import sailpoint.object.*;
+      import sailpoint.api.PersistenceManager;
+      import sailpoint.api.PersistenceManager.LockParameters;
+
+
+      Identity a = context.getObjectByName(Identity.class, "Amy.Cox");
+      // test 1: don't load
+      LockParameters lockParams = LockParameters.createById(a.getId(), PersistenceManager.LOCK_TYPE_TRANSACTION);
+      context.printStatistics();
+      log.warn("got object: " + a);
+      try {
+        Identity b = context.lockObject(Identity.class, lockParams);
+        log.warn("locked object: " + b);
+      } catch (Throwable t) {
+        log.error (t.getMessage(), t);
+      }
+      context.printStatistics();
+      context.commitTransaction();
+   </Source>
+</Rule>
+

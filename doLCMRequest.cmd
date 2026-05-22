@@ -1,5 +1,6 @@
 @call %scriptsDir%\doEcho.cmd
 setlocal
+echo DOLCM_AUTH=%DOLCM_AUTH%
 if defined DOLCM_AUTH (
     echo Setting AUTH: %DOLCM_AUTH%
     set AUTH=%DOLCM_AUTH%
@@ -8,10 +9,13 @@ if defined DOLCM_AUTH (
 )
 if [] EQU [%1] goto cmdLineArgs
 set JSON=%1
-set URL=http://localhost:8080/iiq/ui/rest/requestAccess
+call %~p0\iiqRest\getUiUrl.cmd
+echo AUTH=%AUTH%
+if not defined URL set URL=%UI_URL%/requestAccess
 
 :doRequest
 if not exist %JSON% goto noJson
+echo %URL%
 call http --json --auth %AUTH% --auth-type basic POST "%URL%" < %JSON%
 exit /b
 

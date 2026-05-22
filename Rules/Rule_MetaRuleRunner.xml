@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Meta Rule Runner">
+    <Source>
+		<![CDATA[
+
+        import sailpoint.server.BSFRuleRunner;
+        import sailpoint.object.Rule;
+
+        // instantiate a new RuleRunner
+        BSFRuleRunner rr = new BSFRuleRunner();
+        Rule doIt = context.getObjectByName(Rule.class, "Do it");
+        if (doIt != null) {
+
+            // use it to run a Rule
+            Map params = new HashMap();
+            params.put("context", context);
+            params.put("log", log);
+            Object result = rr.runRule(doIt, params);
+            log.warn("rule result: " + result);
+
+            // discard rule runner
+            rr = null;
+
+            // sleep? if there wasn't an immediate relief, see if gc helps
+            log.warn("Sleeping for 30...");
+            Thread.sleep(30000);
+
+        } else {
+            log.warn("Rule not found");
+        }
+
+
+
+		]]>
+    </Source>
+</Rule>    

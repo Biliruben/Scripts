@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Delete Any">
+    <Source>
+		<![CDATA[
+
+        import sailpoint.object.*;
+        import sailpoint.api.Terminator;
+
+        Identity johnny = context.getObjectByName(Identity.class, "johnny.tables");
+        List justJohnny = new ArrayList();
+        justJohnny.add(johnny);
+        if (johnny != null) {
+            Filter inFilter = Filter.in("id", justJohnny);
+            QueryOptions opts = new QueryOptions();
+            opts.add(inFileter);
+            Terminator arnold = new Terminator(context);
+            arnold.deleteObjects(Identity.class, opts);
+            context.commitTransaction();
+            log.warn("did it");
+        }
+		]]>
+    </Source>
+</Rule>    

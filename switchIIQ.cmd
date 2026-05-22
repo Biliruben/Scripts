@@ -14,16 +14,14 @@ if ERRORLEVEL 1 set CHOICE=%1
 if %CHOICE% LEQ 0 set CHOICE=%1
 
 :CmdLineDone
-REM Convience utility script to swap between various JDKS. When switching, will
-REM change the JAVA_HOME variable to the desired JDK and update the PATH to
-REM point to the java executable (and not point to any other java executable)
 
 set IIQ80="8.0 or lower"
 set IIQ81=8.1-8.3
 set IIQ84="8.4"
-set IIQ85="8.5 or higher"
+set IIQ85="8.5"
+set IIQ90="9.0 or higher"
 
-set IIQ_LIST=%IIQ80% %IIQ81% %IIQ84% %IIQ85%
+set IIQ_LIST=%IIQ80% %IIQ81% %IIQ84% %IIQ85% %IIQ90%
 
 call %SCRIPT_HOME%\makeChoice %IIQ_LIST%
 rem echo if not defined CHOICE choice /t 60 /D 1 /C %choiceStr% /M "Which JDK (%promptStr%)?"
@@ -31,7 +29,7 @@ if not defined choice choice /t 60 /d 1 /c %choicestr% /m "which IIQ (%promptstr
 if not defined choice set choice=%errorlevel%
 
 call :IIQ_%CHOICE%
-endlocal & set path=%path%& set java_home=%java_home%& set CATALINA_HOME=%CATALINA_HOME%
+endlocal & set path=%path%& set java_home=%java_home%& set CATALINA_HOME=%CATALINA_HOME%& set MYSQL_PORT=%MYSQL_PORT%
 goto EOF
 
 :IIQ_1
@@ -39,6 +37,7 @@ goto EOF
 :IIQ_7.1
 :IIQ_8.0
 rem 8.0 or lower
+call switchmysql 57
 call switchjdk 1
 call switchnode 1
 call switchtomcat 1
@@ -49,6 +48,7 @@ goto eof
 :IIQ_8.2
 :IIQ_8.3
 rem 8.1 through 8.3
+call switchmysql 57
 call switchjdk 1
 call switchnode 2
 call switchtomcat 1
@@ -57,23 +57,27 @@ goto eof
 :IIQ_3
 :IIQ_8.4
 rem 8.4
+call switchmysql 57
 call switchjdk 2
 call switchnode 2
 call switchtomcat 2
 goto eof
 
-:IIQ_develop
 :IIQ_4
 :IIQ_8.5
-call switchjdk 2
+call switchmysql 57
+call switchjdk 4
 call switchnode 3
 call switchtomcat 2
 goto eof
 
-rem for now, Jakarta is only switchable via cmd line: switchiiq jakarta
-:IIQ_jakarta
+:IIQ_develop
+:IIQ_5
+:IIQ_9.0
+call switchmysql 80
 call switchjdk 4
 call switchnode 3
 call switchtomcat 3
 goto eof
+
 :EOF

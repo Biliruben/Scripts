@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Dump Unreleased">
+    <Source>
+		<![CDATA[
+
+        import sailpoint.api.SailPointFactory;
+        import sailpoint.api.DatabaseInstance;
+
+        // Spews to STDOUT; No control over this
+        log.warn("IIQ:");
+        SailPointFactory.dumpUnreleased();
+        try {
+            // This fails for pre 8.4 environments. Wrap it with
+            // a try/catch so it stays classy
+            Class clazz = Class.forName("sailpoint.api.DatabaseInstance");
+            log.warn("Access History:");
+            SailPointFactory.dumpUnreleased(DatabaseInstance.ACCESS_HISTORY);
+        } catch (Throwable t) {
+            log.warn ("No DatabaseInstance for Access History");
+            log.error(t.getMessage(), t);
+        }
+
+
+		]]>
+    </Source>
+</Rule>    

@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="MA Concat">
+  <Source>
+    <![CDATA[
+    import sailpoint.api.ManagedAttributer;
+
+    try {
+
+        String appId = "c0a856f397561ee68197562004ba0781";  // RealLDAPWithDemoData
+        String attrName = "groups";
+        String attrValue = "CN=Development_LDP,OU=demoGroups,OU=DemoData,DC=test,DC=sailpoint,DC=com";
+
+        // c0a856f397561ee68197562007bb07ad   RealLDAPWithDemoData               group        groups                             CN=Development_LDP,OU=demoGroups,OU=DemoData,DC=test,DC=sailpoint,DC=com
+        // used for projection search on MA
+        List<String> properties = new ArrayList<String>();
+        properties.add("id");
+
+        Object[] attrs = ManagedAttributer.getAttr(context, appId, false, attrName, attrValue, properties);
+
+        log.warn("Managed Attribute found." + attrs);
+
+    } catch (Throwable t) {
+        log.error(t.getMessage(), t);
+        return;
+    }
+    ]]>
+  </Source>
+</Rule>

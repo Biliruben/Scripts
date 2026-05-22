@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Change Default Value">
+    <Source>
+        import sailpoint.object.*;
+
+        ObjectConfig oc = context.getObjectByName(ObjectConfig.class, "Application");
+        log.warn(oc.toXml());
+        ObjectAttribute someRuleAttr = oc.getObjectAttribute("someRuleAttribute");
+        String id = someRuleAttr.getDefaultValueAsString();
+        Rule rule = context.getObjectById(Rule.class, id);
+        if (rule != null) {
+            log.warn("Setting to name");
+            someRuleAttr.setDefaultValue(rule.getName());
+        }
+
+        context.commitTransaction();
+        context.decache();
+        oc = context.getObjectByName(ObjectConfig.class, "Application");
+        log.warn(oc.toXml());
+    
+    </Source>
+</Rule>

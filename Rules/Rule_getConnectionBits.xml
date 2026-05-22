@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Sniff Connection">
+  <Source>
+    <![CDATA[
+
+    import java.sql.Connection;
+    import javax.sql.DataSource;
+    import org.apache.activemq.store.jdbc.JDBCPersistenceAdapter;
+    import org.apache.activemq.store.jdbc.JDBCAdapter;
+    import org.apache.activemq.store.jdbc.TransactionContext;
+    import sailpoint.server.Environment;
+
+
+            Environment env = Environment.getEnvironment();
+            DataSource dataSource = env.getSpringDataSource();
+            JDBCPersistenceAdapter jdbcPersistenceAdapter = new JDBCPersistenceAdapter();
+            Class jdbcAdapterClass = env.getMessageServiceFactory().getMessageServiceManager().getActivemqJdbcAdapterClass();
+
+            if (jdbcAdapterClass == null) {
+                String msg = "The ActiveMQ JDBCAdapter class has not been supplied and broker setup is unable to continue.";
+                log.error(msg);
+                throw new GeneralException(msg);
+            }
+
+            JDBCAdapter adapter = jdbcAdapterClass.getDeclaredConstructor().newInstance();
+            jdbcPersistenceAdapter.setAdapter(adapter);
+
+            jdbcPersistenceAdapter.setDataSource(dataSource);
+            jdbcPersistenceAdapter.setCreateTablesOnStartup(false);
+            TransactionContext tCtx = jdbcPersistenceAdapter.getTransactionContext();
+            Connection con = tCtx.getConnection();
+            String catalog = con.getCatalog();
+            String schema = con.getSchema();
+
+            return "Connection: " + con + 
+                "\nClass: " + jdbcAdapterClass +
+                "\nCatalog: " + catalog + "\nSchema: " + schema;
+
+    ]]>
+  </Source>
+</Rule>

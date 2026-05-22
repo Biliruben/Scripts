@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Make With All That Ass">
+  <Description>Takes all entitlement values from my dumb apps and makes dumb assignments</Description>
+  <Source>
+    <![CDATA[
+import sailpoint.object.Application;
+import sailpoint.object.AttributeAssignment;
+import sailpoint.object.Attributes;
+import sailpoint.object.Identity;
+import sailpoint.object.Link;
+import sailpoint.object.ManagedAttribute.Type;
+import sailpoint.object.Source;
+
+
+        Identity aaden = context.getObjectByName(Identity.class, "Aaden.Denight-9");
+        List<Link> allLinks = aaden.getLinks();
+        for (Link link : allLinks) {
+            String appName = link.getApplicationName();
+            if (appName != null && appName.startsWith("ApplicationProfile")) {
+                Application app = link.getApplication();
+                String nativeId = link.getNativeIdentity();
+                Attributes entitlementAttributes = link.getEntitlementAttributes();
+                Object entitlementValuesObj = entitlementAttributes.get("entitlement");
+                List entitlementValues = null;
+                if (entitlementValuesObj instanceof List) {
+                    entitlementValues = (List)entitlementValuesObj;
+                } else {
+                    entitlementValues = Collections.singletonList(entitlementValuesObj);
+                }
+                for (Object entitlementValue : entitlementValues) {
+                    AttributeAssignment ass = new AttributeAssignment(app, nativeId, null, "entitlement", entitlementValue,"James.Smith", Source.LCM, Type.Entitlement);;
+                    aaden.add(ass);
+                }
+            }
+        }
+        context.saveObject(aaden);
+        context.commitTransaction();
+        return aaden.toXml();
+
+    ]]>
+  </Source>
+</Rule>

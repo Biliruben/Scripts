@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Do Provisioning">
+    <Source>
+		<![CDATA[
+
+import sailpoint.workflow.IdentityLibrary;
+import sailpoint.api.ConnectorloaderHelper;
+import sailpoint.api.Provisioner;
+import sailpoint.api.ProvisioningTestUtil;
+import sailpoint.api.WorkflowSession;
+import sailpoint.object.Identity;
+import sailpoint.object.IdentityRequest;
+import sailpoint.object.ProvisioningPlan;
+import sailpoint.object.ProvisioningPlan.AccountRequest;
+import sailpoint.object.ProvisioningPlan.AccountRequest.Operation;
+import sailpoint.object.ProvisioningPlan.AttributeRequest;
+import sailpoint.object.ProvisioningProject;
+import sailpoint.api.ConnectorloaderHelper;
+import sailpoint.object.WorkflowCase;
+
+String IDENTITY_NAME = "Jose.Reedify";
+String APPLICATION_NAME = "IE Test App1";
+String NATIVE_IDENTITY = "77";
+String ATTR_NAME = "groups";
+String[] ATTR_VALUES = new String[] {"group12", "group13"};
+
+        //ProvisioningDelimitedFileConnector.addGeneratedAttribute(PROVISIONING_APP, "employeeId");
+        ConnectorloaderHelper.addGeneratedAttributeProvDelimConn();
+
+        //ProvisioningDelimitedFileConnector.setSaveObjectOnResult(true);
+        ConnectorloaderHelper.setSaveObjectOnResultProvDelimConn(true);
+
+        ProvisioningPlan plan = new ProvisioningPlan();
+        Identity identity = context.getObjectByName(Identity.class, IDENTITY_NAME);
+        plan.setIdentity(identity);
+
+        // make an IIQ AccountRequest
+        AccountRequest acct = new AccountRequest(Operation.Modify, APPLICATION_NAME, null, NATIVE_IDENTITY);
+        
+        // Add two Attr request
+        for (String attributeValue : ATTR_VALUES) {
+            AttributeRequest attr = new AttributeRequest(ATTR_NAME, ProvisioningPlan.Operation.Add, attributeValue);
+            acct.add(attr);
+        }
+
+        plan.add(acct);
+
+        Map inputs = new HashMap();
+        inputs.put(IdentityLibrary.VAR_IDENTITY_NAME, identity.getName());
+        inputs.put(IdentityLibrary.VAR_PLAN, plan);
+        inputs.put(IdentityLibrary.VAR_FLOW, "AccessRequest");
+        inputs.put("approvalScheme", "none");
+
+/**
+* Compile Only
+        Provisioner p = new Provisioner(context);
+        ProvisioningProject project = p.compile(plan);
+
+        return project;
+**/
+
+/**
+* PrOvIsIoN Only
+        p.execute(project);
+        context.commitTransaction();
+**/
+
+/**
+* LCM Horkage
+**/
+        WorkflowSession session = ProvisioningTestUtil.launchUpdate(context, inputs);
+        ProvisioningTestUtil.waitForCase(session.getWorkflowCase());
+
+        return session.getWorkflowCase().get("project");
+]]>
+    </Source>
+</Rule>    

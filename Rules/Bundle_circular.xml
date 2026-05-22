@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<sailpoint>
+<Bundle created="1717608222174" modified="1717608445936" name="Biz Role A" significantModified="1717608445936" type="business">
+  <Attributes>
+    <Map>
+      <entry key="BoolAttr">
+        <value>
+          <Boolean/>
+        </value>
+      </entry>
+      <entry key="DateAttr"/>
+      <entry key="IntegerAttr">
+        <value>
+          <Integer>0</Integer>
+        </value>
+      </entry>
+      <entry key="StringAttr"/>
+      <entry key="accountSelectorRules"/>
+      <entry key="allowDuplicateAccounts" value="false"/>
+      <entry key="allowMultipleAssignments" value="false"/>
+      <entry key="identAttr"/>
+      <entry key="mergeTemplates" value="false"/>
+      <entry key="ruleAttr"/>
+      <entry key="sysDescriptions">
+        <value>
+          <Map>
+            <entry key="en_US"/>
+          </Map>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+  <Inheritance>
+    <Reference class="sailpoint.object.Bundle" name="Biz Role C"/>
+  </Inheritance>
+  <Owner>
+    <Reference class="sailpoint.object.Identity" name="James.Smith"/>
+  </Owner>
+  <Requirements>
+    <Reference class="sailpoint.object.Bundle" name="Benefits Clerk - IT"/>
+  </Requirements>
+</Bundle>
+<Bundle created="1717608291432" modified="1717608384968" name="Biz Role B" significantModified="1717608384968" type="business">
+  <Attributes>
+    <Map>
+      <entry key="BoolAttr">
+        <value>
+          <Boolean/>
+        </value>
+      </entry>
+      <entry key="DateAttr"/>
+      <entry key="IntegerAttr">
+        <value>
+          <Integer>0</Integer>
+        </value>
+      </entry>
+      <entry key="StringAttr"/>
+      <entry key="accountSelectorRules"/>
+      <entry key="allowDuplicateAccounts" value="false"/>
+      <entry key="allowMultipleAssignments" value="false"/>
+      <entry key="identAttr"/>
+      <entry key="mergeTemplates" value="false"/>
+      <entry key="ruleAttr"/>
+      <entry key="sysDescriptions">
+        <value>
+          <Map>
+            <entry key="en_US"/>
+          </Map>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+  <Inheritance>
+    <Reference class="sailpoint.object.Bundle" name="Biz Role A"/>
+  </Inheritance>
+  <Owner>
+    <Reference class="sailpoint.object.Identity" name="James.Smith"/>
+  </Owner>
+  <Requirements>
+    <Reference class="sailpoint.object.Bundle" name="ADDirect-Benefits Clerk"/>
+  </Requirements>
+</Bundle>
+<Bundle created="1717608341512" modified="1717608445936" name="Biz Role C" significantModified="1717608445936" type="business">
+  <Attributes>
+    <Map>
+      <entry key="BoolAttr">
+        <value>
+          <Boolean/>
+        </value>
+      </entry>
+      <entry key="DateAttr"/>
+      <entry key="IntegerAttr">
+        <value>
+          <Integer>0</Integer>
+        </value>
+      </entry>
+      <entry key="StringAttr"/>
+      <entry key="accountSelectorRules"/>
+      <entry key="allowDuplicateAccounts" value="false"/>
+      <entry key="allowMultipleAssignments" value="false"/>
+      <entry key="identAttr"/>
+      <entry key="mergeTemplates" value="false"/>
+      <entry key="ruleAttr"/>
+      <entry key="sysDescriptions">
+        <value>
+          <Map>
+            <entry key="en_US"/>
+          </Map>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+  <Inheritance>
+    <Reference class="sailpoint.object.Bundle" name="Biz Role B"/>
+  </Inheritance>
+  <Owner>
+    <Reference class="sailpoint.object.Identity" name="James.Smith"/>
+  </Owner>
+  <Requirements>
+    <Reference class="sailpoint.object.Bundle" name="LDPDirect-Benefits Clerk-IT"/>
+  </Requirements>
+</Bundle>
+</sailpoint>

@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Privvy Test">
+  <Description>Just loads a buttload of shit in the session and commits</Description>
+  <Source>
+    <![CDATA[
+
+    import sailpoint.api.DatabaseInstance;
+    import sailpoint.api.SailPointContext;
+    import sailpoint.api.SailPointFactory;
+    import sailpoint.object.Identity;
+    import sailpoint.object.SailPointObject;
+    import sailpoint.object.accesshistory.HistoricalIdentity;
+
+    SailPointContext privvy = null;
+    try {
+
+        SailPointContext ahCtx = SailPointFactory.createContext(DatabaseInstance.ACCESS_HISTORY);
+
+        privvy = SailPointFactory.createPrivateContext(DatabaseInstance.ACCESS_HISTORY);
+        SailPointObject admin = privvy.getObjectByName(HistoricalIdentity.class, "spadmin");
+        log.warn(admin);
+
+    } catch (Throwable t) {
+        log.error(t.getMessage(), t);
+
+    } finally {
+        if (privvy != null) SailPointFactory.releasePrivateContext(privvy);
+    }
+    ]]>
+  </Source>
+</Rule>

@@ -1,0 +1,281 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<sailpoint>
+<Application connector="sailpoint.connector.DelimitedFileConnector" created="1642702273798" featuresString="DIRECT_PERMISSIONS, NO_RANDOM_ACCESS, DISCOVER_SCHEMA, ADDITIONAL_ACCOUNT_REQUEST, ACCOUNT_ONLY_REQUEST" icon="directory1Icon" modified="1642704854198" name="Active_Directory - donkey" profileClass="" type="Delimited File Parsing Connector">
+    <Attributes>
+        <Map>
+            <entry key="acctAggregationEnd">
+                <value>
+                    <Date>1642704468068</Date>
+                </value>
+            </entry>
+            <entry key="acctAggregationStart">
+                <value>
+                    <Date>1642704467213</Date>
+                </value>
+            </entry>
+            <entry key="buildMapRule" value="NormalizePermissionBuildMapRule"/>
+            <entry key="columnNames">
+                <value>
+                    <List>
+                        <String>employeeId</String>
+                        <String>dbId</String>
+                        <String>app1_privileged</String>
+                        <String>acct_lastLogin</String>
+                        <String>app1_service</String>
+                        <String>app1_inactive</String>
+                        <String>groupmbr</String>
+                        <String>userName</String>
+                    </List>
+                </value>
+            </entry>
+            <entry key="delimiter" value=","/>
+            <entry key="file" value="WEB-INF/config/demo/data/PlatformApp-UsersData.csv"/>
+            <entry key="filetransport" value="local"/>
+            <entry key="filterEmptyRecords">
+                <value>
+                    <Boolean>true</Boolean>
+                </value>
+            </entry>
+            <entry key="group.columnNames">
+                <value>
+                    <List>
+                        <String>group</String>
+                        <String>friendlyName</String>
+                        <String>description</String>
+                        <String>target</String>
+                        <String>rights</String>
+                    </List>
+                </value>
+            </entry>
+            <entry key="group.delimiter" value=";"/>
+            <entry key="group.file" value="WEB-INF/config/demo/data/groups/PlatformApp-GroupData.csv"/>
+            <entry key="group.hasHeader">
+                <value>
+                    <Boolean>true</Boolean>
+                </value>
+            </entry>
+            <entry key="group.indexColumn" value="group"/>
+            <entry key="hasHeader">
+                <value>
+                    <Boolean>true</Boolean>
+                </value>
+            </entry>
+            <entry key="host" value="local"/>
+            <entry key="indexColumn" value="dbId"/>
+            <entry key="isSortedByIndexColumn">
+                <value>
+                    <Boolean/>
+                </value>
+            </entry>
+            <entry key="mergeColumns">
+                <value>
+                    <List>
+                        <String>groupmbr</String>
+                    </List>
+                </value>
+            </entry>
+            <entry key="mergeRows">
+                <value>
+                    <Boolean>true</Boolean>
+                </value>
+            </entry>
+            <entry key="regExMultiLineMode">
+                <value>
+                    <Boolean/>
+                </value>
+            </entry>
+            <entry key="stopIfLineHasWrongColumnLength">
+                <value>
+                    <Boolean/>
+                </value>
+            </entry>
+            <entry key="sysDescriptions">
+                <value>
+                    <Map>
+                        <entry key="en_US" value="&lt;P&gt;&lt;U&gt;The main Active_Directory domain data for the corporate network.&lt;/U&gt;&lt;/P&gt;"/>
+                    </Map>
+                </value>
+            </entry>
+            <entry key="templateApplication" value="DelimitedFile Template"/>
+        </Map>
+    </Attributes>
+    <CorrelationRule>
+        <Reference class="sailpoint.object.Rule" name="Platform Correlation Rule"/>
+    </CorrelationRule>
+    <CreationRule>
+        <Reference class="sailpoint.object.Rule" name="Set Password Identity Rule"/>
+    </CreationRule>
+    <Owner>
+        <Reference class="sailpoint.object.Identity" name="Mary.Johnson"/>
+    </Owner>
+    <Schemas>
+        <Schema created="1642702273798" displayAttribute="userName" identityAttribute="dbId" nativeObjectType="account" objectType="account">
+            <AttributeDefinition name="employeeId" type="string">
+                <Description>Employee Id</Description>
+            </AttributeDefinition>
+            <AttributeDefinition name="dbId" type="string">
+                <Description>DB Id</Description>
+            </AttributeDefinition>
+            <AttributeDefinition name="app1_privileged" type="string">
+                <Description>Denotes privileged account</Description>
+            </AttributeDefinition>
+            <AttributeDefinition name="acct_lastLogin" type="string">
+                <Description>Last login time</Description>
+            </AttributeDefinition>
+            <AttributeDefinition name="app1_service" type="string">
+                <Description>Denotes service account</Description>
+            </AttributeDefinition>
+            <AttributeDefinition name="app1_inactive" type="string">
+                <Description>Denotes inactive account</Description>
+            </AttributeDefinition>
+            <AttributeDefinition entitlement="true" managed="true" multi="true" name="groupmbr" schemaObjectType="group" type="string">
+                <Description>Group membership</Description>
+            </AttributeDefinition>
+            <AttributeDefinition name="userName" type="string">
+                <Description>Name of account</Description>
+            </AttributeDefinition>
+        </Schema>
+        <Schema created="1642702273798" displayAttribute="friendlyName" identityAttribute="group" includePermissions="true" indexPermissions="true" nativeObjectType="group" objectType="group">
+            <AttributeDefinition name="group" type="string">
+                <Description>The group name</Description>
+            </AttributeDefinition>
+            <AttributeDefinition name="friendlyName" type="string">
+                <Description>The display name for the Group</Description>
+            </AttributeDefinition>
+            <AttributeDefinition name="description" type="string">
+                <Description>Description of the Group</Description>
+            </AttributeDefinition>
+        </Schema>
+    </Schemas>
+    <ApplicationScorecard compositeScore="1000" created="1642704854198">
+        <Attributes>
+            <Map>
+                <entry key="inactiveAccount" value="319"/>
+                <entry key="privilegedAccount" value="665"/>
+                <entry key="serviceAccount" value="160"/>
+                <entry key="totalEntitlements" value="263"/>
+                <entry key="totalLinks" value="263"/>
+                <entry key="violatorAccount" value="1000"/>
+            </Map>
+        </Attributes>
+        <ScoreItem compositePercentage="54" displayName="score_def_violatorAccount_name" score="1000" scorePercentage="100" type="Violator Account">
+            <SuggestionMessage>
+                <Message key="score_def_violatorAccount_suggest" type="Info"/>
+            </SuggestionMessage>
+            <TargetMessage>
+                <Message key="link_attr_scorer_match_count" type="Info">
+                    <Parameters>
+                        <String>85</String>
+                        <String>263</String>
+                    </Parameters>
+                </Message>
+            </TargetMessage>
+        </ScoreItem>
+        <ScoreItem compositePercentage="33" displayName="score_def_privilegedAccount_name" score="665" scorePercentage="100" type="Privileged Account">
+            <SuggestionMessage>
+                <Message key="score_def_privilegedAccount_suggest" type="Info"/>
+            </SuggestionMessage>
+            <TargetMessage>
+                <Message key="link_attr_scorer_match_count" type="Info">
+                    <Parameters>
+                        <String>25</String>
+                        <String>263</String>
+                    </Parameters>
+                </Message>
+            </TargetMessage>
+        </ScoreItem>
+        <ScoreItem compositePercentage="12" displayName="score_def_inactiveAccount_name" score="319" scorePercentage="100" type="Inactive Account">
+            <SuggestionMessage>
+                <Message key="score_def_inactiveAccount_suggest" type="Info"/>
+            </SuggestionMessage>
+            <TargetMessage>
+                <Message key="link_attr_scorer_match_count" type="Info">
+                    <Parameters>
+                        <String>12</String>
+                        <String>263</String>
+                    </Parameters>
+                </Message>
+            </TargetMessage>
+        </ScoreItem>
+        <ScoreItem compositePercentage="1" displayName="score_def_serviceAccount_name" score="160" scorePercentage="100" type="Service Account">
+            <SuggestionMessage>
+                <Message key="score_def_serviceAccount_suggest" type="Info"/>
+            </SuggestionMessage>
+            <TargetMessage>
+                <Message key="link_attr_scorer_match_count" type="Info">
+                    <Parameters>
+                        <String>6</String>
+                        <String>263</String>
+                    </Parameters>
+                </Message>
+            </TargetMessage>
+        </ScoreItem>
+    </ApplicationScorecard>
+</Application>
+
+<Rule language="beanshell" name="MultiThreading Doom">
+  <Description>In the process of loading objects, allows child collections to be orphaned</Description>
+  <Source>
+    <![CDATA[
+
+    import sailpoint.object.Application;
+    import sailpoint.api.SailPointFactory;
+    import sailpoint.api.SailPointContext;
+    import org.apache.commons.logging.Log;
+    import org.apache.commons.logging.LogFactory;
+    
+    private static SailPointContext staticContext;
+    private static Log log = LogFactory.getLog("MultiThreadingDoom");
+
+    private static class Set8784_Test5_Thread extends Thread {
+        private boolean getApp;
+        private int loop;
+        private Log log = LogFactory.getLog("MultiThreadingDoom-Thread");
+        public Set8784_Test5_Thread(boolean getApp, int loop) {
+            this.getApp = getApp;
+            this.loop = loop;
+        }
+        
+        public void run () {
+            if (staticContext == null) staticContext = SailPointFactory.createContext();
+            try {
+                for (int i = 0; i < this.loop; i++) {
+                    //log.warn("Loop " + i);
+                    try {
+                        if (this.getApp) {
+                            staticContext.getObjects(Application.class);
+                        } else {
+                            // do commit
+                            staticContext.commitTransaction();
+                        }
+                    } catch (Throwable t) {
+                        log.error(t.getMessage(), t);
+                    }
+                }
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+    }
+
+
+
+        String loopStr = "1000000";
+        int loop = Integer.valueOf(loopStr);
+        Thread t1 = new Set8784_Test5_Thread(true, loop);
+        t1.setName("GetterThread");
+        Thread t2 = new Set8784_Test5_Thread(false, loop);
+        t2.setName("CommitterThread");
+        t1.start();
+        t2.start();
+ 
+
+    ]]>
+    
+    <!-- About 'becauseBshThatsWhy': Something goofy happens when a variable in the root namespace is
+         assigned to an inner class. Bsh likes to keep that sucker around and re-execution of the rule
+         leads to sadness when it tries to assign that variable again -->
+  </Source>
+</Rule>
+</sailpoint>

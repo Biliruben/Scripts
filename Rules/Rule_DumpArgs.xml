@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Dump Args">
+    <Source>
+		<![CDATA[
+
+        import bsh.This;
+
+        log.warn("Dumping args...");
+        for (String var : global.namespace.getVariableNames()) {
+           log.warn(var + ": " + global.namespace.getVariable(var));
+        }
+
+		]]>
+    </Source>
+</Rule>    

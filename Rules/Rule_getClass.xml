@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Get Class">
+  <Source>
+    <![CDATA[
+    import java.lang.reflect.Method;
+
+    log.warn("Begin all the noise...");
+    String clazz="javax.management.j2ee.statistics.Stats";
+
+    int STAHP = 10;
+    Class c = Class.forName(clazz);
+    ClassLoader loader = c.getClassLoader();
+    log.warn(loader);
+
+    String resourceName = clazz.replace(".", "/") + ".class";
+    log.warn("Resource: " + resourceName);
+    URL resourceUrl = null;
+    count = 0;
+    Method m = null;
+    while (loader != null && resourceUrl == null && m == null && count < STAHP) {
+        count++;
+        try {
+            log.warn("loader: " + loader);
+            try {
+                m = loader.getClass().getMethod("findResource", String.class);
+                log.warn("method: " + m);
+                if (m != null) {
+                    log.warn("Executing: " + m);
+                    resourceUrl = m.invoke(loader, resourceName);
+                    log.warn("resourceUrl: " + resourceUrl);
+                }
+            } catch (Throwable th) {
+                log.warn(th.getMessage(), th);
+            }
+            try {
+                if (m == null) {
+                    log.warn("Using getResource");
+                    m = loader.getClass().getMethod("getResource", String.class);
+                    log.warn("method: " + m);
+                    if (m != null) {
+                        log.warn("Executing: " + m);
+                        resourceUrl = m.invoke(loader, resourceName);
+                        log.warn("resourceUrl: " + resourceUrl);
+                    }
+                }
+            } catch (Throwable th) {
+                log.warn(th.getMessage(), th);
+            }
+        } catch (Throwable t) {
+            log.warn(t.getMessage(), t);
+            if (loader != null) {
+                loader = loader.getParent();
+            }
+        }
+    }
+
+    String path = loader + ": " + resourceUrl != null ? resourceUrl.getPath() : null;
+    return path;
+    ]]>
+  </Source>
+</Rule>

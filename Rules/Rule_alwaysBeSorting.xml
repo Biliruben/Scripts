@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Always Be Sorting">
+  <Description>Given a (Comparable) class, sort the biscuits out of it</Description>
+  <Source>
+    <![CDATA[
+
+    import sailpoint.object.QueryOptions;
+    
+    int TOTAL_SORTS = 100;
+    Class SP_CLASS = sailpoint.object.CertificationItem.class;
+
+    List allObjects = context.getObjects(SP_CLASS, new QueryOptions());
+    for (int i = 0; i < TOTAL_SORTS; i++) {
+        log.warn("Iteration: " + i);
+        // shuffle it
+        Collections.shuffle(allObjects);
+
+        // sort it
+        Collections.sort(allObjects);
+    }
+    return "That was really fun.";
+    ]]>
+  </Source>
+</Rule>

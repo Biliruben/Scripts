@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Find JSON Patch Errors">
+    <Source><![CDATA[
+import sailpoint.accesshistory.AccessHistoryUtil;
+import sailpoint.accesshistory.CaptureContext;
+import sailpoint.api.DatabaseInstance;
+import sailpoint.api.SailPointContext;
+import sailpoint.api.SailPointFactory;
+import sailpoint.object.Filter;
+import sailpoint.object.Identity;
+import sailpoint.object.QueryOptions;
+import sailpoint.object.accesshistory.HistoricalIdentityCapture;
+
+        SailPointContext ahContext = null;
+        List<String> captureBork = new ArrayList<String>();
+        try {
+            ahContext = SailPointFactory.createPrivateContext(DatabaseInstance.ACCESS_HISTORY);
+
+            // get a list of all HistoricalIdentityCapture (full) ids
+            QueryOptions ops = new QueryOptions();
+            ops.add(Filter.eq("transformType", "full"));
+            Iterator results = ahContext.search(HistoricalIdentityCapture.class, ops, "id, identityId");
+            List allIds = new ArrayList();
+            Map captureMap = new HashMap();
+            while (results.hasNext()) {
+                Object[] result = results.next();
+                String id = (String)result[0];
+                allIds.add(id);
+                String identityId = (String)result[1];
+                captureMap.put(id, identityId);
+            }
+
+            // iterate through the list and get the capture data for each one
+            for (String captureId : allIds) {
+                try {
+                    CaptureContext captureContext = AccessHistoryUtil.loadJsonDataById(HistoricalIdentityCapture.class, captureId, ahContext);
+                    try {
+                        // capture those that explode and report them back
+                        String patched = captureContext.getPatchedCapture();
+                        if (patched == null) captureBork.add(captureMap.get(captureId));
+                    } catch (Throwable t) {
+                        log.error(t.getMessage());
+                        captureBork.add(captureMap.get(captureId));
+                    }
+                } catch (Throwable t) {
+                    // error getting the capture context; care less about these
+                    log.warn(t.getMessage());
+                }
+            }
+        } finally {
+
+            if (ahContext != null) {
+                try {
+                    SailPointFactory.releasePrivateContext(DatabaseInstance.ACCESS_HISTORY, ahContext);
+                } catch (Throwable t) {
+                    log.error("Error releasing AH context: " + t.getMessage(), t);
+                }
+            }
+        }
+        return captureBork;
+ ]]></Source>
+</Rule>

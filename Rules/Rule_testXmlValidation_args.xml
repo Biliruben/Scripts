@@ -1,0 +1,866 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Map PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Map>
+    <entry key="xmlStrings">
+        <value>
+        <List>
+            <!-- XXE test 1 -->
+            <String>
+&lt;?xml version=&apos;1.0&apos; encoding=&apos;UTF-8&apos;?&gt;
+&lt;!DOCTYPE foo [
+   &lt;!ELEMENT foo ANY &gt;
+   &lt;!ENTITY xxe SYSTEM  &quot;http://localhost:8080/iiq8411/rest/ping&quot; &gt;]&gt;
+&lt;foo&gt;&amp;xxe;&lt;/foo&gt;
+
+            </String>
+            <!-- XML String 1 -->
+            <!-- IIQ Object -->
+            <String>
+                <![CDATA[
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Identity PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Identity bundleSummary="User - IT, ADDirect-User, AccessHistory3-IT" correlated="true" created="1753806836887" id="c0a856f89857183e8198570894960163" lastLogin="1753982645700" lastRefresh="1753807565153" modified="1753982645704" name="Amy.Cox" password="1:ACP:9bsSavLYvk6qdwHutoK5+e/9H/5zARRX6+ssCfxlMWI=" significantModified="1753807420974">
+  <Attributes>
+    <Map>
+      <entry key="DBView_Status"/>
+      <entry key="Department" value="Accounting"/>
+      <entry key="costcenter">
+        <value>
+          <List>
+            <String>R03e</String>
+            <String>L08e</String>
+          </List>
+        </value>
+      </entry>
+      <entry key="displayName" value="Amy Cox"/>
+      <entry key="email" value="Amy.Cox@demoexample.com"/>
+      <entry key="empId" value="1a2c3b4c"/>
+      <entry key="firstname" value="Amy"/>
+      <entry key="lastname" value="Cox"/>
+      <entry key="location" value="San Jose"/>
+      <entry key="region" value="Americas"/>
+      <entry key="triggerSnapshots">
+        <value>
+          <Map>
+            <entry key="Rule" value="c0a856f89857183e81985708b535032d"/>
+          </Map>
+        </value>
+      </entry>
+      <entry key="type" value="contractor"/>
+    </Map>
+  </Attributes>
+  <AttributeMetaDatas>
+    <AttributeMetaData attribute="email" source="HR_Contractors:email"/>
+    <AttributeMetaData attribute="firstname" source="HR_Contractors:firstName"/>
+    <AttributeMetaData attribute="lastname" source="HR_Contractors:lastName"/>
+    <AttributeMetaData attribute="inactive" source="HR_Contractors:inactiveIdentity"/>
+    <AttributeMetaData attribute="type" source="HR_Contractors$Identity Attribute Rule - Type"/>
+    <AttributeMetaData attribute="DBView_Status" source="$HHS_Rule_Immtrac_Global_Dbview_Status"/>
+    <AttributeMetaData attribute="region" source="HR_Contractors:region"/>
+    <AttributeMetaData attribute="Department" source="HR_Contractors:department"/>
+    <AttributeMetaData attribute="location" source="HR_Contractors:location"/>
+    <AttributeMetaData attribute="empId" source="HR_Contractors:employeeId"/>
+    <AttributeMetaData attribute="costcenter" source="HR_Contractors:costcenter"/>
+    <AttributeMetaData attribute="regionOwner" source="$Global Identity Attribute Rule - Region Owner"/>
+    <AttributeMetaData attribute="locationOwner" source="$Global Identity Attribute Rule - Location Owner"/>
+    <AttributeMetaData attribute="manager" source="HR_Contractors:managerId"/>
+  </AttributeMetaDatas>
+  <Bundles>
+    <Reference class="sailpoint.object.Bundle" id="c0a856f898561f9a81985706d3ab1523" name="User - IT"/>
+    <Reference class="sailpoint.object.Bundle" id="c0a856f898561f9a81985707b63a1871" name="ADDirect-User"/>
+    <Reference class="sailpoint.object.Bundle" id="c0a856f898561f9a81985706debf1614" name="AccessHistory3-IT"/>
+  </Bundles>
+  <Exceptions>
+    <EntitlementGroup created="1753807182768" displayName="AmyCox" id="c0a856f89857183e8198570ddbb04415" nativeIdentity="163">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" id="c0a856f898561f9a81985706ce0e1511" name="Composite_ERP_Global_Platform"/>
+      </ApplicationRef>
+      <Attributes>
+        <Map>
+          <entry key="groupmbr">
+            <value>
+              <List>
+                <String>AcctsReceivable</String>
+              </List>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+    </EntitlementGroup>
+    <EntitlementGroup created="1753807182768" displayName="Amy.Cox" id="c0a856f89857183e8198570ddbb04416" nativeIdentity="CN=Amy Cox,OU=San Jose,OU=Americas,OU=DemoData,DC=test,DC=sailpoint,DC=com">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" id="c0a856f898561f9a81985706de871608" name="ADDirectDemodata"/>
+      </ApplicationRef>
+      <Attributes>
+        <Map>
+          <entry key="memberOf" value="CN=2ndRoundAllSame,OU=HierarchicalGroups,OU=DemoData,DC=test,DC=sailpoint,DC=com"/>
+        </Map>
+      </Attributes>
+    </EntitlementGroup>
+    <EntitlementGroup created="1753807182768" displayName="AmyCox" id="c0a856f89857183e8198570ddbb04417" nativeIdentity="163">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" id="c0a856f898561f9a81985706cd27150d" name="Composite_ERP_Global_DB"/>
+      </ApplicationRef>
+      <Permissions>
+        <Permission rights="execute" target="SP_AppUserLogin">
+          <Annotation>Annotation For Target: SP_AppUserLogin</Annotation>
+        </Permission>
+      </Permissions>
+    </EntitlementGroup>
+    <EntitlementGroup created="1753807182768" displayName="AmyCox" id="c0a856f89857183e8198570ddbb04418" nativeIdentity="163">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" id="c0a856f898561f9a81985706cb431505" name="Oracle_DB_oasis"/>
+      </ApplicationRef>
+      <Permissions>
+        <Permission rights="execute" target="Approve Vendor">
+          <Annotation>Annotation For Target: Approve Vendor</Annotation>
+        </Permission>
+      </Permissions>
+    </EntitlementGroup>
+    <EntitlementGroup created="1753807182768" displayName="Amy.Cox" id="c0a856f89857183e8198570ddbb04419" nativeIdentity="1a2c3b4c">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" id="c0a856f898561f9a81985707e81519db" name="JDBCDirectDemoData"/>
+      </ApplicationRef>
+      <Attributes>
+        <Map>
+          <entry key="positionid">
+            <value>
+              <List>
+                <String>CB</String>
+                <String>K</String>
+                <String>COACH</String>
+              </List>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+    </EntitlementGroup>
+    <EntitlementGroup created="1753807182768" displayName="163" id="c0a856f89857183e8198570ddbb0441a" nativeIdentity="163">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" id="c0a856f898561f9a81985706ceea1515" name="ERP_Global"/>
+      </ApplicationRef>
+      <Attributes>
+        <Map>
+          <entry key="groupmbr">
+            <value>
+              <List>
+                <String>AcctsReceivable</String>
+              </List>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+      <Permissions>
+        <Permission rights="execute" target="SP_AppUserLogin">
+          <Annotation>Annotation For Target: SP_AppUserLogin</Annotation>
+        </Permission>
+      </Permissions>
+    </EntitlementGroup>
+  </Exceptions>
+  <ExtendedIdentity1>
+    <Reference class="sailpoint.object.Identity" id="c0a856f898561f9a81985706de5b1603" name="James.Smith"/>
+  </ExtendedIdentity1>
+  <ExtendedIdentity2>
+    <Reference class="sailpoint.object.Identity" id="c0a856f898561f9a81985706cbba1508" name="Patricia.Jones"/>
+  </ExtendedIdentity2>
+  <Manager>
+    <Reference class="sailpoint.object.Identity" id="c0a856f89857183e8198570870da0021" name="Maria.White"/>
+  </Manager>
+  <Preferences>
+    <Map>
+      <entry key="roleDetections">
+        <value>
+          <List>
+            <RoleDetection date="1753806880417" roleId="c0a856f898561f9a81985706d3ab1523" roleName="User - IT">
+              <RoleTarget applicationId="c0a856f898561f9a81985706ca4c1500" applicationName="Active_Directory" displayName="AmyCox" nativeIdentity="163">
+                <AccountItem name="groupmbr" value="Users"/>
+              </RoleTarget>
+            </RoleDetection>
+            <RoleDetection date="1753807182640" roleId="c0a856f898561f9a81985707b63a1871" roleName="ADDirect-User">
+              <RoleTarget applicationId="c0a856f898561f9a81985706de871608" applicationName="ADDirectDemodata" displayName="Amy.Cox" nativeIdentity="CN=Amy Cox,OU=San Jose,OU=Americas,OU=DemoData,DC=test,DC=sailpoint,DC=com">
+                <AccountItem name="memberOf" value="CN=Users_AD,OU=demoGroups,OU=DemoData,DC=test,DC=sailpoint,DC=com"/>
+              </RoleTarget>
+            </RoleDetection>
+            <RoleDetection date="1753807182640" roleId="c0a856f898561f9a81985706debf1614" roleName="AccessHistory3-IT">
+              <RoleTarget applicationId="c0a856f898561f9a81985706de871608" applicationName="ADDirectDemodata" displayName="Amy.Cox" nativeIdentity="CN=Amy Cox,OU=San Jose,OU=Americas,OU=DemoData,DC=test,DC=sailpoint,DC=com">
+                <AccountItem name="memberOf" value="CN=a2c,OU=HierarchicalGroups,OU=DemoData,DC=test,DC=sailpoint,DC=com"/>
+              </RoleTarget>
+            </RoleDetection>
+          </List>
+        </value>
+      </entry>
+    </Map>
+  </Preferences>
+  <RoleMetadatas>
+    <Reference class="sailpoint.object.RoleMetadata" id="c0a856f89857183e819857125d875fce" name="User - IT"/>
+    <Reference class="sailpoint.object.RoleMetadata" id="c0a856f89857183e819857125d875fcf" name="AccessHistory3-IT"/>
+    <Reference class="sailpoint.object.RoleMetadata" id="c0a856f89857183e819857125d875fd0" name="ADDirect-User"/>
+  </RoleMetadatas>
+  <Links>
+    <Link created="1753806836887" displayName="Amy.Cox" id="c0a856f89857183e8198570894970164" lastRefresh="1753806836887" modified="1753806836889" identity="1a2c3b4c" significantModified="1753806836889">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" id="c0a856f898561f9a81985706c95614fc" name="HR_Contractors"/>
+      </ApplicationRef>
+      <Attributes>
+        <Map>
+          <entry key="costcenter">
+            <value>
+              <List>
+                <String>R03e</String>
+                <String>L08e</String>
+              </List>
+            </value>
+          </entry>
+          <entry key="department" value="Accounting"/>
+          <entry key="email" value="Amy.Cox@demoexample.com"/>
+          <entry key="employeeId" value="1a2c3b4c"/>
+          <entry key="firstName" value="Amy"/>
+          <entry key="fullName" value="Amy.Cox"/>
+          <entry key="inactiveIdentity" value="FALSE"/>
+          <entry key="lastName" value="Cox"/>
+          <entry key="location" value="San Jose"/>
+          <entry key="managerId" value="1a2c3b"/>
+          <entry key="region" value="Americas"/>
+        </Map>
+      </Attributes>
+    </Link>
+    <Link created="1753806845238" displayName="AmyCox" entitlements="true" id="c0a856f89857183e81985708b536032e" lastRefresh="1753806845238" modified="1753806880432" identity="163" significantModified="1753806880432">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" id="c0a856f898561f9a81985706cb431505" name="Oracle_DB_oasis"/>
+      </ApplicationRef>
+      <Attributes>
+        <Map>
+          <entry key="acct_lastLogin" value="04/07/2008 15:24:27"/>
+          <entry key="app3_inactive" value="false"/>
+          <entry key="app3_privileged" value="false"/>
+          <entry key="app3_service" value="false"/>
+          <entry key="dbId" value="163"/>
+          <entry key="directPermissions">
+            <value>
+              <List>
+                <Permission rights="execute" target="Approve Vendor">
+                  <Annotation>Annotation For Target: Approve Vendor</Annotation>
+                </Permission>
+              </List>
+            </value>
+          </entry>
+          <entry key="employeeId" value="1a2c3b4c"/>
+          <entry key="inactive" value="false"/>
+          <entry key="lastLogin">
+            <value>
+              <Date>1207599867000</Date>
+            </value>
+          </entry>
+          <entry key="privileged" value="false"/>
+          <entry key="service" value="false"/>
+          <entry key="userName" value="AmyCox"/>
+        </Map>
+      </Attributes>
+    </Link>
+    <Link created="1753806858145" displayName="AmyCox" entitlements="true" id="c0a856f89857183e81985708e7a1080a" lastRefresh="1753806858145" modified="1753806880432" identity="163" significantModified="1753806880432">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" id="c0a856f898561f9a81985706ca4c1500" name="Active_Directory"/>
+      </ApplicationRef>
+      <Attributes>
+        <Map>
+          <entry key="acct_lastLogin" value="04/17/2008 21:26:43"/>
+          <entry key="app1_inactive" value="false"/>
+          <entry key="app1_privileged" value="false"/>
+          <entry key="app1_service" value="false"/>
+          <entry key="dbId" value="163"/>
+          <entry key="employeeId" value="1a2c3b4c"/>
+          <entry key="groupmbr">
+            <value>
+              <List>
+                <String>Users</String>
+              </List>
+            </value>
+          </entry>
+          <entry key="inactive" value="false"/>
+          <entry key="lastLogin">
+            <value>
+              <Date>1208485603000</Date>
+            </value>
+          </entry>
+          <entry key="privileged" value="false"/>
+          <entry key="service" value="false"/>
+          <entry key="userName" value="AmyCox"/>
+        </Map>
+      </Attributes>
+    </Link>
+    <Link created="1753806866551" displayName="AmyCox" entitlements="true" id="c0a856f89857183e8198570908770ade" lastRefresh="1753806866551" modified="1753806880432" identity="163" significantModified="1753806880432">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" id="c0a856f898561f9a81985706cd27150d" name="Composite_ERP_Global_DB"/>
+      </ApplicationRef>
+      <Attributes>
+        <Map>
+          <entry key="dbId" value="163"/>
+          <entry key="directPermissions">
+            <value>
+              <List>
+                <Permission rights="execute" target="SP_AppUserLogin">
+                  <Annotation>Annotation For Target: SP_AppUserLogin</Annotation>
+                </Permission>
+              </List>
+            </value>
+          </entry>
+          <entry key="employeeId" value="1a2c3b4c"/>
+          <entry key="userName" value="AmyCox"/>
+        </Map>
+      </Attributes>
+    </Link>
+    <Link created="1753806871383" displayName="AmyCox" entitlements="true" id="c0a856f89857183e819857091b570bdc" lastRefresh="1753806871383" modified="1753806880432" identity="163" significantModified="1753806880432">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" id="c0a856f898561f9a81985706ce0e1511" name="Composite_ERP_Global_Platform"/>
+      </ApplicationRef>
+      <Attributes>
+        <Map>
+          <entry key="acct_lastLogin" value="04/17/2008 21:26:43"/>
+          <entry key="app2_inactive" value="false"/>
+          <entry key="app2_privileged" value="false"/>
+          <entry key="app2_service" value="false"/>
+          <entry key="dbId" value="163"/>
+          <entry key="employeeId" value="1a2c3b4c"/>
+          <entry key="groupmbr">
+            <value>
+              <List>
+                <String>AcctsReceivable</String>
+              </List>
+            </value>
+          </entry>
+          <entry key="inactive" value="false"/>
+          <entry key="lastLogin">
+            <value>
+              <Date>1208485603000</Date>
+            </value>
+          </entry>
+          <entry key="privileged" value="false"/>
+          <entry key="service" value="false"/>
+          <entry key="userName" value="AmyCox"/>
+        </Map>
+      </Attributes>
+    </Link>
+    <Link created="1753806874086" displayName="Amy Cox" id="c0a856f89857183e8198570925e60c5d" lastRefresh="1753806874086" modified="1753806874088" identity="163" significantModified="1753806874088">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" id="c0a856f898561f9a81985706cc411509" name="Composite_ERP_Global_App_Users"/>
+      </ApplicationRef>
+      <Attributes>
+        <Map>
+          <entry key="dbId" value="163"/>
+          <entry key="email" value="Amy.Cox@demoexample.com"/>
+          <entry key="employeeId" value="1a2c3b4c"/>
+          <entry key="fullName" value="Amy Cox"/>
+          <entry key="lastName" value="Cox"/>
+        </Map>
+      </Attributes>
+    </Link>
+    <Link componentIds="c0a856f89857183e8198570925e60c5d,c0a856f89857183e8198570908770ade,c0a856f89857183e819857091b570bdc" created="1753806880376" entitlements="true" id="c0a856f89857183e819857093e780d10" modified="1753806880433" identity="163" significantModified="1753806880433">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" id="c0a856f898561f9a81985706ceea1515" name="ERP_Global"/>
+      </ApplicationRef>
+      <Attributes>
+        <Map>
+          <entry key="directPermissions">
+            <value>
+              <List>
+                <Permission rights="execute" target="SP_AppUserLogin">
+                  <Annotation>Annotation For Target: SP_AppUserLogin</Annotation>
+                </Permission>
+              </List>
+            </value>
+          </entry>
+          <entry key="groupmbr">
+            <value>
+              <List>
+                <String>AcctsReceivable</String>
+              </List>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+    </Link>
+    <Link created="1753806923305" displayName="Amy.Cox" entitlements="true" id="c0a856f89857183e81985709e6292765" key1="S-1-5-21-4013551311-256647443-72526314-240839" lastRefresh="1753806923305" modified="1753807182771" identity="CN=Amy Cox,OU=San Jose,OU=Americas,OU=DemoData,DC=test,DC=sailpoint,DC=com" significantModified="1753807182771" uuid="{f06bb1d9-6d21-4a97-b17e-6f9f05a4a980}">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" id="c0a856f898561f9a81985706de871608" name="ADDirectDemodata"/>
+      </ApplicationRef>
+      <Attributes>
+        <Map>
+          <entry key="NetBIOSName"/>
+          <entry key="accountFlags">
+            <value>
+              <List>
+                <String>Normal User Account</String>
+              </List>
+            </value>
+          </entry>
+          <entry key="cn" value="Amy Cox"/>
+          <entry key="department" value="Accounting"/>
+          <entry key="displayName" value="Amy Cox"/>
+          <entry key="distinguishedName" value="CN=Amy Cox,OU=San Jose,OU=Americas,OU=DemoData,DC=test,DC=sailpoint,DC=com"/>
+          <entry key="givenName" value="Amy"/>
+          <entry key="mail" value="Amy.Cox456@test.sailpoint.com"/>
+          <entry key="manager" value="CN=Maria White,OU=San Jose,OU=Americas,OU=DemoData,DC=test,DC=sailpoint,DC=com"/>
+          <entry key="memberOf">
+            <value>
+              <List>
+                <String>CN=a2c,OU=HierarchicalGroups,OU=DemoData,DC=test,DC=sailpoint,DC=com</String>
+                <String>CN=2ndRoundAllSame,OU=HierarchicalGroups,OU=DemoData,DC=test,DC=sailpoint,DC=com</String>
+                <String>CN=Users_AD,OU=demoGroups,OU=DemoData,DC=test,DC=sailpoint,DC=com</String>
+              </List>
+            </value>
+          </entry>
+          <entry key="msNPAllowDialin" value="Not Set"/>
+          <entry key="objectClass">
+            <value>
+              <List>
+                <String>top</String>
+                <String>person</String>
+                <String>organizationalPerson</String>
+                <String>user</String>
+              </List>
+            </value>
+          </entry>
+          <entry key="objectSid" value="S-1-5-21-4013551311-256647443-72526314-240839"/>
+          <entry key="objectType" value="user"/>
+          <entry key="primaryGroupID" value="513"/>
+          <entry key="sAMAccountName" value="Amy.Cox"/>
+          <entry key="sn" value="Cox"/>
+        </Map>
+      </Attributes>
+    </Link>
+    <Link created="1753807015165" displayName="Amy.Cox" entitlements="true" id="c0a856f89857183e8198570b4cfd3374" lastRefresh="1753807015165" modified="1753807182771" identity="1a2c3b4c" significantModified="1753807182771">
+      <ApplicationRef>
+        <Reference class="sailpoint.object.Application" id="c0a856f898561f9a81985707e81519db" name="JDBCDirectDemoData"/>
+      </ApplicationRef>
+      <Attributes>
+        <Map>
+          <entry key="firstname" value="Amy"/>
+          <entry key="fullname" value="Amy.Cox"/>
+          <entry key="is_active">
+            <value>
+              <Boolean>true</Boolean>
+            </value>
+          </entry>
+          <entry key="is_employee">
+            <value>
+              <Boolean>true</Boolean>
+            </value>
+          </entry>
+          <entry key="lastname" value="Cox"/>
+          <entry key="playerid" value="1a2c3b4c"/>
+          <entry key="positionid">
+            <value>
+              <List>
+                <String>CB</String>
+                <String>K</String>
+                <String>COACH</String>
+              </List>
+            </value>
+          </entry>
+        </Map>
+      </Attributes>
+    </Link>
+  </Links>
+  <Scorecard businessRoleScore="30" certificationScore="1000" compositeScore="462" created="1753807182768" entitlementScore="680" id="c0a856f89857183e8198570ddbb0441b" rawBusinessRoleScore="30" rawEntitlementScore="680">
+    <Attributes>
+      <Map>
+        <entry key="inactiveUser" value="0"/>
+      </Map>
+    </Attributes>
+    <ScoreItem compositePercentage="22" displayName="score_def_certificationAge_name" score="1000" scorePercentage="100" type="Certification Age">
+      <TargetMessage>
+        <Message key="cert_scorer_target_id_not_certified" type="Info"/>
+      </TargetMessage>
+    </ScoreItem>
+    <ScoreItem compositePercentage="16" displayName="score_def_entitlementScore_name" score="150" scorePercentage="22" type="Entitlement Compensated Score">
+      <TargetMessage>
+        <Message key="entitlement_scorer_target_desc" type="Info">
+          <Parameters>
+            <String>Composite_ERP_Global_DB</String>
+            <String>entitlement_scorer_def_account_score</String>
+          </Parameters>
+        </Message>
+      </TargetMessage>
+    </ScoreItem>
+    <ScoreItem compositePercentage="16" displayName="score_def_entitlementScore_name" score="150" scorePercentage="22" type="Entitlement Compensated Score">
+      <TargetMessage>
+        <Message key="entitlement_scorer_target_desc" type="Info">
+          <Parameters>
+            <String>Oracle_DB_oasis</String>
+            <String>entitlement_scorer_def_account_score</String>
+          </Parameters>
+        </Message>
+      </TargetMessage>
+    </ScoreItem>
+    <ScoreItem compositePercentage="13" displayName="score_def_entitlementScore_name" score="120" scorePercentage="17" type="Entitlement Compensated Score">
+      <TargetMessage>
+        <Message key="entitlement_scorer_target_desc" type="Info">
+          <Parameters>
+            <String>ERP_Global</String>
+            <String>entitlement_scorer_def_account_score</String>
+          </Parameters>
+        </Message>
+      </TargetMessage>
+    </ScoreItem>
+    <ScoreItem compositePercentage="8" displayName="score_def_entitlementScore_name" score="80" scorePercentage="11" type="Entitlement Compensated Score">
+      <TargetMessage>
+        <Message key="entitlement_scorer_target_desc" type="Info">
+          <Parameters>
+            <String>Composite_ERP_Global_Platform</String>
+            <String>entitlement_scorer_def_account_score</String>
+          </Parameters>
+        </Message>
+      </TargetMessage>
+    </ScoreItem>
+    <ScoreItem compositePercentage="8" displayName="score_def_entitlementScore_name" score="75" scorePercentage="11" type="Entitlement Compensated Score">
+      <TargetMessage>
+        <Message key="entitlement_scorer_entitlement_target_desc" type="Info">
+          <Parameters>
+            <String>JDBCDirectDemoData</String>
+            <String>positionid</String>
+            <List>
+              <String>CB</String>
+              <String>K</String>
+              <String>COACH</String>
+            </List>
+          </Parameters>
+        </Message>
+      </TargetMessage>
+    </ScoreItem>
+    <ScoreItem compositePercentage="2" displayName="score_def_businessRoleScore_name" score="15" scorePercentage="50" type="Business Role Compensated Score">
+      <TargetMessage>
+        <Message key="User - IT" type="Info"/>
+      </TargetMessage>
+    </ScoreItem>
+    <ScoreItem compositePercentage="2" displayName="score_def_businessRoleScore_name" score="15" scorePercentage="50" type="Business Role Compensated Score">
+      <TargetMessage>
+        <Message key="ADDirect-User" type="Info"/>
+      </TargetMessage>
+    </ScoreItem>
+    <ScoreItem compositePercentage="2" displayName="score_def_entitlementScore_name" score="25" scorePercentage="3" type="Entitlement Compensated Score">
+      <TargetMessage>
+        <Message key="entitlement_scorer_entitlement_target_desc" type="Info">
+          <Parameters>
+            <String>Composite_ERP_Global_Platform</String>
+            <String>groupmbr</String>
+            <List>
+              <String>AcctsReceivable</String>
+            </List>
+          </Parameters>
+        </Message>
+      </TargetMessage>
+    </ScoreItem>
+    <ScoreItem compositePercentage="2" displayName="score_def_entitlementScore_name" score="25" scorePercentage="3" type="Entitlement Compensated Score">
+      <TargetMessage>
+        <Message key="entitlement_scorer_entitlement_target_desc" type="Info">
+          <Parameters>
+            <String>ADDirectDemodata</String>
+            <String>memberOf</String>
+            <String>CN=2ndRoundAllSame,OU=HierarchicalGroups,OU=DemoData,DC=test,DC=sailpoint,DC=com</String>
+          </Parameters>
+        </Message>
+      </TargetMessage>
+    </ScoreItem>
+    <ScoreItem compositePercentage="2" displayName="score_def_entitlementScore_name" score="25" scorePercentage="3" type="Entitlement Compensated Score">
+      <TargetMessage>
+        <Message key="entitlement_scorer_entitlement_target_desc" type="Info">
+          <Parameters>
+            <String>ERP_Global</String>
+            <String>groupmbr</String>
+            <List>
+              <String>AcctsReceivable</String>
+            </List>
+          </Parameters>
+        </Message>
+      </TargetMessage>
+    </ScoreItem>
+    <ScoreItem compositePercentage="1" displayName="score_def_entitlementScore_name" score="10" scorePercentage="1" type="Entitlement Compensated Score">
+      <TargetMessage>
+        <Message key="entitlement_scorer_target_desc" type="Info">
+          <Parameters>
+            <String>Composite_ERP_Global_DB</String>
+            <Message key="permission_desc_message" type="Info">
+              <Parameters>
+                <List>
+                  <String>execute</String>
+                </List>
+                <String>SP_AppUserLogin</String>
+              </Parameters>
+            </Message>
+          </Parameters>
+        </Message>
+      </TargetMessage>
+    </ScoreItem>
+    <ScoreItem compositePercentage="1" displayName="score_def_entitlementScore_name" score="10" scorePercentage="1" type="Entitlement Compensated Score">
+      <TargetMessage>
+        <Message key="entitlement_scorer_target_desc" type="Info">
+          <Parameters>
+            <String>Oracle_DB_oasis</String>
+            <Message key="permission_desc_message" type="Info">
+              <Parameters>
+                <List>
+                  <String>execute</String>
+                </List>
+                <String>Approve Vendor</String>
+              </Parameters>
+            </Message>
+          </Parameters>
+        </Message>
+      </TargetMessage>
+    </ScoreItem>
+    <ScoreItem compositePercentage="1" displayName="score_def_entitlementScore_name" score="10" scorePercentage="1" type="Entitlement Compensated Score">
+      <TargetMessage>
+        <Message key="entitlement_scorer_target_desc" type="Info">
+          <Parameters>
+            <String>ERP_Global</String>
+            <Message key="permission_desc_message" type="Info">
+              <Parameters>
+                <List>
+                  <String>execute</String>
+                </List>
+                <String>SP_AppUserLogin</String>
+              </Parameters>
+            </Message>
+          </Parameters>
+        </Message>
+      </TargetMessage>
+    </ScoreItem>
+  </Scorecard>
+</Identity>
+
+                ]]>
+            </String>
+            <!-- XML String 2 -->
+            <!-- Jasper Report -->
+            <String>
+&lt;?xml version="1.0" encoding="UTF-8"  ?>
+&lt;!-- Created with iReport - A designer for JasperReports -->
+&lt;!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+&lt;jasperReport
+		 name="SearchReport"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="792"
+		 pageHeight="595"
+		 columnWidth="732"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="AllSectionsNoDetail"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+
+    &lt;property name="net.sf.jasperreports.print.keep.full.text" value="true"/>
+	&lt;property name="ireport.scriptlethandling" value="0" />
+	&lt;property name="ireport.encoding" value="UTF-8" />
+	&lt;import value="java.util.*" />
+	&lt;import value="net.sf.jasperreports.engine.*" />
+	&lt;import value="net.sf.jasperreports.engine.data.*" />
+
+	&lt;style 
+		name="title"
+		isDefault="false"
+		fontName="Arial"
+		fontSize="24"
+		isBold="true"
+		isBlankWhenNull="true"
+	>
+	&lt;/style>
+	&lt;style 
+		name="bandedText"
+		isDefault="false"
+		mode="Opaque"
+		forecolor="#000000"
+		backcolor="#FFFFFF"
+		topBorder="None"
+		topBorderColor="#FFFFFF"
+		topPadding="3"
+		leftPadding="5"
+		bottomBorder="1Point"
+		bottomBorderColor="#DDDDDD"
+		bottomPadding="3"
+		fontName="Arial"
+		fontSize="9"
+		isBlankWhenNull="true"
+	>
+					&lt;box leftPadding="5" topPadding="3" bottomPadding="3">					&lt;topPen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+					&lt;bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#DDDDDD"/>
+&lt;/box>
+
+		&lt;conditionalStyle>
+			&lt;conditionExpression>&lt;![CDATA[new Boolean($V{REPORT_COUNT}.intValue() % 2 == 0)&#x5D;]>&lt;/conditionExpression>
+			&lt;style 
+				isDefault="false"
+				backcolor="#EEEEEE"
+			>
+			&lt;/style>
+		&lt;/conditionalStyle>
+	&lt;/style>
+	&lt;style 
+		name="spBlue"
+		isDefault="false"
+		mode="Opaque"
+		forecolor="#FFFFFF"
+		backcolor="#1A7182"
+		topPadding="3"
+		leftPadding="5"
+		isStyledText="false"
+		fontName="Arial"
+		fontSize="9"
+		isBold="true"
+		isBlankWhenNull="true"
+	>
+					&lt;box leftPadding="5" topPadding="3">&lt;/box>
+	&lt;/style>
+	&lt;style 
+		name="footer"
+		isDefault="false"
+		forecolor="#000000"
+		fontName="Arial"
+		fontSize="10"
+	>
+	&lt;/style>
+
+    &lt;parameter name="headerRowTableDS" class="net.sf.jasperreports.engine.JRDataSource" isForPrompting="false"/>
+    &lt;parameter name="GridReportHeaderRow" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false">
+        &lt;parameterDescription>&lt;![CDATA[GridReportHeaderRow&#x5D;]>&lt;/parameterDescription>
+    &lt;/parameter>
+
+	&lt;parameter name="reportDefName" isForPrompting="false" class="java.lang.String"/>
+
+		&lt;background>
+			&lt;band height="0"  isSplitAllowed="true" >
+			&lt;/band>
+		&lt;/background>
+		&lt;title>
+			&lt;band height="50"  isSplitAllowed="true" >
+				&lt;textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					&lt;reportElement
+						style="title"
+						x="0"
+						y="30"
+						width="590"
+						height="20"
+						forecolor="#525759"
+						key="textField-5">
+							&lt;printWhenExpression>&lt;![CDATA[new Boolean($P{reportDefName}!=null)&#x5D;]>&lt;/printWhenExpression>
+						&lt;/reportElement>
+					&lt;box leftPadding="5">					&lt;topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					&lt;leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					&lt;bottomPen lineWidth="0.0" lineColor="#000000"/>
+					&lt;rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+&lt;/box>
+					&lt;textElement verticalAlignment="Middle">
+						&lt;font size="9"/>
+					&lt;/textElement>
+				&lt;textFieldExpression   class="java.lang.String">&lt;![CDATA[$P{reportDefName}&#x5D;]>&lt;/textFieldExpression>
+				&lt;/textField>
+				&lt;textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					&lt;reportElement
+						x="0"
+						y="0"
+						width="729"
+						height="28"
+						key="textField-7"/>
+					&lt;box>					&lt;topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					&lt;leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					&lt;bottomPen lineWidth="0.0" lineColor="#000000"/>
+					&lt;rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+&lt;/box>
+					&lt;textElement>
+						&lt;font size="20" isBold="true"/>
+					&lt;/textElement>
+				&lt;textFieldExpression   class="java.lang.String">&lt;![CDATA[$R{reprt_search_title}&#x5D;]>&lt;/textFieldExpression>
+				&lt;/textField>
+			&lt;/band>
+		&lt;/title>
+		&lt;pageHeader>
+			&lt;band height="0"  isSplitAllowed="true" >
+			&lt;/band>
+		&lt;/pageHeader>
+		&lt;columnHeader>
+			&lt;band height="27"  isSplitAllowed="true" >
+			&lt;/band>
+		&lt;/columnHeader>
+		&lt;detail>
+			&lt;band height="25"  isSplitAllowed="false" >
+			&lt;/band>
+		&lt;/detail>
+		&lt;columnFooter>
+			&lt;band height="0"  isSplitAllowed="true" >
+			&lt;/band>
+		&lt;/columnFooter>
+		&lt;pageFooter>
+			&lt;band height="22"  isSplitAllowed="true" >
+				&lt;textField isStretchWithOverflow="true" pattern="EEEEE dd MMMMM yyyy hh:mm a" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					&lt;reportElement
+						x="0"
+						y="8"
+						width="290"
+						height="14"
+						key="textField-1"/>
+					&lt;box>					&lt;topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					&lt;leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					&lt;bottomPen lineWidth="0.0" lineColor="#000000"/>
+					&lt;rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+&lt;/box>
+					&lt;textElement verticalAlignment="Bottom">
+						&lt;font/>
+					&lt;/textElement>
+				&lt;textFieldExpression   class="java.util.Date">&lt;![CDATA[new java.util.Date()&#x5D;]>&lt;/textFieldExpression>
+				&lt;/textField>
+				&lt;line direction="TopDown">
+					&lt;reportElement
+						x="0"
+						y="1"
+						width="722"
+						height="0"
+						key="footerBlackLine"/>
+					&lt;graphicElement stretchType="NoStretch"/>
+				&lt;/line>
+				&lt;textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Page" hyperlinkType="None"  hyperlinkTarget="Self" >
+					&lt;reportElement
+						style="footer"
+						x="587"
+						y="4"
+						width="80"
+						height="14"
+						key="textField-14"/>
+					&lt;box>					&lt;topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					&lt;leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					&lt;bottomPen lineWidth="0.0" lineColor="#000000"/>
+					&lt;rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+&lt;/box>
+					&lt;textElement textAlignment="Right" verticalAlignment="Bottom">
+						&lt;font/>
+					&lt;/textElement>
+				&lt;textFieldExpression   class="java.lang.String">&lt;![CDATA[msg($R{rept_current_page}, $V{PAGE_NUMBER})&#x5D;]>&lt;/textFieldExpression>
+				&lt;/textField>
+				&lt;textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					&lt;reportElement
+						x="672"
+						y="4"
+						width="50"
+						height="14"
+						key="textField-15"/>
+					&lt;box>&lt;/box>
+					&lt;textElement verticalAlignment="Bottom">
+						&lt;font fontName="Arial"/>
+					&lt;/textElement>
+				&lt;textFieldExpression   class="java.lang.String">&lt;![CDATA[msg($R{rept_current_page_of}, $V{PAGE_NUMBER})&#x5D;]>&lt;/textFieldExpression>
+				&lt;/textField>
+			&lt;/band>
+		&lt;/pageFooter>
+		&lt;summary>
+			&lt;band height="0"  isSplitAllowed="true" >
+			&lt;/band>
+		&lt;/summary>
+&lt;/jasperReport>
+            </String>
+        </List>
+    </value>
+    </entry>
+</Map>

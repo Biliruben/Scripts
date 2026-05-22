@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Filter Join Test">
+  <Source>
+    <![CDATA[
+
+    import sailpoint.object.*;
+    String identId = "c0a8568c89f410968189f4c8df702b4b";
+    Identity identity = context.getObjectByName(Identity.class, "IslaMae.Mangan-8");
+    String nameOrValue = "a";
+
+
+
+        QueryOptions ops = new QueryOptions();
+
+            Filter maFilter = Filter.and(
+
+                    // Get IdentityEntitlement objects for the specific Identity
+                    Filter.eq("IdentityEntitlement.identity.id", identity.getId()),
+
+                    // Get IdentityEntitlement objects that are ManagedAttributes not granted by a role
+                    Filter.eq("IdentityEntitlement.type", ManagedAttribute.Type.Entitlement.name()),
+                    Filter.eq("IdentityEntitlement.grantedByRole", false),
+
+                    // Filter out any IdentityEntitlement objects that are sunrised
+                    Filter.isnull("IdentityEntitlement.startDate"),
+
+
+                    // Join with ManagedAttribute table to get information connected to the IE objects.
+                    Filter.join("IdentityEntitlement.name", "ManagedAttribute.attribute"),
+                    Filter.join("IdentityEntitlement.value", "ManagedAttribute.value"),
+                    Filter.join("IdentityEntitlement.application", "ManagedAttribute.application"),
+
+                    Filter.ignoreCase(Filter.like("ManagedAttribute.displayableName", nameOrValue, Filter.MatchMode.START))
+            );
+
+            Filter nameOrValueFilter = Filter.or(
+                    Filter.ignoreCase(Filter.like("application.name", nameOrValue, Filter.MatchMode.START)),
+                    Filter.ignoreCase(Filter.like("name", nameOrValue, Filter.MatchMode.START)),
+                    Filter.ignoreCase(Filter.like("value", nameOrValue, Filter.MatchMode.START)),
+                    Filter.subquery("id", IdentityEntitlement.class, "IdentityEntitlement.id", maFilter)
+            );
+
+
+            ops.add(nameOrValueFilter);
+            //ops.add(maFilter);
+
+            try {
+                context.search(IdentityEntitlement.class, ops);
+            } catch (Throwable t) {
+                log.error(t.getMessage(), t);
+            }
+
+
+    ]]>
+  </Source>
+</Rule>

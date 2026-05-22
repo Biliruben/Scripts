@@ -1,0 +1,324 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Get Additional Questions">
+  <Description>Emulates AccessItemResource#getAdditionalQuestions()</Description>
+  <Source>
+    <![CDATA[
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import sailpoint.api.DynamicScopeMatchmaker;
+import sailpoint.api.SailPointContext;
+import sailpoint.authorization.AccessItemAuthorizer;
+import sailpoint.authorization.AuthorizationUtility;
+import sailpoint.authorization.LcmActionAuthorizer;
+import sailpoint.authorization.utils.LcmUtils;
+import sailpoint.object.Bundle;
+import sailpoint.object.Capability;
+import sailpoint.object.ColumnConfig;
+import sailpoint.object.Configuration;
+import sailpoint.object.Filter;
+import sailpoint.object.Identity;
+import sailpoint.object.ManagedAttribute;
+import sailpoint.object.QueryOptions;
+import sailpoint.object.QuickLink;
+import sailpoint.object.SailPointObject;
+import sailpoint.object.UIConfig;
+import sailpoint.rest.ui.requestaccess.AccessItemResource;
+import sailpoint.rest.ui.requestaccess.AccessItemResource.AdditionalQuestionsRequest;
+import sailpoint.service.AdditionalQuestionsContext;
+import sailpoint.service.AdditionalQuestionsService;
+import sailpoint.tools.GeneralException;
+import sailpoint.tools.Internationalizer;
+import sailpoint.tools.Localizable;
+import sailpoint.tools.Message;
+import sailpoint.tools.ObjectNotFoundException;
+import sailpoint.tools.Util;
+import sailpoint.web.UserContext;
+
+    String LOGGED_IN_USER_NAME = "David.Anderson";
+    String ACCESS_ITEM = "c0a8567687ed1b168187ed8c82f1041e";
+    String[] IDENTITY_IDS = {"c0a8567687ed1dd28187ed8e06ff0047"};
+    String[] OTHER_ADDED_ROLES = {};
+    String QUICK_LINK = "Request Access";
+    
+    /*
+     * Customer deets
+    String LOGGED_IN_USER_NAME = "David.Anderson";
+    String ACCESS_ITEM = "0a059c5c873b184981873f64d26e10b9";
+    String[] IDENTITY_IDS = {"a059c5e761e14d581762e4a294b5fc7"};
+    String[] OTHER_ADDED_ROLES = {};
+    String QUICK_LINK = "Request Access";
+    */
+    
+    SailPointObject accessItem = null;
+    Log log = LogFactory.getLog("Rule.GetAdditionalQuestions");
+
+    private SailPointObject getAccessItem(SailPointContext ctx) throws GeneralException {
+        log.debug("Entering getAccessItems: ctx = " + ctx);
+        if (accessItem == null) {
+            accessItem = ctx.getObjectById(Bundle.class, ACCESS_ITEM);
+            if (accessItem == null) {
+                accessItem = ctx.getObjectById(ManagedAttribute.class, ACCESS_ITEM);
+            }
+            if (accessItem == null) {
+                throw new ObjectNotFoundException(new Message("Unable to find matching Bundle or ManagedAttribute for ID: " + ACCESS_ITEM));
+            }
+        }
+        log.debug("Existing getAccessItems - " + accessItem);
+        return accessItem;
+    }
+
+    private UserContext getUserContext(SailPointContext ctx) throws GeneralException {
+        log.debug("Entering getUserContext: ctx = " + ctx);
+        Identity loggedInUser = ctx.getObjectByName(Identity.class, LOGGED_IN_USER_NAME);
+        UserContext userCtx = new UserContext() {
+
+            
+            public SailPointContext getContext() {
+                return ctx;
+            }
+
+            
+            public Locale getLocale() {
+                return null;
+            }
+
+            
+            public Identity getLoggedInUser() throws GeneralException {
+                return loggedInUser;
+            }
+
+            
+            public List getLoggedInUserCapabilities() {
+                return loggedInUser.getCapabilities();
+            }
+
+            
+            public List getLoggedInUserDynamicScopeNames() throws GeneralException {
+                DynamicScopeMatchmaker matcher = new DynamicScopeMatchmaker(ctx);
+                return matcher.getMatches(loggedInUser);
+            }
+
+            
+            public String getLoggedInUserName() throws GeneralException {
+                return loggedInUser.getName();
+            }
+
+            
+            public Collection getLoggedInUserRights() {
+                return loggedInUser.getCapabilityManager().getEffectiveFlattenedRights();
+            }
+
+            
+            public TimeZone getUserTimeZone() {
+                return null;
+            }
+
+            
+            public boolean isMobileLogin() {
+                return false;
+            }
+
+            
+            public boolean isObjectInUserScope(SailPointObject object) throws GeneralException {
+                return isObjectInUserScope(object.getId(), org.hibernate.Hibernate.getClass(object));
+            }
+
+            
+            public boolean isObjectInUserScope(String id, Class clazz) throws GeneralException {
+                if (id==null || "".equals(id))
+                    return true;
+
+                QueryOptions scopingOptions = new QueryOptions();
+                scopingOptions.setScopeResults(true);
+                scopingOptions.add(Filter.eq("id", id));
+                int count = ctx.countObjects(clazz, scopingOptions);
+                return (count > 0);
+            }
+
+            
+            public boolean isScopingEnabled() throws GeneralException {
+                Configuration config = ctx.getObjectByName(Configuration.class,
+                        Configuration.OBJ_NAME);        
+                return config.getBoolean(Configuration.SCOPING_ENABLED, true);
+            }
+        };
+
+        log.debug("Exiting getUserContext - " + userCtx);
+        return userCtx;
+    }
+
+    private AdditionalQuestionsContext getQuestionsCtx(UserContext userCtx) {
+        AdditionalQuestionsContext questionsCtx = new AdditionalQuestionsContext() {
+
+            
+            public SailPointContext getContext() {
+                return userCtx.getContext();
+            }
+
+            
+            public Locale getLocale() {
+                return userCtx.getLocale();
+            }
+
+            
+            public Identity getLoggedInUser() throws GeneralException {
+                return userCtx.getLoggedInUser();
+            }
+
+            
+            public List getLoggedInUserDynamicScopeNames() throws GeneralException {
+                return userCtx.getLoggedInUserDynamicScopeNames();
+            }
+
+            
+            public List getPermittedRoleProperties() throws GeneralException {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            
+            public String getQuickLink() {
+                return QUICK_LINK;
+            }
+            
+        };
+
+        return null;
+    }
+
+    private List convertRows(List rows, String columnsKeyPrefix) throws GeneralException {
+        List converted = new ArrayList();
+        for (Map row : Util.safeIterable(rows)) {
+            String columnsKey = columnsKeyPrefix + row.get("accessType");
+            converted.add(convertRow(row, columnsKey));
+        }
+        return converted;
+    }
+
+    public Map convertRow(Map rawObject, String columnsKey)
+            throws GeneralException {
+        
+            Map converted = new HashMap(rawObject);
+            List columns = getColumns(columnsKey);
+
+            // First, perform auto-convert on columns that we understand (i18n, etc...).
+            for(Map.Entry entry : rawObject.entrySet()){
+                ColumnConfig config = null;
+                String col = entry.getKey();
+        
+                for(ColumnConfig column : columns) {
+                    if(col.equals(column.getProperty())) {
+                        config = column;
+                        break;
+                    }
+                }
+        
+                if(config != null) {
+                    Object value = convertColumn(entry, config, rawObject);
+                    
+                    // Use the dataIndex if config is not null
+                    converted.put(config.getDataIndex(), value);
+                }
+            }
+        
+            // Perform any custom calculations for the row
+            calculateColumns(rawObject, columnsKey, converted);
+
+            return converted;
+        }
+
+    private Object convertColumn(Map.Entry entry, ColumnConfig config, Map rawObject ) {
+        // if the value can be localized, localize it
+           Object value = entry.getValue();
+           if (value != null && Localizable.class.isAssignableFrom(value.getClass())){
+               value = ((Localizable)value).getLocalizedMessage();
+           }
+           
+           if (value != null && config.isLocalize() && value instanceof String) {
+               value = (new Message((String)value)).getLocalizedMessage();
+           }
+
+           // if value is a Date, format it for display
+           if(value instanceof Date) {
+               Integer dateStyle = Internationalizer.IIQ_DEFAULT_DATE_STYLE;
+               Integer timeStyle = null;
+               if(config.getDateStyle() != null) {
+                   dateStyle = config.getDateStyleValue();
+                   timeStyle = config.getDateStyleValue();
+               }
+               value = Util.dateToString((Date)value, dateStyle, timeStyle, null, null);
+           }
+           
+           return value;
+       }
+    private List getColumns(String columnsKey) throws GeneralException{
+        UIConfig uiConfig = UIConfig.getUIConfig();
+        List columns = null;
+        if(uiConfig!=null) {
+            columns = uiConfig.getAttributes().getList(columnsKey);
+            if ( columns == null && !uiConfig.getAttributes().containsKey(columnsKey ) ) {
+                throw new GeneralException("Unable to locate column config for ["+columnsKey+"].");
+            }
+        }
+        return columns;
+    }
+
+    private void calculateColumns(Map rawQueryResults,
+            String columnsKey,
+            Map map)
+                    throws GeneralException{
+
+        for(ColumnConfig config : getColumns(columnsKey)) {
+            if(config.getProperty()==null) {
+                calculateColumn(config, rawQueryResults, map);
+            }
+        }
+    }
+
+
+    private void calculateColumn(ColumnConfig config, Map rawQueryResults, Map map) {
+        // no-op
+    }
+
+    try {
+        SailPointObject accessItem = getAccessItem(context);
+        Map inputs = new HashMap();
+        inputs.put("identityIds", IDENTITY_IDS);
+        inputs.put("otherAddedRoles", OTHER_ADDED_ROLES);
+        inputs.put("quickLink", QUICK_LINK);
+        log.debug("Creating AdditionalQuestionsRequest: inputs = " + inputs);
+        AdditionalQuestionsRequest request = new AdditionalQuestionsRequest(inputs);
+        log.debug("Created " + request);
+        String targetId = null;
+        if (!Util.isEmpty(request.getIdentityIds()) && request.getIdentityIds().size() == 1) {
+            targetId = request.getIdentityIds().get(0);
+        }
+        log.debug("targetId = " + targetId);
+        UserContext userCtx = getUserContext(context);
+        LcmUtils.authorizeTargetedIdentities(request.getIdentityIds(), context, userCtx);
+        LcmActionAuthorizer lcmAuthorizer = new LcmActionAuthorizer(QuickLink.LCM_ACTION_REQUEST_ACCESS);
+        AccessItemAuthorizer accessItemAuthorizer = new AccessItemAuthorizer(ACCESS_ITEM, targetId, request.getQuickLink());
+        AuthorizationUtility.authorize(userCtx, lcmAuthorizer, accessItemAuthorizer);
+        
+        AdditionalQuestionsContext questionsCtx = getQuestionsCtx(null);
+        AdditionalQuestionsService service = new AdditionalQuestionsService(questionsCtx);
+
+        AdditionalQuestionsService.AdditionalQuestions questions =
+                service.getAdditionalQuestions(accessItem, request);
+
+        // Do some extra column conversion on the permitted roles, if they are there
+        if (!Util.isEmpty(questions.getPermittedRoles())) {
+           questions.setPermittedRoles(convertRows(questions.getPermittedRoles(), AccessItemResource.COLUMNS_KEY_PREFIX));  
+        }
+
+    } catch (Throwable t) {
+        log.error(t.getMessage(), t);
+        throw t;
+    }
+    return questions;        
+
+    ]]>
+  </Source>
+</Rule>

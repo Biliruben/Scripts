@@ -1,0 +1,26 @@
+{
+  "identities": ["0a0b65ca9c401246819c40b2856c0145"],
+  "addedRoles": [],
+  "removedRoles": [],
+  "addedEntitlements": [
+    {
+      "id": "0a0b65ca9c401109819c40b1b31a0508",
+      "comment": null,
+      "sunrise": null,
+      "sunset": null,
+      "accountSelections": [
+        {
+          "identityId": "0a0b65ca9c401246819c40b2856c0145",
+          "roleName": null,
+          "applicationName": "Active_Directory",
+          "nativeIdentity": "149",
+          "instance": null
+        }
+      ],
+      "attachments": []
+    }
+  ],
+  "removedEntitlements": [],
+  "priority": null,
+  "quickLink": "Request Access"
+}

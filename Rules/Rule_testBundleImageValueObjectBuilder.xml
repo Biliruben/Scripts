@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Test Bundle ImageValueObjectBuilder">
+  <Source>
+    <![CDATA[
+    import sailpoint.dataextract.model.builders.*;
+    import sailpoint.dataextract.model.configuration.*;
+    import sailpoint.object.Bundle;
+    import sailpoint.tools.JsonHelper;
+
+
+    String BUNDLE_NAME = "Biz Role C";
+    String TRANS_CFG_NAME = "AccessHistoryTransformConfig";
+
+    ConfigurationUtil cUtil = new ConfigurationUtil();
+    TransformationConfig tCfg = cUtil.buildTransformationConfig (context, TRANS_CFG_NAME);
+    Bundle bundle = context.getObjectByName(Bundle.class, BUNDLE_NAME);
+
+    ImageValueObjectBuilder builder = new ImageValueObjectBuilder().setObject(bundle).setTransformationConfig(tCfg).setObjectType("role");
+    return JsonHelper.toJsonNoEscapes(builder.build(context), JsonHelper.PRETTY_NONULLS);
+
+    ]]>
+  </Source>
+</Rule>

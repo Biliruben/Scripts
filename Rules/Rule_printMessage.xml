@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Print Message">
+  <Source>
+    <![CDATA[
+    import sailpoint.tools.Message;
+
+    String theMessage = "<html><body>I made html!</body></html>";
+
+    Message m = new Message(Message.Type.Error, theMessage, null);
+
+    log.warn("" + m);
+    ]]>
+  </Source>
+</Rule>

@@ -1,0 +1,2 @@
+c:\etn_data
+c:\gitroot

@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="829 Test Single">
+  <Source>
+    <![CDATA[
+    import sailpoint.api.ObjectUtil;
+    import sailpoint.object.Identity;
+
+    Boolean hasName = null;
+    boolean bHasName = ObjectUtil.hasName(Identity.class);
+    hasName = Boolean.valueOf(bHasName);
+    return "hasName: " + hasName;
+    ]]>
+  </Source>
+</Rule>

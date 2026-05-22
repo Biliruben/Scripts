@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Start Transaction">
+  <Description>Given a (Comparable) class, sort the biscuits out of it</Description>
+  <Source>
+    <![CDATA[
+    import sailpoint.object.QueryOptions;
+    import sailpoint.object.WorkItem;
+    import java.sql.Connection;
+    import java.sql.PreparedStatement;
+    import sailpoint.object.TaskResult;
+
+        long sleepyTime = 15000L;
+        Iterator<TaskResult> it = context.search(TaskResult.class, new QueryOptions());
+        log.warn("Searched the TaskResults");
+        Thread.sleep(sleepyTime);
+        
+        log.warn("One more...");
+        it = context.search(TaskResult.class, new QueryOptions());
+        log.warn("Searched AGAIN!!");
+        Thread.sleep(sleepyTime);
+        
+        log.warn("BYE!");
+        
+        
+        return "That was really fun.";
+
+    ]]>
+  </Source>
+</Rule>

@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="GetDefaultAttr">
+  <Source>
+    <![CDATA[
+
+    import sailpoint.object.Application;
+
+    String appName = "Active_Directory";
+    String attrName = "someRuleAttribute";
+
+    Application app = context.getObjectByName(Application.class, appName);
+    if (app != null) {
+        log.warn(app.toXml());
+        Object attr = app.getAttributeValue(attrName);
+        log.warn(attrName + ":" + attr);
+    }
+    ]]>
+  </Source>
+</Rule>
+

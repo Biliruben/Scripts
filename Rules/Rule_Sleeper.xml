@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Sleeper">
+  <Description>Sleepies</Description>
+  <Source>
+    <![CDATA[
+
+    long DEFAULT_SLEEP = 1000L * 60L; // 1 minute
+    String SLEEP_ARG = "sleepTime";
+
+    long sleepTimeActual = DEFAULT_SLEEP;
+
+    for (String argName : global.namespace.getVariableNames()) {
+        if ("config".equals(argName)) {
+            try {
+                sleepTimeActual = Long.valueOf(config.get(SLEEP_ARG));
+            } catch (Throwable t) {
+                log.debug(t);
+            }
+        }
+    }
+
+    log.warn("Sleeping for: " + sleepTimeActual);
+    Thread.sleep(sleepTimeActual);
+    log.warn("Wakey, wakey! Hands off snakey!");
+
+]]>
+  </Source>
+</Rule>

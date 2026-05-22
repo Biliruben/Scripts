@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Create Private Context">
+  <Description>Creates a Private Context and generates an AuditEvent</Description>
+  <Source>
+    <![CDATA[
+    import sailpoint.api.SailPointContext;
+    import sailpoint.api.SailPointFactory;
+    import sailpoint.object.Custom;
+
+    SailPointContext privvy = null;
+    try {
+        Custom obj1 = new Custom();
+        obj1.setName("Without privateCtx");
+        context.saveObject(obj1);
+        context.commitTransaction();
+    
+        privvy = SailPointFactory.createPrivateContext();
+        Custom obj2 = new Custom();
+        obj2.setName("With privateCtx");
+        privvy.saveObject(obj2);
+        privvy.commitTransaction();
+    
+    } finally {
+        if (privvy != null) SailPointFactory.releasePrivateContext(privvy);
+    }
+
+    ]]>
+  </Source>
+</Rule>

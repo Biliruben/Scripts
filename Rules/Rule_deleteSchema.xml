@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Delete Schema">
+  <Description>
+	  Deletes the schemas from the Application
+  </Description>
+  <Source>
+      <![CDATA[
+      import sailpoint.object.Application;
+      import sailpoint.object.Schema;
+      import sailpoint.object.AttributeDefinition;
+      import sailpoint.api.Terminator;
+
+      try {
+        String APPLICATION_NAME = "$$TEST_APPLICATION$$";
+
+        Application app = context.getObjectByName (Application.class, APPLICATION_NAME);
+        if (app == null) {
+            Application a = new Application ();
+            a.setName(APPLICATION_NAME);
+            context.saveObject(a);
+            context.commitTransaction();
+            app = context.getObjectByName (Application.class, APPLICATION_NAME);
+        }
+        String appId = app.getId();
+
+        Schema schema = new Schema("Fake", "Fake");
+        schema.addAttributeDefinition(new AttributeDefinition ("stuff", "string"));
+
+        log.warn ("Populate Schema");
+        app.setSchema(schema);
+        log.warn ("Save application 1");
+        context.saveObject(app);
+        log.warn ("Commit Transaction 1");
+        context.commitTransaction();
+        context.decache();
+        String schemaId = schema.getId();
+        log.warn ("Reload Application");
+        app = context.getObjectByName (Application.class, APPLICATION_NAME);
+
+        log.warn ("Zero out AttributeDefinitions");
+        Schema emptySchema = new Schema("Empty", "Empty");
+        app.setSchema (emptySchema);
+        context.saveObject(app);
+        context.commitTransaction();
+        String emptySchemaId = emptySchema.getId();
+        log.warn ("Reload Application");
+        app = context.getObjectByName (Application.class, APPLICATION_NAME);
+
+        log.warn ("Set schemas to null");
+        app.setSchemas(null);
+        log.warn ("Save application 2");
+        context.saveObject(app);
+        log.warn ("Commit Transaction 2");
+        context.commitTransaction();
+
+        log.warn ("Removing test application");
+        app = context.getObjectById(Application.class, appId);
+        Terminator t = new Terminator(context);
+        if (app != null) {
+            try {
+                t.deleteObject (app);
+            } catch (Exception e) {
+                log.warn (e.getMessage(), e);
+            }
+
+            try {
+                schema = context.getObjectById(Schema.class, schemaId);
+                log.warn ("Removing schema: " + schema);
+                if (schema != null) t.deleteObject (schema);
+                schema = context.getObjectById(Schema.class, emptySchemaId);
+                log.warn ("Removing schema: " + schema);
+                if (schema != null) t.deleteObject (schema);
+            } catch (Exception e) {
+                log.warn (e.getMessage(), e);
+            }
+         }
+
+        } catch (Throwable t) {
+            log.error (t.getMessage(), t);
+        }
+
+      ]]>
+  </Source>
+</Rule>
+

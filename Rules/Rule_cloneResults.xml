@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Clone Results Test">
+  <Source>
+    <![CDATA[
+
+    import sailpoint.object.QueryOptions;
+    import sailpoint.object.Identity;
+    import sailpoint.object.Custom;
+
+    String COMMIT_TEST = "commitTest";
+    long sleepyTime = 0;
+    boolean CLONE_RESULTS = true;
+    long TEST_SLEEP = 10000L; // this is done twice in a row
+
+    public void reportCount() {
+        context.decache();
+        c = getCustom();
+        log.warn("Custom after: " + c.toXml());
+    }
+
+    public Custom getCustom() {
+        Custom c = context.getObjectByName(Custom.class, COMMIT_TEST);
+        if (c == null) {
+            c = new Custom();
+            c.setName(COMMIT_TEST);
+            context.saveObject(c);
+        }
+        return c;
+    }
+
+    public void incrCustom(Custom c) {
+        int incr = c.getInt("counter");
+        log.warn("incr before: " + incr);
+        incr++;
+        log.warn("incr after: " + incr);
+        c.put("counter", incr);
+    }
+
+    // MAIN
+
+    context.decache();
+    
+    // Control - Assert the original assumption that an opentransaction was a bad thing
+    // Get any object and don't commit...
+    Identity amy = context.getObjectByName(Identity.class, "amy.cox");
+    log.warn("I got me an amy: " + amy.getId());
+    log.warn("Sleep!");
+    Thread.sleep(TEST_SLEEP);
+
+    // commit verification setup
+    Custom c = getCustom();
+    incrCustom(c);
+    // don't commit!
+
+    QueryOptions ops = new QueryOptions();
+    ops.setCloneResults(CLONE_RESULTS, false);
+    log.warn("Start search 1 - no commit on clone");
+
+    Iterator results = context.search(Identity.class, ops, "id");
+    List allIds = new ArrayList();
+    while (results.hasNext()) {
+        String id = results.next()[0];
+        allIds.add(id);
+        if (sleepyTime > 0) {
+            Thread.sleep(sleepyTime);
+        }
+    }
+    // commit verification
+    reportCount();
+
+    log.warn("I'm done with round 1! " + System.currentTimeMillis());
+    Thread.sleep(TEST_SLEEP);
+    log.warn(TEST_SLEEP + " has elapsed...");
+    Thread.sleep(TEST_SLEEP);
+
+    c = getCustom();
+    incrCustom(c);
+    ops = new QueryOptions();
+    ops.setCloneResults(CLONE_RESULTS); // implied true for commitOnClone
+
+    log.warn("Start search 2 - commit on clone");
+    results = context.search(Identity.class, ops, "id");
+
+    while (results.hasNext()) {
+        String id = results.next()[0];
+        allIds.add(id);
+        if (sleepyTime > 0) {
+            Thread.sleep(sleepyTime);
+        }
+    }
+    log.warn("I'm done with round 2! " + System.currentTimeMillis());
+    Thread.sleep(TEST_SLEEP);
+    log.warn(TEST_SLEEP + " has elapsed...");
+    Thread.sleep(TEST_SLEEP);
+    reportCount();
+
+    return allIds.size();
+    ]]>
+  </Source>
+</Rule>

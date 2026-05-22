@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Terminate Task">
+    <Source>
+		<![CDATA[
+
+        import sailpoint.object.TaskResult;
+        import sailpoint.api.TaskManager;
+
+        List results = context.getObjects(TaskResult.class);
+        Set resultIds = new HashSet();
+        TaskManager tm = new TaskManager(context);
+
+        for (TaskResult result : results != null ? results : new ArrayList()) {
+            resultIds.add(result.getId());
+        }
+        log.warn("Terminat-o! " + resultIds);
+        tm.terminateTasks(resultIds);
+		]]>
+    </Source>
+</Rule>    

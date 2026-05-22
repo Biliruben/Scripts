@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Log Error">
+  <Description>Just loads a buttload of shit in the session and commits</Description>
+  <Source>
+    <![CDATA[
+    import sailpoint.tools.GeneralException;
+    import sailpoint.api.AuthenticationFailureException;
+    try {
+        throw new AuthenticationFailureException("DN: 'CN=xxxxx,OU=People, DC=sailpoint,DC=com' . Status: Error 49 . 80090308: LdapErr: DSID-0C09030B, comment: AcceptSecurityContext error, data 52e, v893");
+    } catch (GeneralException ex) {
+        log.error(ex.getMessage());
+    }
+
+    ]]>
+  </Source>
+</Rule>

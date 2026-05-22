@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Do Refresh Rule">
+    <Source>
+		<![CDATA[
+
+        log.warn("Do Refresh Rule");
+        context.printStatistics();
+		]]>
+    </Source>
+</Rule>    

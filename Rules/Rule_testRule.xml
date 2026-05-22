@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Test Rule">
+  <Source>
+
+      System.out.println("context: " + global.namespace.getVariable("context"));
+      System.out.println("madeUp: " + global.namespace.getVariable("madeUp").getClass());
+
+  </Source>
+</Rule>

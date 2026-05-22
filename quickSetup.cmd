@@ -65,6 +65,12 @@ call %SCRIPT_HOME%\quickSetupStatus.cmd
 
 pushd %REPO_HOME%
 call %SCRIPT_HOME%\workstationutil.cmd convertIIQProperties %REPO_HOME%\src %IIQ_TAG%
+type %REPO_HOME%\src\iiq.properties | sed -e s/\/\/localhost\//\/\/localhost:%MYSQL_PORT%\// > %temp%\_iiq_temp.properties
+
+rem set this var to instruct initiiq to skip re-updating iiqprops
+set INIT_SKIP_IIQ_PROP=true
+
+copy /y %temp%\_iiq_temp.properties %REPO_HOME%\src\iiq.properties
 rem call %SCRIPT_HOME%\increaseBuildMem 2048m
 call ant %ANT_TASK%
 if ERRORLEVEL 1 goto error

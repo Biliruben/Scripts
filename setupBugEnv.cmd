@@ -26,6 +26,10 @@ if defined SWITCH_IIQ (
     echo SWITCH_IIQ already set! -- %SWITCH_IIQ%
     set pause=pause
 )
+if defined IIQ_TAG (
+    echo IIQ_TAG already set! -- %IIQ_TAG%
+    set pause=pause
+)
 if defined pause (
     echo.
     echo %SCRIPT_HOME%\clearBugEnv.cmd will clear these values

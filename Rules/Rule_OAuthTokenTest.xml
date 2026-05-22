@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="OAuth Token Test">
+  <Source>
+    <![CDATA[
+
+    import sailpoint.object.Identity;
+    import sailpoint.service.oauth.OAuthAccessToken;
+    import sailpoint.service.oauth.OAuthTransformer;
+    import sailpoint.tools.Base64Util;
+
+
+    // case sensitive
+    String identityName = "James.Smith";
+    String identityId = "c0a856f49b091e52819b096f36fc048a";
+
+    String clientId = Base64Util.encodeBytes(identityId.getBytes());
+
+    OAuthAccessToken token = new OAuthAccessToken(clientId, identityName, new ArrayList(), System.currentTimeMillis() + 500000L);
+
+    String encryptedToken = new OAuthTransformer(context).encrypt(clientId, token.toString());
+
+    String bearerTokenRaw = "*" + identityName + "." + encryptedToken;
+    String encryptedBearerToken = Base64Util.encodeBytes(bearerTokenRaw.getBytes());
+
+    return encryptedBearerToken;
+    ]]>
+  </Source>
+</Rule>
+

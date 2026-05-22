@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Do The Fuck Around">
+    <Source>
+		<![CDATA[
+
+import sailpoint.api.Terminator;
+import sailpoint.object.Rule;
+import sailpoint.object.Workflow;
+import sailpoint.tools.Util;
+
+try {
+        Terminator arnold = new Terminator(context);
+        // Create a Workflow w/ Rule libraries; Reference some OOB existing rules
+        String rules = "All Objects,Clear CustomGlobal,IdentityNowSAML";
+        
+        String wfName = "Doing the FuckAround";
+        
+        Workflow wfObj = context.getObjectByName(Workflow.class, wfName);
+        if (wfObj != null) {
+            // delete this nonsense
+            arnold.deleteObject(wfObj);
+        }
+
+        wfObj = new Workflow();
+        wfObj.setName(wfName);
+        List<Rule> ruleLibraries = new ArrayList<Rule>();
+        for (String ruleName : Util.otol(rules)) {
+            Rule rule = context.getObjectByName(Rule.class, ruleName);
+            if (rule != null) {
+                ruleLibraries.add(rule);
+            } else {
+                log.error(ruleName + " is a non-existant Rule");
+            }
+        }
+        wfObj.setRuleLibraries(ruleLibraries);
+        context.saveObject(wfObj);
+        context.commitTransaction();
+        context.decache();
+        log.warn("Do the fuck-around");
+
+        // Then remove the reference from the wf and save
+        wfObj = context.getObjectByName(Workflow.class, wfName);
+        wfObj.setRuleLibraries(null);
+        context.saveObject(wfObj);
+        context.commitTransaction();
+} catch (Throwable t) {
+    log.error(t.getMessage(), t);
+}
+		]]>
+    </Source>
+</Rule>    

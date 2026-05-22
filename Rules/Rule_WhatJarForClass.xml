@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="What Jar">
+    <Source>
+		<![CDATA[
+
+        Class clazz = com.fasterxml.jackson.core.json.JsonReadContext.class;
+        URL location = clazz.getResource('/' + clazz.getName().replace('.', '/') + ".class");
+        return location.toString();
+		]]>
+    </Source>
+</Rule>    

@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Log Span">
+  <Source>
+    <![CDATA[
+    import sailpoint.persistence.SailPointInterceptor;
+    import org.apache.log4j.Priority;
+    try {
+        int newLineBreak = 40;
+        int maxLength = 100;
+
+        String msg = "Hi, my name is Joe\nAnd, I work at a butt factory!\nOne day, my boss came up to me and said, \"Hello Joe, are you busy?\"" +
+        " and I said, \"No.\"\nHe said, \"Kick the butts with your left foot!\"";
+        SailPointInterceptor.logWithSpanning(log, Priority.WARN_INT, msg, newLineBreak, maxLength);
+        SailPointInterceptor.logWithSpanning(log, Priority.WARN_INT, msg.replace("\n",""), newLineBreak, maxLength);
+    } catch (Throwable t) {
+        log.error(t.getMessage(), t);
+    }
+    ]]>
+  </Source>
+</Rule>

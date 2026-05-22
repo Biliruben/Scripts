@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Get PFiles">
+    <Source>
+		<![CDATA[
+/*
+This is a utility Rule that will, given an array of PersistedFile ids, extract
+the PersistedFile and all of the PersistedFile's FileBuckets' data. This utility
+is intended to be used as a troubleshooting device in which problematic reports
+may be executed within other environments without the need for the original
+objects against which were reported.
+*/
+import java.io.ByteArrayStream;
+import java.io.FileOutputStream;
+import java.io.File;
+
+import sailpoint.object.FileBucket;
+import sailpoint.object.Filter;
+import sailpoint.object.PersistedFile;
+import sailpoint.object.QueryOptions;
+import sailpoint.tools.GeneralException;
+
+// Modify this value to the file you want to create/overwrite
+String FILE_NAME = "c:/temp/test.dat";
+
+// Modify this array and to supply the IDs of each PersistedFile to capture
+String[] PERSISTED_FILE_IDS = new String[] {
+    "c0a8566785cb1ced8185cb4d17320040",
+    "c0a8566785cc10948185cc02c2d10004"
+};
+
+    // Extraction code
+    File outFile = new File(FILE_NAME);
+    
+    // Setup the file output stream
+    FileOutputStream fos = new FileOutputStream(outFile);
+    List<String> pFileList = Arrays.asList(PERSISTED_FILE_IDS);
+    // Use 0x00 as the record separator
+    byte[] sep = new byte[] {0x00};
+    
+    // Iterate through each provided PersistedFile id and find the FileBucket(s) for each
+    for (String pFileId : pFileList) {
+        log.warn("Extracting PersistedFile: " + pFileId);
+        QueryOptions ops = new QueryOptions();
+        ops.add(Filter.eq("parent.id", pFileId));
+        Iterator results = context.search(FileBucket.class, ops, "id");
+        List buckets = new ArrayList();
+        
+        // For today's quick 'n dirty purposes, this is fine. However, future iterations should 
+        // be more careful about grabbing ALL of the FileBuckets as it will fill memory. Today, 
+        // I have a relatively known-quantity of data and I don't have to care about this.
+        while (results.hasNext()) {
+            String nextId = (String) results.next()[0];
+            log.warn("Found FileBucket: " + nextId);
+            FileBucket bucket = context.getObjectById(FileBucket.class, nextId);
+            buckets.add(bucket);
+        }
+
+        // For each FileBucket, fetch the parent PersistedFile and serialize the relevant data to
+        // the output file.
+        for (FileBucket bucket : buckets) {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(1024);
+            if (bucket == null) {
+                // very weird situation (a null object would not have returned from context.search earlier)
+                bos.write("NULL BUCKET".getBytes());
+                bos.write(sep);
+                bos.write(sep);
+                bos.writeTo(fos);
+                continue;
+            }
+            PersistedFile pFile = bucket.getParent();
+            if (pFile != null) {
+                bos.write(pFile.toXml().getBytes());
+            } else {
+                String nullPFileMsg = "NULL PFILE: " + pFileId;
+                bos.write(nullPFileMsg.getBytes());
+            }
+            bos.write(sep);
+            bos.write(bucket.getData());
+            bos.write(sep);
+            bos.writeTo(fos);
+        }
+        fos.flush();
+        context.decache();
+    }
+    fos.close();
+    String msg = "Wrote to " + outFile.getCanonicalPath();
+    log.warn(msg);
+
+    return msg;
+]]>
+    </Source>
+</Rule>    

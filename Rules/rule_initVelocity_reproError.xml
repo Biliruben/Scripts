@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Init Velocity">
+  <Description>Velocity, but stupidly</Description>
+  <Source>
+    <![CDATA[
+
+    import sailpoint.tools.VelocityUtil;
+    
+    boolean wait = true;
+    //int THREADS = 2; // start small
+    int THREADS = 20; // let's go!!!
+    long FINAL_WAIT = 5000;
+
+    // Set to true to mitigate the error
+    boolean DO_MITIGATION = false;
+
+    Runnable r = new Runnable() {
+
+        public void run() {
+        String renderedMsg = "unrendered";
+        try {
+            while (wait) {
+                // just wait, but wait really fast
+            }
+                renderedMsg = VelocityUtil.render("Rendered string!", new HashMap(), Locale.US, TimeZone.getDefault(), false);
+            } catch (Throwable t) {
+                log.error(t.getMessage(), t);
+            } finally {
+                log.warn(renderedMsg);
+            }
+        }
+    };
+
+    if (DO_MITIGATION) {
+        String mitigated = VelocityUtil.render("Mitigated",  new HashMap(), Locale.US, TimeZone.getDefault(), false);
+        log.warn(mitigated);
+    }
+    try {
+        List<Thread> threads = new ArrayList();
+        for (int i = 0; i < THREADS; i++) {
+            Thread t = new Thread(r);
+            threads.add(t);
+            t.start();
+        }
+    
+        // aaaand go!
+        wait = false;
+    
+        // this thread hangs out long enough for stuff to go boom
+        Thread.sleep(FINAL_WAIT);
+    } catch (Throwable t) {
+        log.error(t.getMessage(), t);
+        throw (t);
+    }
+    ]]>
+  </Source>
+</Rule>

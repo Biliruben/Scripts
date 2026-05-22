@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Find Orphaned PFiles">
+    <Source>
+		<![CDATA[
+import sailpoint.object.Filter;
+import sailpoint.object.PersistedFile;
+import sailpoint.object.JasperResult;
+import sailpoint.object.QueryOptions;
+import sailpoint.api.Terminator;
+
+// When true, the Rule will only return a list of orphaned IDs.
+// When false, deletion will occur in addition to returning the list of IDs
+boolean  REPORT_ONLY = true;
+
+        // We have to get the IDs of all of the PeristedFiles that are present
+        // in the system with a corresponding JasperResult. But there's not a handy
+        // way in our object model to HQL that information out. I can't even to a 
+        // projection search to just get the 'files' property from spt_jasper_result
+        //
+        // An alternative is to just load up each JasperResult and capture the ids of
+        // the PersistedFiles List. Might have to do that, but that's a lot of data
+        // to iterate through just to make a list of IDs.
+        //
+        // Rather, let's see if we can just use 'context.search("sql:...", ...)' to get that list
+ 
+        List orphanedPersistedFiles = new ArrayList();
+
+        String query = "sql: select p.id from spt_persisted_file p "
+                + "left join spt_jasper_files j on j.elt = p.id "
+                + "left join spt_plugin pl on pl.file_id = p.id "
+                + "where (j.elt is null and pl.id is null)";
+        Iterator results = context.search(query, new HashMap(), new QueryOptions());
+        while (results.hasNext()) {
+            Object result = results.next();
+            orphanedPersistedFiles.add(result);
+        }
+
+        // Then for each id, Terminate the PersistedFile
+        Terminator t = new Terminator(context);
+        if (!REPORT_ONLY) {
+            for (String orphanedPFile : orphanedPersistedFiles) {
+                log.warn("Deleting PeristedFile: " + orphanedPFile);
+                PersistedFile pFile = context.getObjectById(PersistedFile.class, orphanedPFile);
+                t.deleteObject(pFile);
+                context.decache();
+            }
+        }
+        return orphanedPersistedFiles;
+]]>
+    </Source>
+</Rule>    

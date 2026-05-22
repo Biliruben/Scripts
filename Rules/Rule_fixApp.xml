@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Fix App">
+  <Source>
+    <![CDATA[
+
+    import sailpoint.object.Application;
+
+    log.warn("Fixing it...");
+    String APP_NAME = "My CGW";
+    Application fixIt = context.getObjectByName(Application.class, APP_NAME);
+    context.saveObject(fixIt);
+    context.commitTransaction();
+    context.decache();
+
+    log.warn("Fixed it!");
+    return context.getObjectByName(Application.class, APP_NAME);
+    ]]>
+  </Source>
+</Rule>

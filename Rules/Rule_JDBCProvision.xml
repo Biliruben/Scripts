@@ -1,0 +1,756 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule created="1706819801467" language="beanshell" modified="1706820422304" name="JDBCDirectDemoDataProvision" type="JDBCProvision">
+  <Description>A Provisioning rule for the JDBCDirectDemoData application. Handles Account add/remove, create/delete and Group Creates/Deletes/Modifies</Description>
+  <Signature returnType="ProvisioningResult">
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="application">
+        <Description>
+                The application whose data file is being processed.
+                </Description>
+      </Argument>
+      <Argument name="schema">
+        <Description>
+                The Schema currently in use.
+                </Description>
+      </Argument>
+      <Argument name="connection">
+        <Description>
+                A connection object to connect to database.
+                </Description>
+      </Argument>
+      <Argument name="plan">
+        <Description>
+                The ProvisioningPlan created against the JDBC application.
+                </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="result">
+        <Description>
+                A Provisioning Result object is desirable to return the status.IT can be a new object or part of  Provisioning Plan
+                </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import sailpoint.api.SailPointContext;
+import sailpoint.object.Application;
+import sailpoint.object.ProvisioningPlan;
+import sailpoint.object.ProvisioningPlan.AccountRequest;
+import sailpoint.object.ProvisioningPlan.AttributeRequest;
+import sailpoint.object.ProvisioningPlan.ObjectRequest;
+import sailpoint.object.ProvisioningResult;
+import sailpoint.object.Schema;
+import sailpoint.tools.Util;
+import org.apache.commons.logging.LogFactory;
+
+// Internal method for grabbing an Attribute Request Value.
+public Object getAttributeRequestValue(AccountRequest acctReq, String attribute) {
+    if ( acctReq != null ) {
+        AttributeRequest attrReq = acctReq.getAttributeRequest(attribute);
+        if ( attrReq != null ) {
+            return attrReq.getValue();
+        }
+    }
+    return null;
+}
+
+public Object getAttributeRequestBoolean(AccountRequest acctReq, String attribute) {
+  if ( acctReq != null ) {
+      AttributeRequest attrReq = acctReq.getAttributeRequest(attribute);
+      if ( attrReq != null &amp;&amp; attrReq.getValue() != null) {
+          return attrReq.getValue();
+      }
+  }
+  return Boolean.FALSE;
+}
+
+public Object getAttributeRequestValue(ObjectRequest acctReq, String attribute) {
+    if ( acctReq != null ) {
+        AttributeRequest attrReq = acctReq.getAttributeRequest(attribute);
+        if ( attrReq != null ) {
+            return attrReq.getValue();
+        }
+    }
+    return null;
+}
+
+public Object getAttributeRequest(ObjectRequest acctReq, String attribute) {
+    if ( acctReq != null ) {
+        AttributeRequest attrReq = acctReq.getAttributeRequest(attribute);
+        if ( attrReq != null ) {
+            return attrReq;
+        }
+    }
+    return null;
+}
+
+public void processAccountRequests(ProvisioningPlan plan, ProvisioningResult result, Connection connection) {
+
+    List accounts = plan.getAccountRequests();
+
+    //  Get all Account Requests out of the plan
+    if ( ( accounts != null ) &amp;&amp; ( accounts.size() &gt; 0 ) ) {
+
+        //
+        // If the plan contains one or more account requests, we'll iterate through them
+        //
+
+        for ( AccountRequest account : accounts ) {
+
+            try {
+
+                // 
+                // All of the account operations will reside in a try block in case we have any errors, we can mark the provisioningresult as "Failed" if we have an issue.
+                //
+
+                if (AccountRequest.Operation.Create.equals(account.getOperation())) {
+
+                    //
+                    // CREATE Operation
+                    //              
+
+                    log.debug("Account Request Operation = Create");
+
+                    PreparedStatement statement = connection.prepareStatement("insert into jdbcdirectdemodata.players (playerid,firstname,lastname,fullname,is_employee,is_active) values (?,?,?,?,?,?)");
+                    try {
+                        statement.setString(1, (String) account.getNativeIdentity());
+                        statement.setString(2, getAttributeRequestValue(account, "firstname"));
+                        statement.setString(3, getAttributeRequestValue(account, "lastname"));
+                        statement.setString(4, getAttributeRequestValue(account, "fullname"));
+                        statement.setBoolean(5, getAttributeRequestBoolean(account, "is_employee"));
+                        statement.setBoolean(6, getAttributeRequestBoolean(account, "is_active"));
+
+                        log.debug("Preparing to execute: " + statement);
+                        statement.executeUpdate();
+                    }   finally {
+                        statement.close();
+                    }
+
+                    //add any positions that are part of this AccountRequest to the assignments table
+                    List positionsToAdd = account.getAttributeRequests("positionid");
+                    if (positionsToAdd != null) {                        
+                        statement = connection.prepareStatement("insert into jdbcdirectdemodata.assignments (playerid,positionid) values (?,?)");
+                        try {
+                            for ( AttributeRequest positionToAdd : positionsToAdd ) {
+                                List&lt;String&gt; valueList = Util.asList(positionToAdd.getValue());
+                                for (String value : valueList) {
+                                    statement.setString(1, (String) account.getNativeIdentity());
+                                    statement.setString(2, value);
+
+                                    log.debug("Preparing to execute: " + statement);
+                                    statement.executeUpdate();
+                                }
+                            }
+                        }   finally {
+                            statement.close();
+                        }
+                    }
+                    
+                    //
+                    // Sucessful Create, so mark result as COMMITTED
+                    //
+
+                    result.setStatus(ProvisioningResult.STATUS_COMMITTED);                       
+
+                } else if (AccountRequest.Operation.Modify.equals(account.getOperation())) {
+
+                    //
+                    // MODIFY Operation
+                    // 
+
+                    //
+                    // We have a modify, this one is trickier, as we can have "Add" and "Remove" 
+                    // operations and each can be a single string value or a list
+                    //
+
+                    log.debug("Account Request Operation = Modify");
+
+                    //
+                    // Determine what the current positions are first... 
+                    //
+
+                    Statement curr_stmt = connection.createStatement();
+                    ResultSet rs = null;
+                    String positions = "";
+                    List current_positions = null;
+
+                    try {
+
+                        rs = curr_stmt.executeQuery("select positionid " + 
+                                "from jdbcdirectdemodata.assignments where jdbcdirectdemodata.assignments.playerid= '" + account.getNativeIdentity() + "'");
+                        while (rs.next()) {
+                            positions = positions + "," + rs.getString("positionid");
+                        } 
+                        current_positions = Util.csvToList(positions,true);
+
+                    } finally {
+                        curr_stmt.close();
+                    }
+
+                    if (current_positions == null) {
+                        log.debug("We have a null current_positions list... change it to an empty list for subsequent processing.");
+                        current_positions = new ArrayList();
+                    }
+
+                    log.debug("Current positions for User = " + Util.listToCsv(current_positions));
+
+                    //
+                    // Get all Attribute Requests and pull out just the position ones. 
+                    //
+
+                    List remove_positions = new ArrayList();
+                    List add_positions = new ArrayList(); 
+					String newFirstname = null;
+					String newLastname = null;
+                    //
+                    // Get all attribute requests and then we will filter for those related to the positions column
+                    //
+                    List mod_attr_requests = account.getAttributeRequests();
+
+                    if (mod_attr_requests != null) {
+                        for (AttributeRequest req : mod_attr_requests ) {
+                            if (req.getName().equals("positionid")) {
+                                if (ProvisioningPlan.Operation.Remove.equals(req.getOperation())) {
+                                    // Process Removes First
+                                    if (req.getValue() instanceof String) {
+                                        remove_positions.addAll(Util.csvToList(req.getValue()));
+                                    } else if (req.getValue() instanceof List) {
+                                        remove_positions.addAll(req.getValue());
+                                    }
+                                } else if (ProvisioningPlan.Operation.Add.equals(req.getOperation())) {
+                                    // Process Adds Second
+                                    if (req.getValue() instanceof String) {
+                                        add_positions.addAll(Util.csvToList(req.getValue()));
+                                    } else if (req.getValue() instanceof List) {
+                                        add_positions.addAll(req.getValue());                     
+                                    }
+								}
+                            } else if (ProvisioningPlan.Operation.Set.equals(req.getOperation())) {
+									//changing something other than assignments
+									if (req.getName().equals("firstname")) {
+										newFirstname = req.getValue();
+									} else if (req.getName().equals("lastname")) {
+										newLastname = req.getValue();
+									} 
+							}
+                        }
+                    }
+
+                    //  We now have a calculated list of the positions we are adding, the positions we are removing, and the current positions for the user.
+                    log.debug("Add positions = " + Util.listToCsv(add_positions));
+                    log.debug("Remove positions = " + Util.listToCsv(remove_positions));
+
+
+                    // If we have positions to remove, remove them
+                    if (!remove_positions.isEmpty()) {
+                        log.debug("About to remove positions: " + remove_positions.toString() + " from the current_positions = " + current_positions.toString());
+
+                        PreparedStatement statement = connection.prepareStatement("delete from jdbcdirectdemodata.assignments where playerid = ? and positionid = ?");
+
+                        try {
+                            for (String removeposition : remove_positions) {
+                                // validate the player actually currently has that position/position, continue if not
+                                if ( !current_positions.contains(removeposition) ) {
+                                    log.debug("current positions do not contain position: " + removeposition);
+                                    continue;
+                                }
+
+                                statement.setString(1, (String) account.getNativeIdentity());
+                                statement.setString(2, removeposition); 
+                                statement.executeUpdate();
+
+                                current_positions.remove(removeposition);
+                                log.debug("Completed removing position: " + removeposition + " from the current_positions = " + current_positions.toString());
+                            }
+                        } finally {
+                            statement.close();
+                        }
+
+                    }
+
+                    // If we have positions to add, check if they are there and add them as we iterate through
+                    if (!add_positions.isEmpty()) {
+                        log.debug("About to add positions: " + add_positions.toString() + " to the current_positions = " + current_positions.toString());
+
+                        PreparedStatement statement = connection.prepareStatement("insert into jdbcdirectdemodata.assignments (playerid, positionid) values (?, ?)");
+
+                        try {
+                            for (String addposition : add_positions) {
+                                // validate the player actually currently has that position/position, continue if not
+                                if ( current_positions.contains(addposition) ) {
+                                    log.debug("current positions already contain position: " + addposition);
+                                    continue;
+                                }
+
+                                statement.setString(1, (String) account.getNativeIdentity());
+                                statement.setString(2, addposition); 
+                                statement.executeUpdate();
+
+                                current_positions.add(addposition);
+                                log.debug("Completed adding position: " + addposition + " to the current_positions = " + current_positions.toString());
+                            }
+                        } finally {
+                            statement.close();
+                        }
+						
+                    }
+					
+					// If we have a firstname change, process that
+                    if (newFirstname != null) {
+                        log.debug("About to change firstname: " + newFirstname);
+
+                        PreparedStatement statement = connection.prepareStatement("update jdbcdirectdemodata.players set firstname=? where playerid=?");
+
+                        try {
+                                statement.setString(1, newFirstname);
+								statement.setString(2, (String) account.getNativeIdentity());
+                                statement.executeUpdate();
+
+                                log.debug("Completed firstname change: " + "update players set firstname = " + newFirstname + " where playerid = " + (String) account.getNativeIdentity());                           
+                        } finally {
+                            statement.close();
+                        }
+                    }
+					
+					// If we have a lastname change, process that
+                    if (newLastname != null) {
+                        log.debug("About to change lastname: " + newLastname);
+
+                        PreparedStatement statement = connection.prepareStatement("update jdbcdirectdemodata.players set lastname=? where playerid=?");
+
+                        try {
+                                statement.setString(1, newLastname);
+								statement.setString(2, (String) account.getNativeIdentity());
+                                statement.executeUpdate();
+
+                                log.debug("Completed lastname change: " + "update players set lastname = " + newLastname + " where playerid = " + (String) account.getNativeIdentity());
+                        } finally {
+                            statement.close();
+                        }
+
+                    }
+
+                    //  Print out the list of positions being provisioned after processing "add" and "remove" operations
+                    log.debug("Completed the positions for:" + (String) account.getNativeIdentity() + " Current positions after adding/removing = " + Util.listToCsv(current_positions)); 
+
+                    result.setStatus(ProvisioningResult.STATUS_COMMITTED);
+
+                } else if (AccountRequest.Operation.Delete.equals(account.getOperation())) {
+
+                    //
+                    // DELETE ACCOUNT Operation
+                    // 
+
+
+                    log.debug("Account Request Operation = Delete");
+                    PreparedStatement statement = null; 
+                    try {
+                        statement = connection.prepareStatement("delete from assignments where playerid = ?");
+                        statement.setString(1, (String) account.getNativeIdentity());
+                        statement.executeUpdate(); 
+                    } finally {
+                        statement.close();
+                    }
+                    try {
+                        statement = connection.prepareStatement("delete from players where playerid = ?");
+                        statement.setString(1, (String) account.getNativeIdentity());
+                        statement.executeUpdate(); 
+                    } finally {
+                        statement.close();
+                    }
+
+                    result.setStatus(ProvisioningResult.STATUS_COMMITTED);
+
+                } else if (AccountRequest.Operation.Disable.equals(account.getOperation())) {
+
+                } else if (AccountRequest.Operation.Enable.equals(account.getOperation())) {
+
+                } else if (AccountRequest.Operation.Lock.equals(account.getOperation())) {
+
+                } else if (AccountRequest.Operation.Unlock.equals(account.getOperation())) {
+
+                } else {
+
+                    // Unknown operation!
+                    log.error("Unknown account operation [" + account.getOperation() + "]!");
+                }
+
+            } catch (SQLException e) {
+                log.error("Error: " + e);
+                result.setStatus(ProvisioningResult.STATUS_FAILED);
+                result.addError(e);
+            }
+        }    // account request loop
+    }     // if account requests exist
+}
+
+public void processGroupRequests(ProvisioningPlan plan, ProvisioningResult result, Connection connection) {
+
+    List groups = plan.getObjectRequests();
+
+    // 
+    //  Get all Object (GROUP) Requests out of the plan
+    // 
+
+    if ( ( groups != null ) &amp;&amp; ( groups.size() &gt; 0 ) ) {
+
+        //
+        // If the plan contains one or more group requests, we'll iterate through them
+        //
+
+        for ( ObjectRequest group : groups ) {
+
+            try {
+
+                // 
+                // All of the group operations will reside in a try block in case we have any errors, we can mark the provisioningresult as "Failed" if we have an issue.
+                //
+
+                if (ProvisioningPlan.ObjectOperation.Create.equals(group.getOp())) {
+
+                    //
+                    // CREATE Operation
+                    //              
+
+                    PreparedStatement statement = null;
+
+                    if (group.getType().equals("position")) {
+
+                        log.debug("Group Request Operation = Create Position");
+
+                        statement = connection.prepareStatement("insert into positions (positionid,positionname,description) values (?,?,?)");
+                        statement.setString(1, (String) group.getNativeIdentity());
+                        statement.setString(2, getAttributeRequestValue(group, "positionname"));
+                        statement.setString(3, getAttributeRequestValue(group, "description"));
+
+                        log.debug("Preparing to execute: " + statement);
+                        statement.executeUpdate();
+
+                        Object unitvalue = getAttributeRequest(group, "unitid");
+                        if (unitvalue != null) {
+                            if (unitvalue.getValue() instanceof String) {
+                                statement = connection.prepareStatement("insert into UNITSPOSITIONS (positionid, unitid) values (?,?)");
+                                statement.setString(1, getAttributeRequestValue(group, "positionid"));
+                                statement.setString(2, getAttributeRequestValue(group, "unitid"));
+
+                                statement.executeUpdate();
+                            }
+                            else if (unitvalue.getValue() instanceof List){
+                                List units = unitvalue.getValue();
+                                for ( Object unit : units ) {
+                                    try {
+                                        String group = getAttributeRequestValue(group, "positionid");
+                                        statement = connection.prepareStatement("insert into UNITSPOSITIONS (positionid, unitid) values (?,?)");
+                                        statement.setString(1, group);
+                                        statement.setString(2, (String)unit);
+                                        statement.executeUpdate();
+                                    }
+                                    catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                    finally {
+                                        statement.close();
+                                    }
+                                }
+                            }
+                        }
+                    } else if (group.getType().equals("unit")) {
+
+                        log.debug("Unit Request Operation = Create Unit");
+
+                        statement = connection.prepareStatement("insert into units (unitid,unitname,description) values (?,?,?)");
+                        statement.setString(1, (String) group.getNativeIdentity());
+                        statement.setString(2, getAttributeRequestValue(group, "unitname"));
+                        statement.setString(3, getAttributeRequestValue(group, "description"));
+
+                        log.debug("Preparing to execute: " + statement);
+                        statement.executeUpdate();
+                    }
+
+                    //
+                    // Sucessful Create, so mark result as COMMITTED
+                    //
+
+                    result.setStatus(ProvisioningResult.STATUS_COMMITTED);
+
+
+                } else if (ProvisioningPlan.ObjectOperation.Modify.equals(group.getOp())) {
+
+                    //
+                    // MODIFY Operation
+                    // 
+
+                    //
+                    // We have a modify, this one is trickier, as we can have "Add" and "Remove" 
+                    // operations and each can be a single string value or a list
+                    //
+
+                    //
+                    // Process update SQL operation
+                    //
+                    if (group.getType().equals("position")) {
+
+                        log.debug("Group Modify Operation = Modify Position");
+
+                        List columns = Arrays.asList(new String[] {"positionname", "description"});
+                        Map values = new HashMap();
+                        StringBuffer queryString = new StringBuffer("update positions set ");
+                        for (int i = 0; i &lt; columns.size(); i++) {
+                            String value = getAttributeRequestValue(group, columns.get(i));
+                            if (value != null) {
+                                queryString.append(columns.get(i));
+                                queryString.append("=?,");
+                                values.put(columns.get(i), value);
+                            }
+                        }
+
+                        // update the unitspartitons table for relationships between those groups
+
+                        ResultSet rs = null;
+                        Object unitvalue = getAttributeRequest(group, "unitid");
+                        if (unitvalue != null) {
+                            if (unitvalue.getValue() instanceof String) {
+                                if (getAttributeRequestValue(group, "unitid") != null){
+
+                                    try{
+                                        //replacing existing values with new values. Assuming IIQ is authoritative.
+                                        //First delete the old ones:
+                                        statement = connection.prepareStatement("delete from UNITSPOSITIONS where positionid = '" 
+                                                + (String)group.getNativeIdentity() + "'");
+                                        statement.executeUpdate();
+
+                                        //now add the new value
+                                        statement = connection.prepareStatement("insert into UNITSPOSITIONS (positionid, unitid) values (?,?)");
+                                        statement.setString(1, (String) group.getNativeIdentity());
+                                        statement.setString(2, getAttributeRequestValue(group, "unitid"));
+                                        statement.executeUpdate();
+                                    }
+                                    finally {
+                                        statement.close();
+                                    }
+                                }
+                            } 
+                            else if (unitvalue.getValue() instanceof List){  //multiple changes
+                                List units = unitvalue.getValue();
+                                //replacing existing values with new values. Assuming IIQ is authoritative.
+                                //First delete the old ones:
+                                statement = connection.prepareStatement("delete from UNITSPOSITIONS where positionid = '" 
+                                        + (String)group.getNativeIdentity() + "'");
+                                statement.executeUpdate();
+                                statement.close();
+
+                                for ( Object unit : units ) {
+                                    try {
+                                        statement = connection.prepareStatement("insert into UNITSPOSITIONS (positionid, unitid) values (?,?)");
+                                        statement.setString(1, (String)group.getNativeIdentity());
+                                        statement.setString(2, (String)unit);
+                                        statement.executeUpdate();
+                                        statement.close();
+                                    }
+                                    catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                            else{ // we've been passed an empty value, so delete any unit/position relationships
+                                try {
+                                    log.debug("Unitvalue is null");
+                                    statement = connection.prepareStatement("delete from UNITSPOSITIONS where positionid = '" 
+                                            + (String)group.getNativeIdentity() + "'");
+                                    statement.executeUpdate();
+                                }
+                                finally {
+                                    statement.close();
+                                }
+                            }
+                        }
+                        else {
+                            log.debug("unitvalue not being modified at this time");
+                        }
+
+                        log.debug("queryString: " + queryString.toString());
+                        log.debug("values: " + values);
+
+                        // if values not empty we need to update something
+                        if ( !(values.isEmpty()) ) {
+                            // first remove the final comma we added above
+                            queryString.deleteCharAt(queryString.length()-1);
+                            queryString.append(" where positionid = ?");
+                            log.debug("final queryString: " + queryString.toString());
+
+                            PreparedStatement statement = connection.prepareStatement(queryString.toString());
+                            // iterate over columns
+                            int param = 1;
+                            for (int i = 0; i &lt; columns.size(); i++) {
+                                String value = (String)values.get(columns.get(i));
+                                if (value != null) {
+                                    log.debug(columns.get(i) + ": Setting " + value + " to param " + param);
+                                    statement.setString(param, value);
+                                    param++;
+                                }
+                            }
+
+                            log.debug("Preparing to execute: " + statement);
+                            statement.setString(param, (String) group.getNativeIdentity());
+
+                            statement.executeUpdate();
+                        }
+
+                    } else if (group.getType().equals("unit")) {
+
+                        log.debug("Group Modify Operation = Modify Unit");
+
+                        List columns = Arrays.asList(new String[] {"unitname", "description"});
+                        Map values = new HashMap();
+                        StringBuffer queryString = new StringBuffer("update units set ");
+                        for (int i = 0; i &lt; columns.size(); i++) {
+                            String value = getAttributeRequestValue(group, columns.get(i));
+                            if (value != null) {
+                                queryString.append(columns.get(i));
+                                queryString.append("=?,");
+                                values.put(columns.get(i), value);
+                            }
+                        }
+
+                        if ( !(values.isEmpty()) ) {
+                            // first remove the final comma we added above
+                            queryString.deleteCharAt(queryString.length()-1);
+                            queryString.append(" where unitid = ?");
+                            log.debug("final queryString: " + queryString.toString());
+
+                            PreparedStatement statement = connection.prepareStatement(queryString.toString());
+                            // iterate over columns
+                            int param = 1;
+                            for (int i = 0; i &lt; columns.size(); i++) {
+                                String value = (String)values.get(columns.get(i));
+                                if (value != null) {
+                                    log.debug(columns.get(i) + ": Setting " + value + " to param " + param);
+                                    statement.setString(param, value);
+                                    param++;
+                                }
+                            }
+
+                            statement.setString(param, (String) group.getNativeIdentity());
+                            statement.executeUpdate();
+                        }
+                    }
+
+                    result.setStatus(ProvisioningResult.STATUS_COMMITTED);
+
+                } else if (ProvisioningPlan.ObjectOperation.Delete.equals(group.getOp())) {
+
+                    //
+                    // DELETE Operation
+                    // 
+
+                    if (group.getType().equals("position")){
+                        log.debug("Group Request Operation = Delete Position");
+
+                        //delete any references in unitspositions table
+                        //have to delete these first
+                        statement = connection.prepareStatement("delete from unitspositions where positionid = ?");
+                        statement.setString(1, (String) group.getNativeIdentity());
+                        statement.executeUpdate();
+                        statement.close();
+
+                        PreparedStatement statement = connection.prepareStatement("delete from positions where positionid = ?");
+                        statement.setString(1, (String) group.getNativeIdentity());
+                        statement.executeUpdate();
+                        statement.close();
+                    } else if (group.getType().equals("unit")){
+                        log.debug("Group Request Operation = Delete Unit");
+
+                        //delete any references in unitspositions table
+                        //have to delete these first
+                        statement = connection.prepareStatement("delete from unitspositions where unitid = ?");
+                        statement.setString(1, (String) group.getNativeIdentity());
+                        statement.executeUpdate();
+                        statement.close();
+
+                        PreparedStatement statement = connection.prepareStatement("delete from units where unitid = ?");
+                        statement.setString(1, (String) group.getNativeIdentity());
+                        statement.executeUpdate();
+                        statement.close();
+                    }
+                    result.setStatus(ProvisioningResult.STATUS_COMMITTED);
+
+                } else {
+
+                    // Unknown operation!
+                    log.error("Unknown group operation [" + group.getOp() + "]!");
+                }
+
+            } catch (SQLException e) {
+                log.error("Error: " + e);
+                result.setStatus(ProvisioningResult.STATUS_FAILED);
+                result.addError(e);
+            } 
+        }    // group request loop
+    }     // if group requests exist
+}
+
+
+
+//
+// JDBC Provisioning Rule Body
+//
+
+log.warn(plan.toXml());
+throw new sailpoint.tools.GeneralException("Totes JDBC Debugging, but not.");
+
+// Overwrite the log object with our own classname so we can turn on
+// logging on for just this rule. Add a line like this to log4j props file:
+// log4j.logger.sailpoint.rule.JDBCDemoDataProvisioning=debug
+log = LogFactory.getLog("sailpoint.rule.JDBCDemoDataProvisioning");
+
+Date now = new Date();
+
+log.debug("\n\n\n\n\n");
+log.debug("****************************************");
+log.debug("Entering Provisioning Rule for JDBCDirectDemoData");
+log.debug(" Current Time =  " + now.toString());
+log.debug("****************************************");
+
+
+// The ProvisioningResult is the return object for this type of rule. We'll create it here and then populate it later
+ProvisioningResult result = new ProvisioningResult();
+
+// Check if the plan is null or not, if not null, process it... 
+if ( plan != null ) {
+
+    log.debug("*** \n The Provisioning Plan being passed in = \n***\n" + plan.toXml() + "\n****************************************");
+    processAccountRequests(plan, result, connection);
+    processGroupRequests(plan, result, connection);
+
+}   // if plan not null
+
+
+log.debug("****************************************");
+log.debug("****************************************");
+log.debug("Exiting Provisioning Rule for JDBCDirectDemoData. \n  Result=  \n" + result.toXml(false));
+log.debug("****************************************");
+log.debug("****************************************");
+log.debug("\n\n\n\n\n");
+
+return result;
+</Source>
+</Rule>

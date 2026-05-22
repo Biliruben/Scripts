@@ -1,0 +1,832 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="IDX Integrity Checker" type="BuildMap">
+  <Description>
+  A rule to check the integrity of IDX / Ordered Collection relationships in 
+  IdentityIQ.   This can be run in Task context (IIQ 6.3+) or in IIQ Console 
+  context for older versions of IdentityIQ. 
+  The goal is for this tool to report in any IDX issues found on a system and
+  to be able to repair those issues when they are found.
+  </Description>
+  <Signature returnType="ResourceObject">
+    <Inputs>
+      <Argument name="log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+    </Inputs>
+  </Signature>
+  <Source><![CDATA[
+  
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.HashSet;
+
+import java.sql.Connection;
+import java.sql.CallableStatement;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+
+import sailpoint.tools.Message;
+import sailpoint.Version;
+import sailpoint.api.PersistenceManager;
+import sailpoint.scheduler.QuartzPersistenceManager;
+import sailpoint.persistence.ClassPersistenceManager;
+import sailpoint.persistence.HibernatePersistenceManager;
+
+import org.hibernate.dialect.Dialect;
+
+import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
+
+// Declare a logger class for us to isolate these messages during aggregation.
+Logger log = Logger.getLogger("sailpoint.services.rule.IDXIntegrityChecker");
+String version = Version.getVersion();
+
+// Force the log level to DEBUG for initial testing.
+// log.setLevel(Level.DEBUG);  // TODO: Comment out this line for produciton release.
+// log.setLevel(Level.WARN);   // TODO: Comment out this line for produciton release.
+// log.setLevel(Level.TRACE);  // TODO: Comment out this line for produciton release.
+
+// Keep a flag around to identify whether this rule is being run inside a Task
+// context or whether it is being run stand-alone from the console ore Debug 
+// page.  For 6.3 and newer installs we can use the presence of the variable 
+// 'taskResult' to determine if we are running in task context.
+boolean inTaskContext = false;
+if ((void != taskResult) && (null != taskResult)) {   
+  inTaskContext = true;    
+}
+
+// Keep a peg counter for the total number of problems found.  Also keep a list
+// of "tableName|problemType|objectId" strings that track all the objects that 
+// had a problem found with them.  We use this for reporting.  
+int numProblemsFound = 0;
+ArrayList problemObjects = new ArrayList();
+
+boolean flagEntitlementSnapshot = false;
+
+// If a table has lots of errant rows we only report on the first 25 of the.
+// This prevents the TaskResult object from getting bloated with too many 
+// messages related to errant tables.  Tables like the 'spt_entitlement_group'
+// table would literally leak millions of rows on some installations before
+// the 6.4p4 release and those would break this Rule's analysis.
+int maxNullsToReport = 25;
+
+log.debug("SailPoint Services IDX / Ordered Collection Integrity Checker.");
+
+//Methods
+
+void checkTaskConfiguration() {
+  if ((void != config) && (config instanceof Map)) {
+    String UI_CFG_KEY_0 = "IDX Integrity Checker";
+    String UI_CFG_KEY_1 = "flagEntitlementSnapshot";
+ 
+    log.debug("ruleconfig = " + config.toString());
+
+    if ((null == config.get(UI_CFG_KEY_0)) || !Boolean.parseBoolean((String) config.get(UI_CFG_KEY_0))) return;
+
+    if (null != config.get(UI_CFG_KEY_1)) flagEntitlementSnapshot = Boolean.parseBoolean((String) config.get(UI_CFG_KEY_1));
+ 
+  }
+}
+
+// Define a helper function to pull back single column String values from various
+// tables.  This helps us build out meta-data on the errant rows where we
+// can.  Since these are likely-corrupt/known-corrupt records, we have to use 
+// direct SQL queries instead of the IdentityIQ context.getOjbect() API methods.
+public String getRowCol(String tableName, String retColName, String idValue) {
+
+   // Default to returning not-available/not-applicable.
+   String returnString = "n/a";   
+ 
+   Connection dbCxn = context.getConnection();
+   
+   // Build out a query/SQL statement.
+   StringBuilder qSQL = new StringBuilder();
+   qSQL.append("SELECT " + retColName +" FROM " + tableName);
+   qSQL.append(" WHERE id = '" + idValue + "'");
+      
+   log.trace("column lookup SQL: " + qSQL.toString());
+   
+   Statement qStmt = dbCxn.createStatement();
+   ResultSet qRS = qStmt.executeQuery(qSQL.toString());
+   while (qRS.next()) { 
+      returnString = qRS.getString(1);
+      if (qRS.wasNull()) {
+         returnString = "NULL";
+      }
+   }
+   qRS.close();
+   qStmt.close();
+   
+   log.trace(tableName + "[" + idValue + "]." + retColName + " = " + returnString);
+   
+   return returnString;
+}
+
+
+// Define a helper function that can pull back extra metadata based on the 
+// the table of the object that had a problem.  Since these are known corrupt
+// records, we have to use SQL for each of the queries because IdentityIQ may
+// not be able to load the details.
+public String getObjDetails (String tableName, String objGuid) {
+
+   String retStr = "";
+   
+   if ("spt_link".equalsIgnoreCase(tableName)) {
+   
+      String acctName = getRowCol("spt_link", "native_identity", objGuid);
+      String identId  = getRowCol("spt_link", "identity_id", objGuid);
+      String appId = getRowCol("spt_link", "application", objGuid);
+      String appName = getRowCol("spt_application", "name", appId);
+      String appType = getRowCol("spt_application", "type", appId);
+      String idenName = getRowCol("spt_identity", "name", identId);
+            
+      retStr = "in account [" + acctName + "] " +
+               "from Application [" + appName + "] " +
+               "type [" + appType + "] " +
+               "on Identity [" + idenName + "]";
+         
+   } else if ("spt_work_item".equalsIgnoreCase(tableName)) {
+   
+      String wiName = getRowCol("spt_work_item", "name", objGuid);
+      String iReqId = getRowCol("spt_work_item", "identity_request_id", objGuid);
+       
+      String handler = getRowCol("spt_work_item",  "handler", objGuid);
+      String tgtClass = getRowCol("spt_work_item", "target_class", objGuid);
+      String tgtObjId = getRowCol("spt_work_item", "target_id", objGuid);
+      
+      retStr = "name=" + wiName + " identityRequestId=" + iReqId + " ";
+      retStr += "handler=" + handler + " targetClass=" + tgtClass + " targetId=" + tgtObjId;
+   
+   } else if ("spt_password_policy_holder".equalsIgnoreCase(tableName)) {
+      
+      String appId = getRowCol("spt_password_policy_holder", "application", objGuid);
+      String appName = getRowCol("spt_application", "name", appId);
+            
+      retStr = "for Application [" + appName + "]";
+      
+   } else {
+      log.debug("Don't know what details to retrieve for row in: " + tableName);
+   }       
+   
+   return retStr;
+
+}
+
+
+// Define the function that processes in individual Ordered Collection relationsip.
+// There are certain classes/tables that receive special treatment because of 
+// polymorphism and different parents that can instantiate pseudo-child objects.
+// See comments below for details. 
+public void checkCollectionIntegrity (String childTab, String parentFKCol) {
+
+   Connection dbCxn = context.getConnection();
+
+   // Count the number of rows that fail the null check.
+   int ncRowCount = 0;
+   
+   // Check for instances of 'NULL' parentFk column _and_ 'NULL' idx column.
+   // Note: there are some tables where this is legal, for example 'spt_scope'
+   // because scopes can exist as top-level without parents.  
+   if ( "spt_scope".equalsIgnoreCase(childTab) || 
+        "spt_work_item".equalsIgnoreCase(childTab)  ) {
+            
+      log.trace("Skipping both null check for table: " + childTab);
+       
+   } else {
+   
+      StringBuilder bcSQL = new StringBuilder(); // Both Check SQL Statement.
+      bcSQL.append("SELECT COUNT(*) numRows FROM " + childTab);
+      bcSQL.append(" WHERE " + parentFKCol + " IS NULL AND idx IS NULL ");
+      if (null != specialSuffixes.get(childTab)) {
+         bcSQL.append(specialSuffixes.get(childTab));
+      }
+   
+      log.trace("both null check SQL: " + bcSQL.toString());
+   
+      Statement bcStmt = dbCxn.createStatement();
+      ResultSet rowCntRS = bcStmt.executeQuery(bcSQL.toString());
+      while (rowCntRS.next()) { ncRowCount = rowCntRS.getInt(1); }
+      rowCntRS.close();
+      bcStmt.close();
+   
+      log.trace("both null check found " + ncRowCount + " errant rows on table " + childTab);
+   
+   } 
+   
+   numProblemsFound += ncRowCount;
+   
+   if (0 != ncRowCount) {
+   
+      String ncMsg = "Table " + childTab + " contains " + ncRowCount + " records with NULL 'idx' columns and NULL parent foreign key columns.";
+      log.warn(ncMsg);
+      if (inTaskContext) taskResult.addMessage(new Message(Message.Type.Warn, ncMsg, null));
+      
+      // Only report the individual rows if there are fewer than 'maxNullsToReport'.
+      // This catches scenarios like the the 'spt_entitlement_group' table in IIQ 6.4p3
+      // and earlier that would leak many rows with null IDX columns.  We only want to
+      // report on a sub-set of the rows if there are many with problems.
+      if (ncRowCount >= maxNullsToReport) {
+         String manyMsg = "Table " + childTab + " has too many NULL 'idx' records to report them all.";
+         manyMsg += "  Purging of errant records via SQL or support tools may be required.";
+         log.warn(manyMsg);
+         if (inTaskContext) taskResult.addMessage(new Message(Message.Type.Error, manyMsg, null)); 
+      }
+      
+      StringBuilder bcRecSQL = new StringBuilder();
+      if (createdColSet.contains(childTab)) {
+         bcRecSQL.append("SELECT id, created, modified FROM " + childTab);
+      } else {
+         bcRecSQL.append("SELECT id FROM " + childTab);
+      }
+      bcRecSQL.append(" WHERE " + parentFKCol + " IS NULL AND idx IS NULL ");
+      
+      if (null != specialSuffixes.get(childTab)) {
+         bcRecSQL.append(specialSuffixes.get(childTab));
+      }
+      
+      Statement bcRecStmt = dbCxn.createStatement();
+      ResultSet bcRecRows = bcRecStmt.executeQuery(bcRecSQL.toString());
+      int bcResultCounter = 0;
+      while ((bcRecRows.next()) && (bcResultCounter < maxNullsToReport)) { 
+      
+         String objGuid  = bcRecRows.getString(1);
+         String created  = "N/A"; // Not available on all tables.
+         String modified = "N/A"; // Not available on all tables.
+         if (createdColSet.contains(childTab)) {
+            created  = "" + bcRecRows.getLong(2);
+            modified = "" + bcRecRows.getLong(3);
+         }
+                  
+         if (0 == modified.length()) { modified = created; }
+         
+         String bcRecMsg = "NULL parent fk, idx: " + childTab + " id:" + objGuid + " , last modified: " + modified;
+         bcRecMsg += " " + getObjDetails(childTab, objGuid);               
+         log.warn(bcRecMsg);
+         if (inTaskContext) taskResult.addMessage(new Message(Message.Type.Error, bcRecMsg, null));
+         
+         // Use a pipe-delimited string of "tableName|problem|objectId" to track problem objects.
+         String probObjStr = childTab + "|bothParentAndIdx|" + objGuid;
+         problemObjects.add(probObjStr);   
+         
+         bcResultCounter++;      
+                   
+      }
+      bcRecRows.close();
+      bcRecStmt.close();      
+   }
+   
+   ncRowCount = 0; // Reset the error counter.
+   
+   // Check for instances of 'NULL' idx column values.   
+   // Default behavior: check for NULL 'idx' columns when parentFK populated.
+   // Some tables override this with 'speacialSuffix' settings that get
+   // appended to the SQL statement.
+   StringBuilder ncSQL = new StringBuilder();
+   ncSQL.append("SELECT COUNT(*) numRows FROM " + childTab);
+   ncSQL.append(" WHERE " + parentFKCol + " IS NOT NULL AND idx IS NULL ");
+   if (null != specialSuffixes.get(childTab)) {
+      ncSQL.append(specialSuffixes.get(childTab));
+   }
+      
+   log.trace("null check SQL: " + ncSQL.toString());
+
+   Statement ncStmt = dbCxn.createStatement();
+   ResultSet rowCntRS = ncStmt.executeQuery(ncSQL.toString());
+   while (rowCntRS.next()) { ncRowCount = rowCntRS.getInt(1); }
+   rowCntRS.close();
+   ncStmt.close();
+   
+   log.trace("null check count for " + childTab + " is: " + ncRowCount);
+   
+   numProblemsFound += ncRowCount;
+   
+   if (0 != ncRowCount) {
+   
+      String ncMsg = "Table " + childTab + " contains " + ncRowCount + " records with NULL 'idx' columns.";
+      log.warn(ncMsg);
+      if (inTaskContext) taskResult.addMessage(new Message(Message.Type.Error, ncMsg, null));
+      
+      // Only report the individual rows if there are fewer than 'maxNullsToReport'.
+      // This catches scenarios like the the 'spt_entitlement_group' table in IIQ 6.4p3
+      // and earlier that would leak many rows with null IDX columns.  We only want to
+      // report on a sub-set of the rows if there are many with problems.
+      if (ncRowCount >= maxNullsToReport) {
+         String manyMsg = "Table " + childTab + " has too many NULL 'idx' records to report them all.";
+         manyMsg += "  Purging of errant records via SQL or support tools may be required.";
+         log.warn(manyMsg);
+         if (inTaskContext) taskResult.addMessage(new Message(Message.Type.Error, manyMsg, null)); 
+      }
+      
+      StringBuilder ncRecSQL = new StringBuilder();
+      if (createdColSet.contains(childTab)) {
+         ncRecSQL.append("SELECT id, created, modified FROM " + childTab);
+      } else {
+         ncRecSQL.append("SELECT id FROM " + childTab);
+      }
+      ncRecSQL.append(" WHERE " + parentFKCol + " IS NOT NULL AND idx IS NULL ");
+      
+      if (null != specialSuffixes.get(childTab)) {
+         ncRecSQL.append(specialSuffixes.get(childTab));
+      }
+      
+      Statement ncRecStmt = dbCxn.createStatement();
+      ResultSet ncRecRows = ncRecStmt.executeQuery(ncRecSQL.toString());
+      int ncResultCounter = 0;
+      while ((ncRecRows.next()) && (ncResultCounter < maxNullsToReport)) { 
+      
+         String objGuid  = ncRecRows.getString(1);
+         String created  = "N/A"; // Not available on all tables.
+         String modified = "N/A"; // Not available on all tables.
+         if (createdColSet.contains(childTab)) {
+            created  = "" + ncRecRows.getLong(2);
+            modified = "" + ncRecRows.getLong(3);
+         }
+                  
+         if (0 == modified.length()) { modified = created; }
+         
+         String ncRecMsg = "NULL idx: " + childTab + " id:" + objGuid + " , last modified: " + modified;
+         ncRecMsg += " " + getObjDetails(childTab, objGuid);               
+         log.warn(ncRecMsg);
+         if (inTaskContext) taskResult.addMessage(new Message(Message.Type.Error, ncRecMsg, null));
+         
+         // Use a pipe-delimited string of "tableName|problem|objectId" to track problem objects.
+         String probObjStr = childTab + "|nullIdx|" + objGuid;
+         problemObjects.add(probObjStr);   
+         
+         ncResultCounter++;      
+                   
+      }
+      ncRecRows.close();
+      ncRecStmt.close();      
+   }
+   
+   
+   // Check for gaps in the IDX columns values, like: 0, 1, 2, 4, 5, etc.
+   // Also check for duplicates in the IDX columns, like: 0, 1, 1, 2, 3.
+   StringBuilder gapChkSQL = new StringBuilder();
+   gapChkSQL.append("SELECT id, " + parentFKCol + ", idx FROM " + childTab);
+   gapChkSQL.append(" WHERE " + parentFKCol + " IS NOT NULL ");
+   gapChkSQL.append("   AND idx IS NOT NULL ");
+   gapChkSQL.append(" ORDER BY " + parentFKCol + ", idx");
+   
+   log.debug("Gap Check SQL: " + gapChkSQL.toString());
+   
+   String lastParentFK = "";
+   int lastIdxInt = 0;
+   
+   Statement gapChkStm = dbCxn.createStatement();
+   ResultSet gapChkRS = gapChkStm.executeQuery(gapChkSQL.toString());
+   int gapChkRowCount = 0;   
+   
+   while (gapChkRS.next()) {
+   
+      String objGuid = gapChkRS.getString(1);
+      String curPFK  = "" + gapChkRS.getString(2);
+      String curIdx  = "" + gapChkRS.getInt(3);
+      
+      int curIdxInt = Integer.parseInt(curIdx);
+      
+      if ( !lastParentFK.equalsIgnoreCase(curPFK) ) {
+         // Rolling over to a new record.
+         lastParentFK = curPFK;
+         lastIdxInt = 0;
+      }
+      
+      // The IDX values should match in this check.  If not, then problem.
+      if (curIdxInt < lastIdxInt) {
+         // We have a duplicate situation here.  Data could be siliently ignored.
+         String eMsg = "Duplication IDX value in " + childTab + ", idx:" + curIdxInt + " on id:" + objGuid;
+         eMsg += " " + getObjDetails(childTab, objGuid); 
+         log.error(eMsg);
+         if (inTaskContext) taskResult.addMessage(new Message(Message.Type.Error, eMsg, null));
+         numProblemsFound++;
+         
+         // Use a pipe-delimited string of "tableName|problem|objectId" to track problem objects.
+         String probObjStr = childTab + "|dupIdx|" + objGuid;
+         problemObjects.add(probObjStr);
+         
+         lastIdxInt++;
+      } else if (curIdxInt > lastIdxInt) {
+         // We have a gapping situation here.  Data could be missing/deleted.
+         String eMsg = "Gap/Missing IDX value in " + childTab + ", idx:" + lastIdxInt + " on id:" + objGuid;
+         eMsg += " " + getObjDetails(childTab, objGuid);
+         log.error(eMsg);
+         if (inTaskContext) taskResult.addMessage(new Message(Message.Type.Error, eMsg, null));
+         numProblemsFound++;
+         
+         // Use a pipe-delimited string of "tableName|problem|objectId" to track problem objects.
+         String probObjStr = childTab + "|gapIdx|" + objGuid;
+         problemObjects.add(probObjStr);
+         
+         lastIdxInt+=2;
+      } else {
+         // Proceed normally.
+         lastIdxInt++;
+      }
+            
+      log.debug(childTab + " " + objGuid + " " + curPFK + " " + curIdx); 
+       
+   }
+   gapChkRS.close();
+   gapChkStm.close();
+    
+   return;
+}
+
+
+
+//End of callable methods
+
+// There are several "many-to-one" or "child-to-parent" relationships modeled
+// by orderd collections in IdentityIQ.  The child tables contain an 'idx' 
+// column.  The child tables have some kind of foreign key reference to their
+// parent table.  The 'idx' column should be monotonic (0, 1, 2, ... n) with
+// no NULLs, no gaps, and no duplicates for all child rows that reference the
+// same parent row.  The column that maps child tables to parent tables and
+// the parent table's record's unique ID vary by child table.  This rule
+// keeps a map of known child table to parent table key columns to help 
+// identify child table rows that all reference the same parent table record.
+
+//spt_certification, spt_scope and spt_work_item removed
+//If you find EntitlementSnapshot with no parent you would need to query CertificationItem.exceptionEntitlements 
+//to see if anything references it and if not consider that an orphan.
+
+checkTaskConfiguration();
+
+HashMap c2pFK = new HashMap();
+
+c2pFK.put("spt_account_group_inheritance",  "account_group");
+c2pFK.put("spt_account_group_perms",        "accountgroup");
+c2pFK.put("spt_account_group_target_perms", "accountgroup");
+c2pFK.put("spt_activity_constraint",        "policy");
+c2pFK.put("spt_activity_data_source",       "collector"); // Could be app+collector keying?
+c2pFK.put("spt_activity_time_periods",      "application_activity");
+c2pFK.put("spt_app_dependencies",           "application");
+c2pFK.put("spt_app_secondary_owners",       "application");
+c2pFK.put("spt_application_remediators",    "application");
+c2pFK.put("spt_application_schema",         "application");
+c2pFK.put("spt_arch_cert_item_apps",        "arch_cert_item_id");
+c2pFK.put("spt_archived_cert_item",         "parent_id");
+c2pFK.put("spt_authentication_answer",      "identity_id");
+c2pFK.put("spt_batch_request_item",         "batch_request_id");
+c2pFK.put("spt_bundle_archive",             "source_id");
+c2pFK.put("spt_bundle_children",            "bundle");
+c2pFK.put("spt_bundle_permits",             "bundle");
+c2pFK.put("spt_bundle_requirements",        "bundle");
+c2pFK.put("spt_capability_children",        "capability_id");
+c2pFK.put("spt_capability_rights",          "capability_id");
+c2pFK.put("spt_cert_action_assoc",          "parent_id");
+c2pFK.put("spt_cert_item_applications",     "certification_item_id");
+c2pFK.put("spt_certification",              "parent"); // only populated when parent is non-null.
+c2pFK.put("spt_certification_def_tags",     "cert_def_id");
+c2pFK.put("spt_certification_entity",       "certification_id");
+c2pFK.put("spt_certification_groups",       "certification_id");
+c2pFK.put("spt_certification_tags",         "certification_id");
+c2pFK.put("spt_certification_item",         "certification_entity_id"); // Entities contain items.
+c2pFK.put("spt_certifiers",                 "certification_id");
+c2pFK.put("spt_child_certification_ids",    "certification_archive_id");
+c2pFK.put("spt_dashboard_content_rights",   "dashboard_content_id");
+c2pFK.put("spt_dashboard_reference",        "identity_dashboard_id");
+c2pFK.put("spt_dictionary_term",            "dictionary_id");
+c2pFK.put("spt_dynamic_scope_exclusions",   "dynamic_scope_id");
+c2pFK.put("spt_dynamic_scope_inclusions",   "dynamic_scope_id");
+c2pFK.put("spt_entitlement_group",          "identity_id");
+c2pFK.put("spt_entitlement_snapshot",       "certification_item_id"); 
+c2pFK.put("spt_generic_constraint",         "policy");
+c2pFK.put("spt_group_permissions",          "entitlement_group_id");
+c2pFK.put("spt_identity_assigned_roles",    "identity_id");
+c2pFK.put("spt_identity_bundles",           "identity_id");
+c2pFK.put("spt_identity_capabilities",      "identity_id");
+c2pFK.put("spt_identity_controlled_scopes", "identity_id");
+c2pFK.put("spt_identity_request_item",      "identity_request_id");
+c2pFK.put("spt_identity_role_metadata",     "identity_id");
+c2pFK.put("spt_identity_workgroups",        "identity_id");
+c2pFK.put("spt_jasper_files",               "result");
+c2pFK.put("spt_link",                       "identity_id"); // Identities contain links.
+c2pFK.put("spt_managed_attr_inheritance",   "managedattribute");
+c2pFK.put("spt_managed_attr_perms",         "managedattribute");
+c2pFK.put("spt_managed_attr_target_perms",  "managedattribute");
+c2pFK.put("spt_mitigation_expiration",      "identity_id"); 
+c2pFK.put("spt_password_policy_holder",     "application");
+c2pFK.put("spt_process_application",        "process");
+c2pFK.put("spt_process_bundles",            "process");
+c2pFK.put("spt_profile",                    "bundle_id");
+c2pFK.put("spt_profile_constraints",        "profile");
+c2pFK.put("spt_profile_permissions",        "profile");
+c2pFK.put("spt_quick_link_dynamic_scopes",  "quick_link_id");
+c2pFK.put("spt_remediation_item",           "work_item_id");
+c2pFK.put("spt_request_arguments",          "signature");
+c2pFK.put("spt_request_definition_rights",  "request_definition_id");
+c2pFK.put("spt_request_returns",            "signature");
+c2pFK.put("spt_rule_dependencies",          "rule_id");
+c2pFK.put("spt_rule_signature_arguments",   "signature");
+c2pFK.put("spt_rule_signature_returns",     "signature");
+c2pFK.put("spt_schema_attributes",          "applicationschema"); // Schemas contain attribs.
+c2pFK.put("spt_scope",                      "parent_id"); // Arbitrary parent_id, various OBJ types.
+c2pFK.put("spt_sign_off_history",           "certification_id"); // Certifications are signed off.
+c2pFK.put("spt_snapshot_permissions",       "snapshot");
+c2pFK.put("spt_sodconstraint",              "policy"); // Some Policies contain SOD constraints.
+c2pFK.put("spt_sodconstraint_left",         "sodconstraint"); // LHS of SOD constraints.
+c2pFK.put("spt_sodconstraint_right",        "sodconstraint"); // RHS of SOD constraints.
+c2pFK.put("spt_sync_roles",                 "config");
+c2pFK.put("spt_target_sources",             "application");
+c2pFK.put("spt_task_definition_rights",     "task_definition_id");
+c2pFK.put("spt_task_signature_arguments",   "signature");
+c2pFK.put("spt_task_signature_returns",     "signature");
+// Work items gets tricky.  Reference one of several other classes as parent:
+// certification_ref_id, identity_request_id, certification_item, workflow_case
+// The parent's identity is in "target_id" and the parent's class is in 
+// target_class. BUT: idx is only populated when certification_ref_id is valid.
+// Forget everything we just said about target_id, check for certification_ref_id.
+c2pFK.put("spt_work_item",                  "certification_ref_id");
+c2pFK.put("spt_work_item_comments",         "work_item");
+c2pFK.put("spt_work_item_owners",           "config");
+c2pFK.put("spt_workflow_rule_libraries",    "rule_id");
+// This is another case where we have a class_name/object_id pairing.
+c2pFK.put("spt_workflow_target",            "object_id");
+
+// Define a set of tables we should skip IDX based parent/child analysis on.
+// Document here which tables to intentionally skip and why, so use a Map:
+HashMap skipMap = new HashMap();
+skipMap.put("spt_task_signature_returns",   "Table has no 'id' column.");
+skipMap.put("spt_task_signature_arguments", "Table has no 'id' column.");
+skipMap.put("spt_certification",   "A null id in this table is OK.");
+skipMap.put("spt_scope",   "A null id in this table is OK.");
+
+if (!flagEntitlementSnapshot)
+{
+	skipMap.put("spt_entitlement_snapshot",  "Table has no 'created','modified' columns.");
+	log.debug("Skipping spt_entitlement_snapshot, as option to check it was unchecked.");
+}
+if (version.equals("7.1") || version.equals("7.2") || version.equals("7.3"))
+{
+  skipMap.put("spt_link",   "In newer versions, a null id in this table is OK.");
+  log.debug("Skipping spt_link table, as version is 7.1 or above.");
+}
+// Define a list of tables that have "idx" columns defined in the schema.
+// We look exclusively at the SPT_* database tables to filter out others.
+// Only a sub-set of the SPT_* tables have 'idx' columns defined.
+ArrayList sptDBTables = new ArrayList();
+ArrayList idxDBTables = new ArrayList();
+HashSet idColSet = new HashSet(); // Tables that have an 'id' column defined.
+HashSet createdColSet = new HashSet(); // Tables that have an 'created' column defined.
+
+
+// Some tables get a special suffix treatement in their queries.  Build out 
+// the special suffixes here and keep them in a map for use below.
+HashMap specialSuffixes = new HashMap();
+
+// Special suffix for the spt_work_item table: 
+// The spt_work_item.target_id column is used in a few cases when the 
+// work item is associated with a given object:
+// 1: for role approvals where it is the object GUID of a Bundle, 
+// 2: for LCM requests where the approval will be associated with an Identity.  
+// 3: for PolicyViolation work items.  
+// In all of the above case cases idx will be null and this okay.
+// When performing null checks against work items we need to filter 
+// out these allowable condidtions.  This invovles screening out handler
+// and target_class combinations.
+// Certifications used to use the WorkItem's 'certification' field to link back 
+// to the owning Certification.  This may or may not have migrated to the general 
+// targetId column. For historical purposes we need to support both; the 
+// 'idx' column should be non-null only if the certification property is non-null
+// or if targetClass is “Certification”.  
+// TODO: This class seeks to identify other use/abuses of WorkItem instances.
+StringBuilder swiSQL = new StringBuilder(); 
+swiSQL.append("AND id NOT IN ( ");
+swiSQL.append(" SELECT id FROM spt_work_item ");
+swiSQL.append("  WHERE (handler = 'sailpoint.api.Interrogator' ");
+swiSQL.append("         AND target_class = 'PolicyViolation') ");
+swiSQL.append(" ) ");
+swiSQL.append("AND id NOT IN ( ");
+swiSQL.append(" SELECT id FROM spt_work_item ");
+swiSQL.append("  WHERE (handler = 'sailpoint.api.Workflower' ");
+swiSQL.append("    AND target_class = 'sailpoint.object.Identity') ");
+swiSQL.append(" ) ");
+
+specialSuffixes.put("spt_work_item", swiSQL.toString());
+
+StringBuilder sciSQL = new StringBuilder(); 
+sciSQL.append("AND id NOT IN ( ");
+sciSQL.append(" select exception_entitlements from spt_certification_item )");
+specialSuffixes.put("spt_entitlement_snapshot", sciSQL.toString());
+
+
+// Build out the special suffix for the spt_certification table.
+
+Connection dbCxn = context.getConnection();
+if (null == dbCxn) {
+   String eMsg = "Failed to acquire database Connection.";
+   log.error(eMsg);
+   return eMsg;
+}
+
+// Determine if we are communicating with an Oracle system via JNDI.
+// If so then we need to pass SPT table name prefix in capitals.
+
+
+PersistenceManager pMgr = context.getPersistenceManager();
+HibernatePersistenceManager hibPMgr = null;
+if (pMgr instanceof ClassPersistenceManager) {
+   pMgr = pMgr.getManager(Class.forName("sailpoint.object.Identity"));
+   hibPMgr = (HibernatePersistenceManager) pMgr;
+} else if (pMgr instanceof HibernatePersistenceManager) {
+   hibPMgr = (HibernatePersistenceManager) pMgr;
+} 
+
+Dialect dialect = hibPMgr.getDialect();
+String dialectName = dialect.toString();
+log.debug("Database dialect: [" + dialectName + "]");
+
+// Must use lowercase spt prefix for MySQL DBs, upper case for Oracle.
+String tablePrefix = "spt%";
+if (dialectName.contains("Oracle")) {
+   tablePrefix = "SPT%";
+}
+
+DatabaseMetaData md = dbCxn.getMetaData();
+String[] types = {"TABLE"};
+ResultSet rs = md.getTables(null, null, tablePrefix, types);  
+ResultSetMetaData rsmd = rs.getMetaData();
+
+// Iterate through the result set metadata and see what column names we have.
+int columnCount = rsmd.getColumnCount();
+HashMap nameToColumnNumberMap = new HashMap();
+// The column count starts from 1 for some odd reason here.
+for (int i = 1; i < columnCount + 1; i++ ) {
+   String columnName = rsmd.getColumnName(i);
+   nameToColumnNumberMap.put(columnName, i);
+   log.debug("Found column: " + columnName);   
+}
+
+while (rs.next()) { 
+
+   String tableName    = rs.getString(nameToColumnNumberMap.get("TABLE_NAME")); 
+   String tableCatalog = rs.getString(nameToColumnNumberMap.get("TABLE_CAT")); 
+   String tableSchema  = rs.getString(nameToColumnNumberMap.get("TABLE_SCHEM"));
+   
+   log.trace("Examining table: " + tableName);
+   
+   ResultSet tableColsRS = md.getColumns(null, null, tableName, "%");
+   ResultSetMetaData tableMd = tableColsRS.getMetaData();
+   
+   HashMap tblColNameToColumnNumberMap = new HashMap();
+   for (int i = 1; i < tableMd.getColumnCount() + 1; i++ ) {
+      String columnName = tableMd.getColumnName(i);
+      tblColNameToColumnNumberMap.put(columnName, i);
+      log.trace("Found table metadata column: " + tableName + "." + columnName);
+   }
+   
+   // Figure out if this table has an 'idx' column.
+   // Also look for columns named 'created' and 'id'.
+   while (tableColsRS.next()) {
+      String tableColumnName = tableColsRS.getString(tblColNameToColumnNumberMap.get("COLUMN_NAME"));
+      if ("idx".equalsIgnoreCase(tableColumnName)) {
+         idxDBTables.add(tableName);
+         log.debug("Added " + tableName + " to the 'idx' tables list.");
+      } else if ("id".equalsIgnoreCase(tableColumnName)) {
+         idColSet.add(tableName);
+         log.debug("Added " + tableName + " to the 'id' tables set.");
+      } else if ("created".equalsIgnoreCase(tableColumnName)) {
+         createdColSet.add(tableName);
+         log.debug("Added " + tableName + " to the 'created' tables set.");
+      } else {
+         log.trace("Examined: " + tableName + "." + tableColumnName);
+      }         
+   }
+   
+   tableColsRS.close();
+   
+}
+
+rs.close();
+
+int numTablesToProcess = idxDBTables.size();
+String ntMsg = "Identified " + numTablesToProcess + " SPT_* tables containing 'idx' columns.";  
+log.debug(ntMsg);
+if (inTaskContext) {       
+   taskResult.addMessage(new Message(ntMsg, null));	   
+}
+
+// Process each of the IDX tables one at a time.  Only inspect tables that have
+// more than zero rows. 
+for (String tableName : idxDBTables) {
+
+   log.trace("Counting rows in table: " + tableName);
+   
+   Statement stmt = dbCxn.createStatement();
+   ResultSet rowCntRS = stmt.executeQuery("SELECT COUNT(*) numRows FROM " + tableName);
+   int rowCount = 0;
+   while (rowCntRS.next()) { rowCount = rowCntRS.getInt(1); }
+   rowCntRS.close();
+   stmt.close();
+   
+   if (0 == rowCount) {
+      String dMsg = "Skipping empty table: " + tableName;
+      log.debug(dMsg);
+      // if (inTaskContext) taskResult.addMessage(new Message(Message.Type.Info, dMsg, null));
+      continue; // Skip to the next table in the list.
+   }
+   
+   if (skipMap.containsKey(tableName)) {
+      String dMsg = "Intentionally skipping table: " + tableName + ", " + skipMap.get(tableName);
+      log.debug(dMsg);
+      // if (inTaskContext) taskResult.addMessage(new Message(Message.Type.Info, dMsg, null));
+      continue; // Skip to the next table in the list.  
+   }
+
+   String sMsg = "Processing table " + tableName + ", containing " + rowCount + " rows.";
+   log.debug(sMsg);
+   if (inTaskContext) { 
+      // taskResult.addMessage(new Message(Message.Type.Info, sMsg, null));
+      taskResult.setProgress(sMsg);
+      context.saveObject(taskResult);
+      context.commitTransaction();
+   }
+   
+   String fkColumn = c2pFK.get(tableName.toLowerCase());
+   if ((null == fkColumn) || (0 == fkColumn.length())) {
+      String wMsg = "Parent FK column not known for table: " + tableName;
+      log.warn(wMsg);
+      if (inTaskContext) taskResult.addMessage(new Message(Message.Type.Warn, wMsg, null));
+      continue; // Skip to the next table in the list.      
+   }
+   
+   // Some tables don't have an 'id' column but do have IDX columns.  How to
+   // verify these tables is currently TBD.  
+   if ( !idColSet.contains(tableName)) {
+      String dMsg = "Table " + tableName + " does not contain an 'id' column, skipping.";
+      log.debug(dMsg);
+      if (log.isDebugEnabled()) {
+         if (inTaskContext) taskResult.addMessage(new Message(Message.Type.Info, dMsg, null));
+      }
+      continue; // Skip to the next table in the list.
+   }
+   
+   checkCollectionIntegrity(tableName, fkColumn);
+   
+}
+
+String retMsg = "Success";
+if (0 != numProblemsFound) {
+
+   retMsg = "There were " + numProblemsFound + " IDX related issues identified.";
+   if (inTaskContext) {
+      taskResult.addMessage(new Message(Message.Type.Error, retMsg, null));
+      taskResult.setProgress(retMsg);
+      context.saveObject(taskResult);
+      context.commitTransaction();
+   }
+      
+   // TODO: Do something with the problemObjects list.  Email? Simple report?
+   for (String probDetails : problemObjects) {
+   
+      log.debug("probDetails: " + probDetails);
+      
+      /*
+      
+      String [] parts = probDetails.split("|");
+      log.debug("tokens.length():" + parts.length());
+       
+      String tableName = parts[0];
+      String probType  = parts[1];
+      String objGuid   = parts[2];
+      
+      String objDetails = getObjDetails(tableName, objGuid);
+      if ((null != objDetails) && (0 != objDetails.length())) {
+         log.debug("objDetails: " + objDetails);
+      }
+      */
+      
+   }
+   
+} else {
+
+   retMsg = "There were no IDX related issues identified, clean integrity check.";
+   log.debug(retMsg);
+   if (inTaskContext) {
+      taskResult.addMessage(new Message(Message.Type.Info, retMsg, null));
+      taskResult.setProgress(retMsg);
+      context.saveObject(taskResult);
+      context.commitTransaction();
+   }
+
+}
+
+return retMsg; 
+
+  ]]></Source>
+</Rule>

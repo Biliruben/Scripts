@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Delete Evicted">
+    <Source>
+		<![CDATA[
+
+        import sailpoint.object.Identity;
+        import sailpoint.api.Terminator;
+
+        Identity dummy = context.getObjectByName(Identity.class, "Doris.Jordan");
+        Terminator t = new Terminator(context);
+        log.warn("Dummy: " + dummy);
+        context.decache();
+        //log.warn(dummy.toXml());
+        t.deleteObject(dummy);
+
+
+		]]>
+    </Source>
+</Rule>    

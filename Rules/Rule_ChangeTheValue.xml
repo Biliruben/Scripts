@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Change The Value" type="ResourceObjectCustomization">
+  <Description>Converts an attribute value of the incoming ResourceObject by adding an arbitrary suffix to the existing value.</Description>
+  <Signature returnType="ResourceObject">
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description>
+          The log object associated with the SailPointContext.
+        </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description>
+          A sailpoint.api.SailPointContext object that can be used to query the database if necessary.
+        </Description>
+      </Argument>
+      <Argument name="object">
+        <Description>
+          The ResourceObject built by the connector.
+        </Description>
+      </Argument>
+      <Argument name="application">
+        <Description>
+          Application that references the connector.
+        </Description>
+      </Argument>
+      <Argument name="connector">
+        <Description>
+          The connector object.
+        </Description>
+      </Argument>
+      <Argument name="state">
+        <Description>
+          A Map containing state information.
+        </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="resourceObject">
+        <Description>
+          The updated resource object.
+        </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>// Attribute name for a scalar attribute (no multi-valued attrs)
+String ATTRIBUTE_NAME = "email";
+
+// A space will be automatically included with the suffix for existing non-null
+// values. For null values, the new value will just be the suffix. For example:
+// When NEW_VALUE_SUFFIX is '- 1'
+//
+// old value: 'foo@bar.com'
+// new value: 'foo@bar.com - 1'
+//
+// old value: (null)
+// new value: '- 1'
+String NEW_VALUE_SUFFIX = "- 1";
+
+// gets the current attribute value as a String
+String currentValue = object.getStringAttribute(ATTRIBUTE_NAME);
+String newValue = currentValue != null ? currentValue + " " + NEW_VALUE_SUFFIX : NEW_VALUE_SUFFIX;
+if (log.isDebugEnabled()) {
+   log.debug("old: " + currentValue + "; new: " + newValue);
+}
+object.put(ATTRIBUTE_NAME, newValue);
+return object;</Source>
+</Rule>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Patch Json">
+    <Source>
+		<![CDATA[
+import sailpoint.tools.JsonHelper;
+
+log.warn("jsonStr = " + jsonStr);
+log.warn("patchDocsList = " + patchDocsList);
+
+String[] patchDocs = patchDocsList.toArray(new String[0]);
+log.warn("Patched up:\n" + JsonHelper.patchDocReplay(jsonStr, patchDocs));
+
+		]]>
+    </Source>
+</Rule>    

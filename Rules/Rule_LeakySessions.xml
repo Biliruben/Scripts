@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Leaky Sessions">
+    <Source>
+		<![CDATA[
+import sailpoint.object.Identity;
+import sailpoint.object.QueryOptions;
+import sailpoint.object.Filter;
+import sailpoint.persistence.SailPointDataSource;
+import sailpoint.api.Terminator;
+import sailpoint.api.SailPointContext;
+import sailpoint.tools.GeneralException;
+
+
+    int TOTAL_INTEGERS = 10;
+    String BASE_USER_NAME = "Donk";
+    String FIRSTNAME = "Grampy";
+    String LASTNAME = "Donks";
+    boolean fullRelease = true;
+
+    public void createIdentity (SailPointContext context, String name, String firstname, String lastname) throws GeneralException {
+        Identity i = new Identity();
+        i.setName(name);
+        i.setFirstname(firstname);
+        i.setLastname(lastname);
+        context.saveObject(i);
+        context.commitTransaction();
+    }
+    
+    public void deleteIdentity (SailPointContext context, String name) throws GeneralException {
+        Terminator t = new Terminator(context);
+        QueryOptions ops = new QueryOptions();
+        ops.addFilter(Filter.eq("name", name));
+        t.deleteObjects(Identity.class, ops);
+    }
+    
+    public void doTest (SailPointContext context, String lastName, boolean toCompletion) {
+        System.out.println("Test query");
+        QueryOptions ops = new QueryOptions();
+        ops.addFilter(Filter.eq("lastname", lastName));
+        Iterator it = context.search(Identity.class, ops);
+        // advance only once
+        it.next();
+        if (toCompletion) while (it.hasNext()) it.next();
+    }
+    
+    public void printConnections() {
+        List connections = SailPointDataSource.getConnectionList();
+        StringBuilder buff = new StringBuilder();
+        for (SailPointDataSource.SPConnection con : connections) {
+            buff.append (con.getName() + "\n");
+            List stackTrace = con.getStack();
+            for (String stackie : stackTrace) {
+                buff.append("\t" + stackie + "\n");
+            }
+            buff.append ("\n-------------------------------------\n");
+        }
+        System.out.println(buff.toString());
+    }
+
+    // MAINE
+    for (int i = 0; i < TOTAL_INTEGERS; i++) {
+        String name = BASE_USER_NAME + "_" + i;
+        deleteIdentity (context, name);
+        createIdentity (context, name, FIRSTNAME, LASTNAME);
+    }
+    
+    doTest (context, LASTNAME, fullRelease);
+    printConnections();
+
+		]]>
+    </Source>
+</Rule>    

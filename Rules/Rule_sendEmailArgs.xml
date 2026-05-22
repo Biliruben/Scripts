@@ -1,0 +1,599 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Map PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Map>
+  <entry key="EMAIL_TEMPLATE" value="Joiner Completed Notification"/>
+  <entry key="TO_IDENTITY" value="Amy.Cox"/>
+  <entry key="DEFAULT_EMAIL_ADDY" value="admin@example.com"/>
+  <entry key="emailArgs">
+    <value>
+      <Map>
+        <entry key="workflow">
+          <value>
+            <Workflow currentStep="3f711bd690b74ce2a4be304d0cdd7d23" libraries="IdentityRequest"
+              name="Identity Request Notify" type="Subprocess">
+              <Variable input="true" name="identityName" required="true"/>
+              <Variable
+                initializer="script:(identityDisplayName != void) ? identityDisplayName : resolveDisplayName(identityName)"
+                input="true" name="identityDisplayName"/>
+              <Variable initializer="user,requester" input="true" name="notificationScheme"/>
+              <Variable input="true" name="securityOfficerName"/>
+              <Variable input="true" name="policyViolations"/>
+              <Variable input="true" name="flow"/>
+              <Variable input="true" name="trace"/>
+              <Variable input="true" name="approvalScheme"/>
+              <Variable input="true" name="approvalSet"/>
+              <Variable input="true" name="plan"/>
+              <Variable initializer="LCM User Notification" input="true" name="userEmailTemplate"/>
+              <Variable initializer="LCM Manager Notification" input="true"
+                name="managerEmailTemplate"/>
+              <Variable initializer="LCM Requester Notification" input="true"
+                name="requesterEmailTemplate"/>
+              <Variable initializer="LCM Manager Notification" input="true"
+                name="securityOfficerEmailTemplate"/>
+              <Variable input="true" name="workItemPriority"/>
+              <Step complete="true" icon="Start" id="656311731fb54457be9f4c6b2cfe45f0" name="Start"
+                posX="28" posY="10">
+                <Transition to="Notify User"/>
+              </Step>
+              <Step action="call:sendEmail"
+                condition="script:Util.csvToList(notificationScheme).contains(&quot;user&quot;)"
+                icon="Email" id="3f711bd690b74ce2a4be304d0cdd7d23" name="Notify User" posX="98"
+                posY="10">
+                <Arg name="template" value="ref:userEmailTemplate"/>
+                <Arg name="to" value="script:getUserEmail(identityName, plan)"/>
+                <Arg name="approvalSet" value="call:prepareApprovalSetForNotification"/>
+                <Transition to="Notify Requester"/>
+              </Step>
+              <Step action="call:sendEmail"
+                condition="script:Util.csvToList(notificationScheme).contains(&quot;requester&quot;)"
+                icon="Email" id="c2e3d5a1337a42d38c1c1cbc90a13246" name="Notify Requester"
+                posX="216" posY="10">
+                <Arg name="template" value="ref:requesterEmailTemplate"/>
+                <Arg name="to" value="script:getEmail(launcher)"/>
+                <Arg name="approvalSet" value="call:prepareApprovalSetForNotification"/>
+                <Transition to="Notify Manager"/>
+              </Step>
+              <Step action="call:sendEmail"
+                condition="script:Util.csvToList(notificationScheme).contains(&quot;manager&quot;)"
+                icon="Email" id="8f84fc82558d4a96a238138870d3ba63" name="Notify Manager" posX="351"
+                posY="10">
+                <Arg name="template" value="ref:managerEmailTemplate"/>
+                <Arg name="to" value="script:getManagersEmail(identityName, plan)"/>
+                <Arg name="approvalSet" value="call:prepareApprovalSetForNotification"/>
+                <Transition to="Notify Security Officer"/>
+              </Step>
+              <Step action="call:sendEmail"
+                condition="script:Util.csvToList(notificationScheme).contains(&quot;securityOfficer&quot;)"
+                icon="Email" id="fcbfdcff980f46059f434b8b357df569" name="Notify Security Officer"
+                posX="483" posY="10">
+                <Arg name="template" value="ref:securityOfficerEmailTemplate"/>
+                <Arg name="to" value="script:getEmail(securityOfficerName)"/>
+                <Arg name="approvalSet" value="call:prepareApprovalSetForNotification"/>
+                <Transition to="end"/>
+              </Step>
+              <Step icon="Stop" id="b6b69318e5b64c759b89a76b436a29df" name="end" posX="602"
+                posY="10"/>
+              <Attributes>
+                <Map>
+                  <entry key="approvalScheme" value="manager, newManager"/>
+                  <entry key="approvalSet">
+                    <value>
+                      <ApprovalSet>
+                        <ApprovalItem application="IIQ" id="ecae54be42814755becd235b781c56e3"
+                          nativeIdentity="willyWonka4" operation="Create" owner="James.Smith"
+                          provisioningState="Finished" state="Finished">
+                          <Attributes>
+                            <Map>
+                              <entry key="email:test@example.com">
+                                <value>
+                                  <Attributes>
+                                    <Map>
+                                      <entry key="source">
+                                        <value>
+                                          <SourceType>UI</SourceType>
+                                        </value>
+                                      </entry>
+                                      <entry key="type" value="string"/>
+                                    </Map>
+                                  </Attributes>
+                                </value>
+                              </entry>
+                              <entry key="firstname:Willy">
+                                <value>
+                                  <Attributes>
+                                    <Map>
+                                      <entry key="required">
+                                        <value>
+                                          <Boolean>true</Boolean>
+                                        </value>
+                                      </entry>
+                                      <entry key="source">
+                                        <value>
+                                          <SourceType>UI</SourceType>
+                                        </value>
+                                      </entry>
+                                      <entry key="type" value="string"/>
+                                    </Map>
+                                  </Attributes>
+                                </value>
+                              </entry>
+                              <entry key="interface" value="LCM"/>
+                              <entry key="lastname:Wonka 4">
+                                <value>
+                                  <Attributes>
+                                    <Map>
+                                      <entry key="required">
+                                        <value>
+                                          <Boolean>true</Boolean>
+                                        </value>
+                                      </entry>
+                                      <entry key="source">
+                                        <value>
+                                          <SourceType>UI</SourceType>
+                                        </value>
+                                      </entry>
+                                      <entry key="type" value="string"/>
+                                    </Map>
+                                  </Attributes>
+                                </value>
+                              </entry>
+                              <entry key="location:Austin">
+                                <value>
+                                  <Attributes>
+                                    <Map>
+                                      <entry key="source">
+                                        <value>
+                                          <SourceType>UI</SourceType>
+                                        </value>
+                                      </entry>
+                                      <entry key="type" value="string"/>
+                                    </Map>
+                                  </Attributes>
+                                </value>
+                              </entry>
+                              <entry key="manager:James.Smith">
+                                <value>
+                                  <Attributes>
+                                    <Map>
+                                      <entry key="source">
+                                        <value>
+                                          <SourceType>UI</SourceType>
+                                        </value>
+                                      </entry>
+                                      <entry key="type" value="sailpoint.object.Identity"/>
+                                    </Map>
+                                  </Attributes>
+                                </value>
+                              </entry>
+                              <entry key="name:willyWonka4">
+                                <value>
+                                  <Attributes>
+                                    <Map>
+                                      <entry key="required">
+                                        <value>
+                                          <Boolean>true</Boolean>
+                                        </value>
+                                      </entry>
+                                      <entry key="source">
+                                        <value>
+                                          <SourceType>UI</SourceType>
+                                        </value>
+                                      </entry>
+                                      <entry key="type" value="string"/>
+                                    </Map>
+                                  </Attributes>
+                                </value>
+                              </entry>
+                              <entry key="operation" value="Create"/>
+                              <entry key="password:********">
+                                <value>
+                                  <Attributes>
+                                    <Map>
+                                      <entry key="secret" value="true"/>
+                                      <entry key="source">
+                                        <value>
+                                          <SourceType>UI</SourceType>
+                                        </value>
+                                      </entry>
+                                      <entry key="type" value="secret"/>
+                                    </Map>
+                                  </Attributes>
+                                </value>
+                              </entry>
+                              <entry key="requester" value="James.Smith"/>
+                              <entry key="type:employee">
+                                <value>
+                                  <Attributes>
+                                    <Map>
+                                      <entry key="source">
+                                        <value>
+                                          <SourceType>UI</SourceType>
+                                        </value>
+                                      </entry>
+                                      <entry key="type" value="string"/>
+                                    </Map>
+                                  </Attributes>
+                                </value>
+                              </entry>
+                              <entry key="useBy:Sun Dec 31 13:05:31 CST 2023"/>
+                            </Map>
+                          </Attributes>
+                          <value>
+                            <List>
+                              <String>name = 'willyWonka4'</String>
+                              <String>firstname = 'Willy'</String>
+                              <String>lastname = 'Wonka 4'</String>
+                              <String>manager = 'James Smith'</String>
+                              <String>email = 'test@example.com'</String>
+                              <String>type = 'employee'</String>
+                              <String>location = 'Austin'</String>
+                            </List>
+                          </value>
+                        </ApprovalItem>
+                      </ApprovalSet>
+                    </value>
+                  </entry>
+                  <entry key="flow" value="IdentityCreateRequest"/>
+                  <entry key="identityDisplayName" value="willyWonka4"/>
+                  <entry key="identityName" value="willyWonka4"/>
+                  <entry key="launcher" value="James.Smith"/>
+                  <entry key="managerEmailTemplate" value="LCM Manager Notification"/>
+                  <entry key="notificationScheme" value="user,requester"/>
+                  <entry key="plan">
+                    <value>
+                      <ProvisioningPlan>
+                        <AccountRequest application="IIQ" nativeIdentity="willyWonka4" op="Create">
+                          <Attributes>
+                            <Map>
+                              <entry key="flow" value="IdentityCreateRequest"/>
+                              <entry key="id" value="d9ebd9b86d5c400197bbac5cb1600249"/>
+                              <entry key="interface" value="LCM"/>
+                              <entry key="operation" value="Create"/>
+                            </Map>
+                          </Attributes>
+                          <AttributeRequest name="name" op="Set" value="willyWonka4">
+                            <Attributes>
+                              <Map>
+                                <entry key="required">
+                                  <value>
+                                    <Boolean>true</Boolean>
+                                  </value>
+                                </entry>
+                                <entry key="source">
+                                  <value>
+                                    <SourceType>UI</SourceType>
+                                  </value>
+                                </entry>
+                                <entry key="type" value="string"/>
+                              </Map>
+                            </Attributes>
+                          </AttributeRequest>
+                          <AttributeRequest name="password" op="Set"
+                            value="1:ACP:eyYZsz90FIhbpXAwGD8nOfc3IrY5PhiKHgYgHiZq404=">
+                            <Attributes>
+                              <Map>
+                                <entry key="secret" value="true"/>
+                                <entry key="source">
+                                  <value>
+                                    <SourceType>UI</SourceType>
+                                  </value>
+                                </entry>
+                                <entry key="type" value="secret"/>
+                              </Map>
+                            </Attributes>
+                          </AttributeRequest>
+                          <AttributeRequest name="firstname" op="Set" value="Willy">
+                            <Attributes>
+                              <Map>
+                                <entry key="required">
+                                  <value>
+                                    <Boolean>true</Boolean>
+                                  </value>
+                                </entry>
+                                <entry key="source">
+                                  <value>
+                                    <SourceType>UI</SourceType>
+                                  </value>
+                                </entry>
+                                <entry key="type" value="string"/>
+                              </Map>
+                            </Attributes>
+                          </AttributeRequest>
+                          <AttributeRequest name="lastname" op="Set" value="Wonka 4">
+                            <Attributes>
+                              <Map>
+                                <entry key="required">
+                                  <value>
+                                    <Boolean>true</Boolean>
+                                  </value>
+                                </entry>
+                                <entry key="source">
+                                  <value>
+                                    <SourceType>UI</SourceType>
+                                  </value>
+                                </entry>
+                                <entry key="type" value="string"/>
+                              </Map>
+                            </Attributes>
+                          </AttributeRequest>
+                          <AttributeRequest name="manager" op="Set" value="James.Smith">
+                            <Attributes>
+                              <Map>
+                                <entry key="source">
+                                  <value>
+                                    <SourceType>UI</SourceType>
+                                  </value>
+                                </entry>
+                                <entry key="type" value="sailpoint.object.Identity"/>
+                              </Map>
+                            </Attributes>
+                          </AttributeRequest>
+                          <AttributeRequest name="email" op="Set" value="test@example.com">
+                            <Attributes>
+                              <Map>
+                                <entry key="source">
+                                  <value>
+                                    <SourceType>UI</SourceType>
+                                  </value>
+                                </entry>
+                                <entry key="type" value="string"/>
+                              </Map>
+                            </Attributes>
+                          </AttributeRequest>
+                          <AttributeRequest name="type" op="Set" value="employee">
+                            <Attributes>
+                              <Map>
+                                <entry key="source">
+                                  <value>
+                                    <SourceType>UI</SourceType>
+                                  </value>
+                                </entry>
+                                <entry key="type" value="string"/>
+                              </Map>
+                            </Attributes>
+                          </AttributeRequest>
+                          <AttributeRequest name="location" op="Set" value="Austin">
+                            <Attributes>
+                              <Map>
+                                <entry key="source">
+                                  <value>
+                                    <SourceType>UI</SourceType>
+                                  </value>
+                                </entry>
+                                <entry key="type" value="string"/>
+                              </Map>
+                            </Attributes>
+                          </AttributeRequest>
+                          <AttributeRequest name="useBy" op="Set">
+                            <Value>
+                              <Date>1704049531456</Date>
+                            </Value>
+                          </AttributeRequest>
+                        </AccountRequest>
+                        <Attributes>
+                          <Map>
+                            <entry key="identityRequestId" value="0000000005"/>
+                            <entry key="requester" value="James.Smith"/>
+                            <entry key="source" value="LCM"/>
+                          </Map>
+                        </Attributes>
+                        <Requesters>
+                          <Reference class="sailpoint.object.Identity"
+                            id="c0a856a48c26167f818c26473e9c048d" name="James.Smith"/>
+                        </Requesters>
+                      </ProvisioningPlan>
+                    </value>
+                  </entry>
+                  <entry key="policyViolations"/>
+                  <entry key="requesterEmailTemplate" value="LCM Requester Notification"/>
+                  <entry key="securityOfficerEmailTemplate" value="LCM Manager Notification"/>
+                  <entry key="securityOfficerName"/>
+                  <entry key="sessionOwner" value="James.Smith"/>
+                  <entry key="source" value="LCM"/>
+                  <entry key="trace" value="false"/>
+                  <entry key="userEmailTemplate" value="LCM User Notification"/>
+                  <entry key="workItemPriority">
+                    <value>
+                      <WorkItemLevel>Normal</WorkItemLevel>
+                    </value>
+                  </entry>
+                </Map>
+              </Attributes>
+            </Workflow>
+          </value>
+        </entry>
+        <entry key="approvalScheme" value="manager, newManager"/>
+        <entry key="plan">
+          <value>
+            <ProvisioningPlan>
+              <AccountRequest application="IIQ" nativeIdentity="willyWonka4" op="Modify">
+                <Attributes>
+                  <Map>
+                    <entry key="flow" value="Lifecycle"/>
+                    <entry key="id" value="c0a856a48c261467818c267cdca719a5"/>
+                    <entry key="interface" value="LCM"/>
+                    <entry key="operation" value="RoleAdd"/>
+                  </Map>
+                </Attributes>
+                <AttributeRequest assignmentId="6ba4212df0b74a458a5c50d8077a61db"
+                  name="assignedRoles" op="Add" value="JoinerBahookey">
+                  <Attributes>
+                    <Map>
+                      <entry key="assignment" value="true"/>
+                    </Map>
+                  </Attributes>
+                </AttributeRequest>
+              </AccountRequest>
+              <Attributes>
+                <Map>
+                  <entry key="identityRequestId" value="0000000006"/>
+                  <entry key="requester" value="spadmin"/>
+                  <entry key="source" value="RapidSetup"/>
+                </Map>
+              </Attributes>
+            </ProvisioningPlan>
+          </value>
+        </entry>
+        <entry key="recipientDisplayName" value="Amy.Cox"/>
+        <entry key="refIdentityDisplayName" value="Will Mahomey Wonka the 9th"/>
+        <entry key="approvalSet">
+          <value>
+            <ApprovalSet>
+              <ApprovalItem application="IIQ" id="ecae54be42814755becd235b781c56e3"
+                nativeIdentity="willyWonka4" operation="Create" owner="James.Smith"
+                provisioningState="Finished" state="Finished">
+                <Attributes>
+                  <Map>
+                    <entry key="email:test@example.com">
+                      <value>
+                        <Attributes>
+                          <Map>
+                            <entry key="source">
+                              <value>
+                                <SourceType>UI</SourceType>
+                              </value>
+                            </entry>
+                            <entry key="type" value="string"/>
+                          </Map>
+                        </Attributes>
+                      </value>
+                    </entry>
+                    <entry key="firstname:Willy">
+                      <value>
+                        <Attributes>
+                          <Map>
+                            <entry key="required">
+                              <value>
+                                <Boolean>true</Boolean>
+                              </value>
+                            </entry>
+                            <entry key="source">
+                              <value>
+                                <SourceType>UI</SourceType>
+                              </value>
+                            </entry>
+                            <entry key="type" value="string"/>
+                          </Map>
+                        </Attributes>
+                      </value>
+                    </entry>
+                    <entry key="interface" value="LCM"/>
+                    <entry key="lastname:Wonka 4">
+                      <value>
+                        <Attributes>
+                          <Map>
+                            <entry key="required">
+                              <value>
+                                <Boolean>true</Boolean>
+                              </value>
+                            </entry>
+                            <entry key="source">
+                              <value>
+                                <SourceType>UI</SourceType>
+                              </value>
+                            </entry>
+                            <entry key="type" value="string"/>
+                          </Map>
+                        </Attributes>
+                      </value>
+                    </entry>
+                    <entry key="location:Austin">
+                      <value>
+                        <Attributes>
+                          <Map>
+                            <entry key="source">
+                              <value>
+                                <SourceType>UI</SourceType>
+                              </value>
+                            </entry>
+                            <entry key="type" value="string"/>
+                          </Map>
+                        </Attributes>
+                      </value>
+                    </entry>
+                    <entry key="manager:James.Smith">
+                      <value>
+                        <Attributes>
+                          <Map>
+                            <entry key="source">
+                              <value>
+                                <SourceType>UI</SourceType>
+                              </value>
+                            </entry>
+                            <entry key="type" value="sailpoint.object.Identity"/>
+                          </Map>
+                        </Attributes>
+                      </value>
+                    </entry>
+                    <entry key="name:willyWonka4">
+                      <value>
+                        <Attributes>
+                          <Map>
+                            <entry key="required">
+                              <value>
+                                <Boolean>true</Boolean>
+                              </value>
+                            </entry>
+                            <entry key="source">
+                              <value>
+                                <SourceType>UI</SourceType>
+                              </value>
+                            </entry>
+                            <entry key="type" value="string"/>
+                          </Map>
+                        </Attributes>
+                      </value>
+                    </entry>
+                    <entry key="operation" value="Create"/>
+                    <entry key="password:********">
+                      <value>
+                        <Attributes>
+                          <Map>
+                            <entry key="secret" value="true"/>
+                            <entry key="source">
+                              <value>
+                                <SourceType>UI</SourceType>
+                              </value>
+                            </entry>
+                            <entry key="type" value="secret"/>
+                          </Map>
+                        </Attributes>
+                      </value>
+                    </entry>
+                    <entry key="requester" value="James.Smith"/>
+                    <entry key="type:employee">
+                      <value>
+                        <Attributes>
+                          <Map>
+                            <entry key="source">
+                              <value>
+                                <SourceType>UI</SourceType>
+                              </value>
+                            </entry>
+                            <entry key="type" value="string"/>
+                          </Map>
+                        </Attributes>
+                      </value>
+                    </entry>
+                    <entry key="useBy:Sun Dec 31 13:05:31 CST 2023"/>
+                  </Map>
+                </Attributes>
+                <value>
+                  <List>
+                    <String>name = 'willyWonka4'</String>
+                    <String>firstname = 'Willy'</String>
+                    <String>lastname = 'Wonka 4'</String>
+                    <String>manager = 'James Smith'</String>
+                    <String>email = 'test@example.com'</String>
+                    <String>type = 'employee'</String>
+                    <String>location = 'Austin'</String>
+                  </List>
+                </value>
+              </ApprovalItem>
+            </ApprovalSet>
+          </value>
+        </entry>
+      </Map>
+    </value>
+  </entry>
+</Map>

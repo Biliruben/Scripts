@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Thread Killer">
+    <Source>
+		<![CDATA[
+
+
+                String threadName = "http-bio-8080-exec-6";
+
+                Thread[] threads = new Thread[Thread.activeCount()];
+                Thread.enumerate(threads);
+
+                List tList = java.util.Arrays.asList(threads);
+                for (Object o : tList) {
+                        Thread t = (Thread)o;
+                        String tName = t.getName();
+                        if (tName != null && tName.compareToIgnoreCase(threadName) == 0) {
+                                t.stop();
+                        }
+                }
+
+                return null;
+
+
+		]]>
+    </Source>
+</Rule>    

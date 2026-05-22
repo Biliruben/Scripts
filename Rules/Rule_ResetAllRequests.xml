@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Reset All Requests">
+  <Description>Sets all Requests to have a next launch 1</Description>
+  <Source>
+    <![CDATA[
+    import sailpoint.object.Request;
+    import sailpoint.object.QueryOptions;
+
+    Iterator idsItr = context.search(Request.class, new QueryOptions(), "id");
+    Date nextLaunch = new Date(1);
+    int i = 0;
+    while (idsItr.hasNext()) {
+        String id = (String)idsItr.next()[0];
+        Request r = context.getObjectById(Request.class, id);
+        if (r != null) {
+            r.setNextLaunch(nextLaunch);
+            log.warn("Reset " + r);
+            i++;
+            if (i % 20 == 0) context.commitTransaction();
+        }
+    }
+    // because i can
+    context.commitTransaction();
+    ]]>
+  </Source>
+</Rule>

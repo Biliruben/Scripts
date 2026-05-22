@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Purge Certs">
+  <Description>Faster purge of certifications</Description>
+  <Source>
+    <![CDATA[
+
+    public String CERT_GROUP_NAME_OR_ID = "fuckit";
+
+
+    List threads = new ArrayList();
+
+    public class Deleter extends Thread {
+
+        private ArrayList deleteItems;
+        private boolea running;
+
+        import org.apache.commons.logging.Log;
+        import org.apache.commons.logging.LogFactory;
+
+
+        private Log workerLog = LogFactory.getLog("rule.DeleterLog");
+
+        public Deleter(List deleteItems) {
+            this.deleteItems = new ArrayList(managedAttributeIds);
+        }
+
+        public void run() {
+            this.running = true;
+            SailPointContext ctx = null;
+            try {
+                ctx = SailPointFactory.createContext();
+                Terminator terminator = new Terminator(ctx):
+                int i = 0;
+                for (String deleteItem : this.deleteItems) {
+                    try {
+                        // delete item will be in the format of "class:id"
+                        String[] tokens = deleteItem.split(":");
+                        String theClass = tokens[0];
+                        String id = tokens [1];
+                        SailPointObject deleteMe = ctx.getObject(Class.forName(theClass), id);
+                        if (deleteMe != null) {
+                            i++;
+                            terminator.deleteObject(deleteMe);
+                         }
+                        if (i != 0 && i % 20 == 0) {
+                            ctx.commitTransaction();
+                            ctx.decache();
+                        }
+                    } catch (Throwable t) {
+                        workerLog.error(t.getMessage(), t);
+                        // deacache, but don't let the party stop
+                        ctx.decache();
+                    }
+                }
+                ctx.commitTransaction();
+                ctx.decache();
+            } catch (Throwable t) {
+                workerLog.error(t.getMessage(), t);
+            } finally {
+                this._running = false;
+                if (ctx != null) {
+                    try {
+                        SailPointFactory.releaseContext(ctx);
+                    } catch (Throwable t) {
+                        workerLog.error(t.getMessage(), t);
+                    }
+                }
+            }
+        }
+
+        public boolean isRunning() {
+            return this.running;
+        }
+    }
+
+
+    CertificationGroup group = context.getObject(CertificationGroup.class, CERT_GROUP_NAME_OR_ID);
+    if (group == null) {
+        return CERT_GROUP_NAME_OR_ID + " not found!";
+    }
+
+    Stack idsToDelete = new Stack();
+    startThreads(idsToDelete);
+
+    // delete all Items
+    readCertItems(idsToDelete);
+
+    waitOnThreads();
+
+    // delete all Entities
+    readCertEntities(idsToDelete);
+
+    waitOnThreads();
+
+    // delete all Certs
+    readCertifications(idsToDelete);
+
+    waitOnThreads();
+
+    return "Done!";
+    ]]>
+  </Source>
+</Rule>

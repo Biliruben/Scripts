@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Get Assigned Roles">
+  <Source>
+    <![CDATA[
+
+    import sailpoint.object.*;
+
+    String name = "Alice.Ford";
+    Identity amy = context.getObjectByName(Identity.class, name);
+    List<Bundle> assignedRoles = amy.getAssignedRoles();
+    for (Bundle b : assignedRoles != null ? assignedRoles : new ArrayList()) {
+        log.warn(b);
+    }
+    ]]>
+  </Source>
+</Rule>

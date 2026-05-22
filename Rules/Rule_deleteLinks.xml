@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Delete Links">
+  <Source>
+    <![CDATA[
+import sailpoint.api.Terminator;
+import sailpoint.object.Filter;
+import sailpoint.object.Link;
+import sailpoint.object.QueryOptions;
+
+        /*
+         * Given a list of IDs, delete the Links for all Identities NOT in that list
+         */
+        String[] NO_CAN_HAS = new String[] {
+                "c0a8561a999610b0819996f0e1900017",
+                "c0a8561a999610b0819996f0e1c30019",
+                "c0a8561a999610b0819996f0e1f2001b",
+                "c0a8561a999610b0819996f0e221001d",
+                "c0a8561a999610b0819996f0e24e001f",
+                "c0a8561a999610b0819996f0e28d0021",
+                "c0a8561a999610b0819996f0e2cc0023",
+                "c0a8561a999610b0819996f0e3020025",
+                "c0a8561a999610b0819996f0e33c0027",
+                "c0a8561a999610b0819996f0e3ab002a",
+                "c0a8561a999610b0819996f0e3e8002c",
+                "c0a8561a999610b0819996f0e41c002e",
+                "c0a8561a999610b0819996f0e44c0030",
+                "c0a8561a999610b0819996f0e47b0032",
+                "c0a8561a999610b0819996f0e4a30034",
+                "c0a8561a999610b0819996f0e4c90036",
+                "c0a8561a999610b0819996f0e4f30038",
+                "c0a8561a999610b0819996f0e521003a",
+                "c0a8561a999610b0819996f0e550003c",
+                "c0a8561a999610b0819996f0e582003e",
+                "c0a8561a999610b0819996f0e5b20040",
+                "c0a8561a999610b0819996f0e5f20042",
+                "c0a8561a999610b0819996f0e62a0044",
+                "c0a8561a999610b0819996f0e6620046",
+                "c0a8561a999610b0819996f0e6930048",
+                "c0a8561a999610b0819996f0e6c6004a",
+                "c0a8561a999610b0819996f0e6fb004c",
+                "c0a8561a999610b0819996f0e728004e",
+                "c0a8561a999610b0819996f0e75b0050",
+                "c0a8561a999610b0819996f0e7910052",
+                "c0a8561a999610b0819996f0e7cd0054"
+        };
+
+        Terminator thanos = new Terminator(context);
+        QueryOptions ops = new QueryOptions();
+        Filter inFilter = Filter.in("identity.id", Arrays.asList(NO_CAN_HAS));
+        Filter nawFilter = Filter.not(inFilter);
+        ops.add(nawFilter);
+        int count = context.countObjects(Link.class, ops);
+        log.warn("Thanos snap: Deleting " + count + " Links...");
+        thanos.deleteObjects(Link.class, ops);
+
+    ]]>
+    
+  </Source>
+</Rule>

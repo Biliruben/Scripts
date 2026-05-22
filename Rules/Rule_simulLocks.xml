@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="SimulLocks">
+
+    <Source>
+
+        
+        // Attribute name for a scalar attribute (no multi-valued attrs)
+String ATTRIBUTE_NAME = "email";
+
+// A space will be automatically included with the suffix for existing non-null
+// values. For null values, the new value will just be the suffix. For example:
+// When NEW_VALUE_SUFFIX is '- 1'
+//
+// old value: 'foo@bar.com'
+// new value: 'foo@bar.com - 1'
+//
+// old value: (null)
+// new value: '- 1'
+String NEW_VALUE_SUFFIX = "- 1";
+
+// gets the current attribute value as a String
+String currentValue = object.getStringAttribute(ATTRIBUTE_NAME);
+String newValue = currentValue != null ? currentValue + " " + NEW_VALUE_SUFFIX : NEW_VALUE_SUFFIX;
+if (log.isDebugEnabled()) {
+   log.debug("old: " + currentValue + "; new: " + newValue);
+}
+object.put(ATTRIBUTE_NAME, newValue);
+return object;</Source>
+</Rule>

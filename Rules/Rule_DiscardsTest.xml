@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Discards Test">
+  <Source>
+    <![CDATA[
+
+    import org.apache.logging.log4j.LogManager;
+    import org.apache.logging.log4j.Logger;
+
+    Logger discardLog = LogManager.getLogger("discards");
+    discardLog.info("Only the discards logger shows this");
+    ]]>
+  </Source>
+</Rule>

@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="779 Load Test">
+  <Description>Just loads a buttload of shit in the session and commits</Description>
+  <Source>
+    <![CDATA[
+
+    import sailpoint.object.*;
+    import sailpoint.api.Meter;
+    
+    int loops = 500;
+    Meter.enter("loadTestRule");
+    for (int i = 0; i < loops; i++) {
+        List links = context.getObjects(Link.class);
+        List identities = context.getObjects(Identity.class);
+        List applications = context.getObjects(Application.class);
+    
+        context.commitTransaction();
+        context.decache();
+    }
+    Meter.exit("loadTestRule");
+    ]]>
+  </Source>
+</Rule>

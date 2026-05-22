@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Clear Correlation Model">
+  <Source>
+    <![CDATA[
+
+    import sailpoint.api.CorrelationModel;
+
+    CorrelationModel model = CorrelationModel.getCorrelationModel(context);
+    log.warn("LastMode: " + model.getCacheLastMod() + "\nRoles: " + model.getCacheNumRoles());
+    CorrelationModel.clear();
+    return "Cleared";
+    ]]>
+  </Source>
+</Rule>

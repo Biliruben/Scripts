@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Clone Application and import">
+  <Description> Clones an application and imports it like you would in ui or console</Description>
+  <Source>
+
+
+import sailpoint.object.*;
+import sailpoint.tools.xml.XMLObjectFactory;
+import sailpoint.server.Importer;
+import sailpoint.api.SailPointFactory;
+import sailpoint.api.SailPointContext;
+
+String APP_NAME = "ADDirectDemoData";
+int APP_CLONES = 10;
+int APP_GETS = 1000;
+boolean doneImport = false;
+boolean doneGet = false;
+
+public getApps(SailPointContext context) {
+    for (int i = 0; i &lt; APP_GETS; i++) {
+        System.out.println("Get!");
+        Application a = context.getObjectByName(Application.class, APP_NAME);
+        if (a.getSchemas() == null || a.getSchemas().size() == 0) {
+            System.out.println("No Schemas!\n" + a.toXml());
+        }
+        context.decache();
+    }
+    doneGet = true;
+}
+
+public cloneApps(SailPointContext context) {
+        String appName = APP_NAME;
+        int dupes = APP_CLONES;
+		ArrayList ls = new ArrayList();
+        
+        Application patientZero = context.getObjectByName(Application.class, appName);
+        
+            Application clone = XMLObjectFactory.getInstance().cloneWithoutId(patientZero, context);
+             
+            System.out.println("clone app id value = "+clone.getId());
+			for (Schema schema : patientZero.getSchemas()) {
+				Schema schemaCopy = XMLObjectFactory.getInstance().cloneWithoutId(schema, context);
+				ls.add(schemaCopy);
+			}
+			clone.setSchemas(ls);
+			System.out.println("app name to be saved "+clone.getName());	
+            System.out.println("about to save app");
+            Importer fred = new Importer((Resolver)context);
+            System.out.println(clone.toXml());
+
+		for (int i = 0; i &lt;= dupes; i++) {        
+              System.out.println("Import!");
+              fred.importXml(clone.toXml());
+              context.commitTransaction();
+        }
+
+        doneImport = true;
+}
+
+Runnable r1 = new Runnable() {
+    public void run() {
+        SailPointContext context = null;
+        try {
+            context = SailPointFactory.createContext();
+            cloneApps(context);
+        } finally {
+            if (context != null) SailPointFactory.releaseContext(context);
+        }
+    }
+};
+
+Runnable r2 = new Runnable() {
+    public void run() {
+        SailPointContext context = null;
+        try {
+            context = SailPointFactory.createContext();
+            getApps(context);
+        } finally {
+            if (context != null) SailPointFactory.releaseContext(context);
+        }
+    }
+};
+
+Thread t = new Thread (r1);
+t.start();
+
+t = new Thread(r2);
+t.start();
+
+while (!doneGet || !doneImport) Thread.sleep(1000);
+
+   </Source>
+</Rule>

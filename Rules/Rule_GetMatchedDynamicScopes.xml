@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule name="Get Matched Dynamic Scopes">
+	<Source>
+<![CDATA[	
+
+import sailpoint.api.DynamicScopeMatchmaker;
+import sailpoint.object.Identity;
+
+String IDENTITY_NAME_OR_ID = "Amy.Cox";
+
+Identity identity = context.getObject(Identity.class, IDENTITY_NAME_OR_ID);
+Object result = null;
+if (identity != null) {
+    DynamicScopeMatchmaker yente = new DynamicScopeMatchmaker(context);
+    try {
+        result = yente.getMatches(identity);
+    } catch (Throwable t) {
+        t.printStackTrace();
+        throw t;
+    }
+} else {
+    log.warn ("Naw, " + IDENTITY_NAME_OR_ID + " ain't not exists");
+    return;
+}
+return result;
+]]></Source>
+</Rule>

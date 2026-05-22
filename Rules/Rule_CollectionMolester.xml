@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Collection Molester">
+  <Description>Handle a collection change without touch its Entity</Description>
+  <Source>
+    <![CDATA[
+    import sailpoint.object.Identity;
+
+    Identity amy = context.getObjectByName(Identity.class, "amy.cox");
+    List links = amy.getLinks();
+    amy.setLinks(new ArrayList());
+    context.printStatistics();
+    context.decache(amy);
+    context.printStatistics();
+    context.commitTransaction();
+    ]]>
+    
+  </Source>
+</Rule>

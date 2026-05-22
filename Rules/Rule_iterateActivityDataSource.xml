@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Iterate Activity Datasource">
+    <Source>
+<![CDATA[
+        import sailpoint.activity.*;
+        import sailpoint.object.ActivityDataSource;
+        import sailpoint.object.Application;
+        import sailpoint.object.ApplicationActivity;
+        import sailpoint.object.Attributes;
+        import sailpoint.object.Identity;
+        import sailpoint.object.TimePeriod;
+        import sailpoint.tools.timePeriod.TimePeriodClassifierFactory;
+        import sailpoint.tools.CloseableIterator;
+        import sailpoint.tools.GeneralException;
+    
+        String APPLICATION = "Oracle_DB_oasis";
+        String ACTIVITY_DATA_SOURCE = "Oasis DB Log";
+
+    private List getTimePeriodClassifiers() {
+        List classifiers = new ArrayList();
+        TimePeriodClassifierFactory.reset();
+
+        try {
+            List timePeriods = context.getObjects(TimePeriod.class);
+            
+            for (TimePeriod tp : timePeriods) {
+                classifiers.add(TimePeriodClassifierFactory.getClassifier(tp));
+            }
+        } catch (GeneralException e) {
+            log.error("Could not initialize the Time Period classifiers", e);
+        }
+        
+        return classifiers;
+    }
+
+    private String getUserAttribute(Attributes config) {
+        String attr = null;
+        if ( config != null ) {
+            attr = config.getString(ActivityCollector.CONFIG_USER_ATTRIBUTE);
+        }
+        return attr; 
+    }
+
+    private String processActivities(CloseableIterator it, Attributes config ) 
+        throws GeneralException {
+
+        List timePeriodClassifiers = getTimePeriodClassifiers();
+        
+        StringBuilder buff = new StringBuilder();
+        if ( it != null ) {
+            String linkAttr = getUserAttribute(config);
+            //Try to optimize decache a bit in case the same user is getting fetched by the correlator.
+            Identity lastIdentity = null;
+            while ( it.hasNext()) {
+                ApplicationActivity activity = it.next();
+
+                if ( activity != null ) {
+                    String activityStr = activity.toString();
+                    buff.append(activityStr).append("\n");
+                    log.debug (activityStr);
+                }
+            }
+        } else {
+            log.warn("Iterator returned from the collector was null.");
+        }
+        return buff.toString();
+    }
+
+        /* MAIN */
+
+        Application app = context.getObjectByName(Application.class, APPLICATION);
+        if (app == null) {
+            log.warn(APPLICATION + " not found");
+            return;
+        }
+
+        CloseableIterator iterator = null;
+        ActivityDataSource ads = app.getActivityDataSource(ACTIVITY_DATA_SOURCE);
+        if (ads == null) {
+            log.warn(ACTIVITY_DATA_SOURCE + " not found for Application " + app);
+            return;
+        }
+
+        ActivityCollector collector = null;
+        try {
+
+            collector = ActivityCollectorFactory.getCollector(ads);
+            collector.setPositionConfig(null);
+
+            Attributes config = collector.getAttributes(); 
+            Map options = new HashMap();
+            log.warn("Gathering data from datasource.");
+            iterator = collector.iterate(options);
+            String results = processActivities(iterator, config);
+            log.warn(results);
+            return results;
+
+        } catch(GeneralException e ) {
+            log.error("Exception while attempting to process activities.", e);
+            throw e;
+
+        }
+]]>
+    </Source>
+</Rule>

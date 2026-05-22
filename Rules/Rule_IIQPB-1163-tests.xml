@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<sailpoint>
+    <Rule language="beanshell" name="Only works preEfix">
+        <Source>
+            Class clazz = org.springframework.web.util.pattern.SubSequence.class;
+            return clazz;
+        </Source>
+    </Rule>
+    <Rule language="beanshell" name="Only works afterEfix">
+        <Source>
+            Class clazz = org.springframework.context.event.AbstractApplicationEventMulticaster$DefaultListenerRetriever.class;
+            return clazz;
+        </Source>
+    </Rule>
+</sailpoint>

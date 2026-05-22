@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule name="Decache Delete">
+	<Source>
+		<![CDATA[	
+        import sailpoint.object.Identity;
+        import sailpoint.object.Link;
+
+        Identity newDude = new Identity();
+        newDude.setName("newDude");
+        newDude.setAttribute("firstName", "New");
+        newDude.setAttribute("lastName", "Dude");
+        Link l = new Link();
+        l.setNativeIdentity("cn=NewDude");
+        newDude.add(l);
+        context.saveObject(newDude);
+        context.commitTransaction();
+        context.decache();
+        log.warn("newDude: " + newDude.toXml());
+
+        // get fresh
+        Identity notAsNewDude = context.getObjectById(Identity.class, newDude.getId());
+        context.decache();
+        try {
+            log.warn(notAsNewDude.toXml());
+        } catch (Throwable t) {
+            log.warn ("Whoopsie, " + t.getMessage(), t);
+        }
+        context.removeObject(notAsNewDude);
+        context.commitTransaction();
+			
+]]></Source>
+</Rule>

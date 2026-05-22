@@ -23,7 +23,8 @@ REM point to the java executable (and not point to any other java executable)
 set JDK8=c:\jdk1.8.0_45
 set JDK11=c:\jdk-11.0.11
 set JDK14=c:\jdk-14.0.2
-set JDK17=c:\jdk-17.0.6
+rem set JDK17=c:\jdk-17.0.6
+set JDK17=c:\jdk-17.0.12
 
 set JDK_LIST=%JDK8% %JDK11% %JDK14% %JDK17%
 

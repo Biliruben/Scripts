@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Generate One Bundle">
+  <Source>
+    <![CDATA[
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+
+import sailpoint.api.SailPointContext;
+import sailpoint.api.SailPointFactory;
+import sailpoint.object.Bundle;
+import sailpoint.object.Filter;
+import sailpoint.object.ManagedAttribute;
+import sailpoint.object.Profile;
+import sailpoint.object.QueryOptions;
+import sailpoint.tools.GeneralException;
+
+    String MAIN_ORG_NAME = "One Org To Rule Them All";
+
+    // use a timestamp for base name so we can run this rule multiple
+    // times without resetting the entire role base
+    long baseTime = System.currentTimeMillis() >> 8;
+
+
+        private Bundle generateBundle(SailPointContext ctx, String name, List profileMAIds) throws GeneralException {
+            Bundle b = new Bundle();
+            b.setType("it");
+            b.setName(name);
+            for (String profileMAId : profileMAIds) {
+                ManagedAttribute ma = ctx.getObjectById(ManagedAttribute.class, profileMAId);
+                Profile p = new Profile();
+                p.setApplication(ma.getApplication());
+                Filter f = Filter.contains(ma.getAttribute(), ma.getValue());
+                p.addConstraint(f);
+                b.add(p);
+            }
+            return b;
+        }
+
+    Bundle getMainOrgBundle() {
+        String MAIN_ORG_NAME = "One Org To Rule Them All";
+        Bundle mainOrg = context.getObjectByName(Bundle.class, MAIN_ORG_NAME);
+        if (mainOrg == null) {
+            log.warn("Creating Org Role: " + MAIN_ORG_NAME);
+            mainOrg = new Bundle();
+            mainOrg.setName(MAIN_ORG_NAME);
+            mainOrg.setType("organizational");
+            context.saveObject(mainOrg);
+            context.commitTransaction();
+        }
+
+        return mainOrg;
+    }
+
+        Bundle mainOrg = getMainOrgBundle();
+
+        List maIds = new ArrayList();
+        QueryOptions opts = new QueryOptions();
+        opts.add(Filter.eq("type", "Entitlement"));
+        Iterator maIdIter = context.search(ManagedAttribute.class, opts, "id");
+        while (maIdIter.hasNext()) {
+            maIds.add((String)maIdIter.next()[0]);
+        }
+        context.decache();
+
+        String name = "Al Bundle - " + baseTime;
+        Bundle genBundle = generateBundle(context, name, maIds);
+        genBundle.setInheritance(Collections.singletonList(mainOrg));
+        context.saveObject(genBundle);
+        context.commitTransaction();
+
+        log.warn("Finished");
+
+    ]]>
+  </Source>
+</Rule>

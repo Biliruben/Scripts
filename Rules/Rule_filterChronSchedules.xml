@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="TaskSchedule search">
+  <Source>
+    <![CDATA[
+
+    import sailpoint.object.*;
+    try {
+
+    Filter f = Filter.isnull("nextExecution");
+    QueryOptions opts = new QueryOptions();
+    opts.add(f);
+    Iterator it = context.search(TaskSchedule.class, opts, "id");
+    while (it != null && it.hasNext()) {
+        log.warn(it.next()[0]);
+    }
+    
+    } catch (Throwable t) {
+        log.error(t.getMessage(), t);
+        throw (t);
+    }
+    ]]>
+  </Source>
+</Rule>

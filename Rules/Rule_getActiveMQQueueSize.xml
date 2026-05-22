@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Get ActiveMQ Queue Size">
+  <Description>Fetches the size of the destination queue</Description>
+  <Source>
+    <![CDATA[
+    import sailpoint.messagebus.monitoring.api.ActiveMQDestinationView;
+    import sailpoint.messagebus.monitoring.api.ActiveMQMonitoringView;
+    import sailpoint.messagebus.monitoring.impl.ActiveMQMonitoringServiceImpl;
+
+    String QUEUE_NAME = "queue://treysDumpingGround";
+
+    long size = -1;
+    ActiveMQMonitoringView view = ActiveMQMonitoringServiceImpl.getInstance().getMonitoringView(context);
+    List queues = view.getQueues();
+    
+    for (ActiveMQDestinationView destView : queues) {
+        if (QUEUE_NAME.equals(destView.getDestinationName())) {
+            size = destView.getQueueSize();
+        }
+    }
+      
+    return size;
+    ]]>
+  </Source>
+</Rule>

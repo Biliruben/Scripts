@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Clone Object">
+    <Source>
+		<![CDATA[
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
+import sailpoint.object.QueryOptions;
+import sailpoint.object.SailPointObject;
+import sailpoint.tools.xml.XMLObjectFactory;
+import sailpoint.object.Filter;
+import sailpoint.object.Filter.MatchMode;
+   
+   try {
+        // Inputs
+        String OG_OBJECT_NAME = "Active_Directory";
+        Class OG_OBJECT_CLASS = sailpoint.object.Application.class;
+
+        int OG_CLONES = 100;
+
+        // Controls
+        boolean REPORT_XML = false;
+        boolean NO_COMMIT = false;
+        
+        // Stuff that's not important
+        String nameDelim = " - ";
+        int commitEvery = 20;
+        int padding = 8; // Daddy wants up to 8 leading buffer chars (let's call them "zeros")
+        String bufferChar = "0";
+        
+        // Get the OG object
+        SailPointObject og = context.getObjectByName(OG_OBJECT_CLASS, OG_OBJECT_NAME);
+        if (og == null) {
+            log.error("OG Object not found: " + OG_OBJECT_CLASS + ":" + OG_OBJECT_NAME);
+            return;
+        }
+
+        XMLObjectFactory xmlFactory = XMLObjectFactory.getInstance();
+        // This won't work for everybody, but it'll blow up quite nicely when it doesn't
+        String ogXml = xmlFactory.toXml(og);
+        // clean out the ids
+        Pattern idPattern = Pattern.compile("id=[\"\'][a-f\\d]*[\"\']");
+        log.warn("idPattern: " + idPattern + " (Flags: " + idPattern.flags() + ")");
+        String cloneXml = idPattern.matcher(ogXml).replaceAll("");
+        if (REPORT_XML) log.warn ("ogXml:\n" + ogXml);
+        if (REPORT_XML) log.warn ("cloneXml:\n" + cloneXml);
+
+        String namePattern = og.getName() + nameDelim;
+        
+        // detatch the og from the sesssion
+        context.decache();
+
+        // Find out where to start counting
+        QueryOptions ops = new QueryOptions();
+        ops.setOrderBy("name");
+        ops.setOrderAscending(false);
+        ops.add(Filter.like("name", namePattern, MatchMode.START));
+        ops.setResultLimit(20);
+        Iterator results = context.search(OG_OBJECT_CLASS, ops, "name");
+        
+        // look for [og name][ - ][numbers] and strip out the [numbers] bit
+        Pattern pattern = Pattern.compile(Pattern.quote(namePattern) + "(\\d*)");
+        log.warn("Qual pattern: " + pattern);
+        int firstInstance = 1;
+        while (results.hasNext()) {
+            String resultName = (String)results.next()[0];
+            log.warn("resultName: " + resultName);
+            Matcher matcher = pattern.matcher(resultName);
+            if (matcher.matches()) {
+                String lastQualifier = matcher.group(1);
+                int lastQualInt = Integer.valueOf(lastQualifier);
+                if (lastQualInt >= firstInstance) {
+                    firstInstance = lastQualInt + 1;
+                }
+            }
+        }
+        
+        log.warn("First Qualifier: " + firstInstance);
+        // got our qualifier, lez do it
+        
+        for (int i = 0; i < OG_CLONES; i++) {
+            SailPointObject ogClone = (SailPointObject) xmlFactory.parseXml(context, cloneXml, false);
+            int qualifier = i + firstInstance;
+            ogClone.setName(namePattern + String.format("%" + bufferChar  + padding + "d", qualifier));
+            if (REPORT_XML) log.warn("ogClone:\n" + xmlFactory.toXml(ogClone));
+            if (!NO_COMMIT) context.saveObject(ogClone);
+            if (i % commitEvery == 0) {
+                context.commitTransaction();
+                context.decache();
+            }
+        }
+
+        // and for good measure
+        context.commitTransaction();
+    } catch (Throwable t) {
+        log.warn ("OMG rage", t);
+    }
+
+		]]>
+    </Source>
+</Rule>    

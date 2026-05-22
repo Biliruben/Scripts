@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Inspect Async CorrelationModel">
+  <Source>
+    <![CDATA[
+import sailpoint.api.CorrelationModel;
+import sailpoint.object.Configuration;
+
+boolean asyncRefresh = context.getConfiguration().getBoolean(Configuration.ASYNC_CACHE_REFRESH);
+int asyncRefreshRequests = CorrelationModel.getAsyncRefreshRequests();
+int cacheLoads = CorrelationModel.getCacheLoads();
+
+Map deets = new HashMap();
+deets.put("asyncRefresh", asyncRefresh);
+deets.put("asyncRefreshRequests", asyncRefreshRequests);
+deets.put("cacheLoads", cacheLoads);
+
+return deets;
+    ]]>
+  </Source>
+</Rule>

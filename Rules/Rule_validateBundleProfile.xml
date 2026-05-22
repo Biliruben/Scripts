@@ -1,0 +1,197 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Validate Bundle Profile">
+  <Description>Validates the tegrity of a Profile</Description>
+  <Source>
+
+      <![CDATA[
+import sailpoint.object.Application;
+import sailpoint.object.AttributeDefinition;
+import sailpoint.object.Filter;
+import sailpoint.object.Filter.CompositeFilter;
+import sailpoint.object.Filter.FilterVisitor;
+import sailpoint.object.Filter.LeafFilter;
+import sailpoint.object.Profile;
+import sailpoint.object.Schema;
+import sailpoint.tools.GeneralException;
+
+
+        String PROFILE_ID = "c0a85658838a16bf81838a07170303b8";
+
+    static class ProfileVisitor implements FilterVisitor {
+        private boolean isValidFilter;
+        private Schema forSchema = null;
+        
+
+        public ProfileVisitor (Schema forSchema) {
+            this.forSchema = forSchema;
+            this.isValidFilter = true;
+        }
+
+        private void visitCompositeFilter(CompositeFilter filter) throws GeneralException {
+            for (Filter child : filter.getChildren()) {
+                child.accept(this);
+            }
+        }
+
+        private void visitLeafFilter(LeafFilter filter) throws GeneralException {
+            // if we've alread found a false, just stop
+            if (!this.isValidFilter) {
+                return;
+            }
+            if (this.forSchema == null) {
+                log.warn ("Schema is null");
+                this.isValidFilter = false;
+                return;
+            }
+            String property = filter.getProperty();
+            if (property == null) {
+                isValidFilter = false;
+            } else {
+                AttributeDefinition attrDef = this.forSchema.getAttributeDefinition(property);
+                if (attrDef == null) {
+                    isValidFilter = false;
+                }
+            }
+        }
+
+        public boolean isValidFilter() {
+            return this.isValidFilter;
+        }
+        
+        public void visitAnd(CompositeFilter filter) throws GeneralException {
+            visitCompositeFilter(filter);
+        }
+
+        
+        public void visitOr(CompositeFilter filter) throws GeneralException {
+            visitCompositeFilter(filter);
+        }
+
+        
+        public void visitNot(CompositeFilter filter) throws GeneralException {
+            visitCompositeFilter(filter);
+        }
+
+        
+        public void visitEQ(LeafFilter filter) throws GeneralException {
+            visitLeafFilter(filter);
+        }
+
+        
+        public void visitNE(LeafFilter filter) throws GeneralException {
+            visitLeafFilter(filter);
+        }
+
+        
+        public void visitLT(LeafFilter filter) throws GeneralException {
+            visitLeafFilter(filter);
+            
+        }
+
+        
+        public void visitGT(LeafFilter filter) throws GeneralException {
+            visitLeafFilter(filter);
+            
+        }
+
+        
+        public void visitLE(LeafFilter filter) throws GeneralException {
+            visitLeafFilter(filter);
+        }
+
+        
+        public void visitGE(LeafFilter filter) throws GeneralException {
+            visitLeafFilter(filter);
+        }
+
+        
+        public void visitIn(LeafFilter filter) throws GeneralException {
+            visitLeafFilter(filter);
+        }
+
+        
+        public void visitContainsAll(LeafFilter filter) throws GeneralException {
+            visitLeafFilter(filter);
+        }
+
+        
+        public void visitLike(LeafFilter filter) throws GeneralException {
+            visitLeafFilter(filter);
+        }
+
+        
+        public void visitNotNull(LeafFilter filter) throws GeneralException {
+            visitLeafFilter(filter);
+        }
+
+        
+        public void visitIsNull(LeafFilter filter) throws GeneralException {
+            visitLeafFilter(filter);
+        }
+
+        
+        public void visitIsEmpty(LeafFilter filter) throws GeneralException {
+            visitLeafFilter(filter);
+        }
+
+        
+        public void visitJoin(LeafFilter filter) throws GeneralException {
+            visitLeafFilter(filter);
+        }
+
+        
+        public void visitLeftJoin(LeafFilter filter) throws GeneralException {
+            visitLeafFilter(filter);
+        }
+
+        
+        public void visitCollectionCondition(LeafFilter filter) throws GeneralException {
+            visitLeafFilter(filter);
+        }
+
+        
+        public void visitSubquery(LeafFilter filter) throws GeneralException {
+            visitLeafFilter(filter);
+        }
+        
+    };
+
+        // Issue trackers
+        String NULL_APPLICATION = "ApplicationNull";
+        String NULL_ATTR_NAME = "AttributeMissing";
+     
+        // Get Profile
+        Profile p = context.getObjectById(Profile.class, PROFILE_ID);
+        if (p == null) {
+            log.warn("Profile: " + PROFILE_ID + " does not exist");
+            return null;
+        }
+
+        Map issues = new HashMap();
+        
+        Application a = p.getApplication();
+        boolean nullApplication = false;
+        boolean nullAttrName = false;
+        if (a == null) {
+            nullApplication = true;
+        } else {
+
+                // this is the tricky part: inspect the Filters
+                for (Filter constraint : p.getConstraints()) {
+                    ProfileVisitor visitor = new ProfileVisitor(a.getSchema("account"));
+                    constraint.accept(visitor);
+                    if (!visitor.isValidFilter()) {
+                        nullAttrName = true;
+                        // stop iteration
+                        break;
+                    }
+                }
+            }
+
+        issues.put(NULL_APPLICATION, nullApplication);
+        issues.put(NULL_ATTR_NAME, nullAttrName);
+        return issues;
+    ]]>
+   </Source>
+</Rule>

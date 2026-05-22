@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Sequential Derp">
+    <Source>
+		<![CDATA[
+
+import sailpoint.api.TaskManager;
+import sailpoint.object.TaskDefinition;
+import sailpoint.object.TaskResult;
+import sailpoint.tools.GeneralException;
+import sailpoint.tools.Util;
+
+        TaskManager tm = new TaskManager(context);
+        
+        String taskNames = "AD AA,ADDirectAccountAggregation";
+        List<String> taskList = Util.csvToList(taskNames);
+        String runResult = "";
+        
+        for (String taskName : taskList) {
+            TaskDefinition taskDef = context.getObjectByName(TaskDefinition.class, taskName);
+            if (taskDef == null) {
+                throw new GeneralException ("You're an idiot: null bullshit");
+            }
+            TaskResult res = null;
+            try {
+                runResult += "Running " + taskDef.getName() + "\n";
+                res = tm.runWithResult(taskDef, new HashMap());
+                while (true) {
+                    Thread.sleep(250);
+                    context.decache();
+                    res = context.getObjectById(TaskResult.class, res.getId());
+                    if (res == null) {
+                        throw new GeneralException ("Somebody fucked up");
+                    }
+                    if (res.isComplete())
+                        break;
+                }
+                runResult += "Ranned " + taskDef.getName() + "\n";
+            } catch (GeneralException ge) {
+                log.error(ge.getMessage(), ge);
+                runResult += "Oh NOES! " + taskDef.getName() + "\n";
+            }
+        }
+        
+        return runResult;
+
+		]]>
+    </Source>
+</Rule>    

@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Child Molester">
+  <Description>In the process of loading objects, allows child collections to be orphaned</Description>
+  <Source>
+    <![CDATA[
+    import sailpoint.object.Application;
+    import sailpoint.api.SailPointContext;
+    
+    class LoadingTester implements Runnable {
+
+        private SailPointContext ctx;
+        private boolean halt;
+
+        public LoadingTester(SailPointContext ctx) {
+            this.ctx = ctx;
+        }
+
+        public void run() {
+            while (!this.halt) {
+                try {
+                  this.ctx.printStatistics();
+                  try {
+                      Thread.sleep(10000);
+                  } catch (InterruptedException e) {
+                      e.printStackTrace();
+                  }
+                } catch (Throwable t) {
+                  // for now, ignore this
+                }
+            }
+        }
+
+        public void halt() {
+            this.halt = true;
+        }
+        
+    }
+
+        // main thread
+        List becauseBshThatsWhy = new ArrayList();
+        try {
+            LoadingTester monitorThread = new LoadingTester(context);
+            becauseBshThatsWhy.add(monitorThread);
+            Thread t = new Thread(monitorThread);
+            t.start();
+            // let the first iteration of the monitor thread run before performoning our next trick.
+            // Concurrent concurrency is currently cantankerous 
+            Thread.sleep(1000);
+
+            // I hope you backed up your database
+            // During this operation, an exception will need to be thrown at just the right place. A debugger is currently
+            // the only reliable way to pull that off.
+            context.getObjects(Application.class);
+        } catch (Throwable t) {
+            log.error(t.getMessage(), t);
+            // bad terrible no good things happen next
+            context.commitTransaction();
+        } finally {
+            for (LoadingTester monitorThread : becauseBshThatsWhy) {
+                monitorThread.halt();
+            }
+        }    
+    ]]>
+    
+    <!-- About 'becauseBshThatsWhy': Something goofy happens when a variable in the root namespace is
+         assigned to an inner class. Bsh likes to keep that sucker around and re-execution of the rule
+         leads to sadness when it tries to assign that variable again -->
+  </Source>
+</Rule>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Compile Test">
+    <Source>
+		<![CDATA[
+        import sailpoint.object.Identity;
+        import sailpoint.object.ProvisioningPlan;
+        import sailpoint.object.ProvisioningPlan.Operation; 
+        import sailpoint.object.ProvisioningProject;
+        import sailpoint.api.Provisioner;
+
+
+        Identity ident = context.getObject(Identity.class, identityName);
+
+        masterPlan.setIdentity(ident);
+
+        Provisioner p = new Provisioner(context);
+        ProvisioningProject project = p.compile(masterPlan);
+
+        log.warn("Compiled project: " + project.toXml());
+
+        //p.execute();
+        //log.warn("Project after execute: " + p.getProject().toXml());
+		]]>
+    </Source>
+</Rule>    

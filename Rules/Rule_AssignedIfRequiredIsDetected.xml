@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Assign If Required Is Detected" type="IdentitySelector">
+  <Description>This rule is used to select an Identity has a detected role that is required
+    by the business role</Description>
+  <Signature returnType="boolean">
+    <Inputs>
+      <Argument name="log" type="org.apache.commons.logging.Log">
+        <Description> The log object associated with the SailPointContext. </Description>
+      </Argument>
+      <Argument name="context" type="sailpoint.api.SailPointContext">
+        <Description> A sailpoint.api.SailPointContext object that can be used to query the
+          database if necessary. </Description>
+      </Argument>
+      <Argument name="identity" type="Identity">
+        <Description> The identity. </Description>
+      </Argument>
+      <Argument name="roleName" type="String">
+        <Description> The name of the sailpoint.object.Bundle (role) that is being selected for
+          the Identity. If roles are not applicable to this Identity selection, this value will be
+          void. </Description>
+      </Argument>
+    </Inputs>
+    <Returns>
+      <Argument name="success">
+        <Description> True if the selection was successful; false otherwise. </Description>
+      </Argument>
+    </Returns>
+  </Signature>
+  <Source>
+    <![CDATA[
+    import sailpoint.object.Bundle;
+    import sailpoint.tools.Util;
+    
+    boolean isSuccess = false;
+    
+    Set detected = new HashSet(identity.getDetectedRoles());
+    if (Util.isEmpty(detected)) {
+      return isSuccess; // false, no detected roles
+    }
+    
+    Bundle bizRole = context.getObjectByName(Bundle.class, roleName);
+    if (bizRole == null) {
+      log.warn(roleName + " was not found... weird!");
+      return isSuccess; // false, bad state
+    }
+    
+    Set requirements = new HashSet(bizRole.getRequirements());
+    if (Util.isEmpty(requirements)) {
+      return isSuccess; // false, no requirements
+    }
+    
+    detected.retainAll(requirements);
+    
+    // if there's anything left in detected, we have an intersection of required roles and detected roles. Yay!
+    isSuccess = !Util.isEmpty(detected);
+    
+    return isSuccess;
+      
+    ]]>
+  </Source>
+</Rule>

@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Launch WF">
+  <Description>Launches a WF via WorkflowRequestExecutor</Description>
+  <Source>
+      import sailpoint.object.Request;
+      import sailpoint.object.Attributes;
+      import sailpoint.object.RequestDefinition;
+
+   private void createRequest() {
+      Request r = new Request();
+      Attributes reqArgs = new Attributes();
+      reqArgs.put("workflow", "WF Commit Test");
+      RequestDefinition def = context.getObjectByName(RequestDefinition.class, "Workflow Request");
+      r.setDefinition(def);
+      r.setNextLaunch(new Date());
+      r.setAttributes(def, reqArgs);
+      context.saveObject(r);
+      context.commitTransaction();
+   }
+
+   int total = 5000;
+   for (int i = 0; i &lt; total; i++) {
+      log.warn("Creating Request: " + i);
+      createRequest();
+   }
+  </Source>
+</Rule>

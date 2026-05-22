@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="HQL Test">
+    <Source>
+		<![CDATA[
+import sailpoint.object.QueryOptions;
+
+    String hql = "select name,id from Identity";
+    Iterator it = context.search(hql, new HashMap(), new QueryOptions());
+    while (it.hasNext()) {
+        Object thing = it.next();
+        log.warn(thing);
+    }
+		]]>
+    </Source>
+</Rule>    

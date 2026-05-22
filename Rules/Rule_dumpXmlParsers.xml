@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Dump XmlParser Pool">
+  <Description>Prints the contents of the XmlParser Pool</Description>
+  <Source>
+
+import sailpoint.tools.XmlParser;
+
+StringBuffer buff = new StringBuffer();
+XmlParser.dump(buff);
+return buff.toString();
+   </Source>
+</Rule>

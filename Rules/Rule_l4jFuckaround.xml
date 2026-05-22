@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Do The Fuck Around">
+    <Source>
+		<![CDATA[
+import sailpoint.tools.GeneralException;
+
+GeneralException e = new GeneralException("Eat a dick");
+log.error(e, e);
+log.warn(e, e);
+log.info(e, e);
+log.debug(e, e);
+log.trace(e, e);
+
+		]]>
+    </Source>
+</Rule>    

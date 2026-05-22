@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="htmlError">
+    <Source>
+		<![CDATA[
+
+        String msg = "<html><head><title>502 Bad Gateway</title></head><body><center><a href=\"#\" id=\"click_me\">Click Me</a><script type=\"text/javascript\">document.getElementById('click_me').addEventListener(\"click\",function(event) {(function(event){alert(this);}).call(document.getElementById('click_me'), event);});</script></center></body></html>";;
+        //throw new sailpoint.tools.GeneralException(msg);
+        throw new Exception(msg);
+
+		]]>
+    </Source>
+</Rule>    
