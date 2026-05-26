@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule  language="beanshell"  name="Rule-Example-ConcurrentIdentityLock">
+  <Source>
+  
+    import java.time.Duration;
+    import java.time.Instant;
+    import java.util.ArrayList;
+    import java.util.List;
+
+    import java.util.concurrent.CountDownLatch;
+    import java.util.concurrent.ExecutorService;
+    import java.util.concurrent.Executors;
+    import java.util.concurrent.Future;
+    import java.util.concurrent.ScheduledExecutorService;
+    import java.util.concurrent.TimeUnit;
+
+    import org.apache.commons.logging.Log;
+
+    import sailpoint.api.ObjectUtil;
+    import sailpoint.api.SailPointContext;
+    import sailpoint.api.SailPointFactory;
+    import sailpoint.object.Identity;
+    import sailpoint.object.Application;
+
+    // -----------------------------------------------------------------------------
+    // User constants (UTC Instant per ISO-8601, e.g. 2026-12-31T23:59:59.123Z )
+    // -----------------------------------------------------------------------------
+
+    String[] TARGET_IDENTITY_IDS = new String[] {
+        "0a0ae3ca9e2d170b819e2dcc68920623",
+        "0a0ae3ca9e2d170b819e2dce56c7694d",
+        "0a0ae3ca9e2d170b819e2dd074784c85",
+        "0a0ae3ca9e2d170b819e2dca65532373"
+    };
+    
+    String APPLICATION_NAME = "Identity Source";
+    // UTC+0 - math accordingly
+    Instant LOCK_FIRE_INSTANT_UTC = Instant.parse("2026-05-19T15:29:00.000Z");
+    log.warn("fire instant: " + LOCK_FIRE_INSTANT_UTC);
+
+    ExecutorService workerPool = null;
+    ScheduledExecutorService fireScheduler = null;
+    Log ruleLog = log;
+    
+    boolean doAppNonsense = true;
+
+    CountDownLatch allWorkersReady = new CountDownLatch(4);
+    CountDownLatch startGate = new CountDownLatch(1);
+
+    try {
+        workerPool = Executors.newFixedThreadPool(4);
+        fireScheduler = Executors.newSingleThreadScheduledExecutor();
+
+        List futures = new ArrayList();
+
+        int t;
+        for (t = 0; t &lt; 4; t++) {
+            final int threadIndex = t;
+            futures.add(workerPool.submit(new Runnable() {
+
+                public void run() {
+                    SailPointContext ctx = null;
+                    Identity lockedIdentity = null;
+                    boolean notifiedReady = false;
+                    try {
+                        ctx = SailPointFactory.createContext();
+                        Identity identity = ctx.getObject(Identity.class, TARGET_IDENTITY_IDS[threadIndex]);
+
+                        allWorkersReady.countDown();
+                        notifiedReady = true;
+
+                        if (doAppNonsense) {
+                            Application a = ctx.getObjectByName(Application.class, APPLICATION_NAME);
+                            a.setAttribute("changedMe", "example-thread-" + threadIndex);
+                        }
+
+                        startGate.await();
+                        log.warn("Locking " + identity);
+                        lockedIdentity = ObjectUtil.lockIdentity(ctx, identity);
+                        if (lockedIdentity == null) {
+                            ruleLog.warn("Concurrent lock example: thread " + threadIndex
+                                + " did not acquire lock (timeout or contention).");
+                            return;
+                        }
+
+                        lockedIdentity.setAttribute("changedMe", "example-thread-" + threadIndex);
+                        ctx.commitTransaction();
+                        ObjectUtil.unlockIdentity(ctx, lockedIdentity);
+                        lockedIdentity = null;
+                        log.warn("done!");
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        ruleLog.error("Concurrent lock example: thread " + threadIndex + " interrupted.", ie);
+                    } catch (Exception ex) {
+                        ruleLog.error("Concurrent lock example: thread " + threadIndex + " error: "
+                            + ex.getMessage(), ex);
+                    } finally {
+                        if (!notifiedReady) {
+                            allWorkersReady.countDown();
+                        }
+                        if (lockedIdentity != null) {
+                            try {
+                                ObjectUtil.unlockIdentity(ctx, lockedIdentity);
+                            } catch (Exception uex) {
+                                ruleLog.error("Concurrent lock example: thread " + threadIndex
+                                    + " finally unlock failed.", uex);
+                            }
+                        }
+                        if (ctx != null) {
+                            try {
+                                SailPointFactory.releaseContext(ctx);
+                            } catch (Exception rex) {
+                                ruleLog.error("Concurrent lock example: thread " + threadIndex
+                                    + " releaseContext failed.", rex);
+                            }
+                        }
+                    }
+                }
+            }));
+        }
+
+        boolean workersReadyInTime = allWorkersReady.await(600L, TimeUnit.SECONDS);
+        if (!workersReadyInTime) {
+            ruleLog.error("Concurrent lock example: workers did not all become ready within 600s.");
+        }
+
+        Instant nowUtc = Instant.now();
+        log.warn("nowUtc: " + nowUtc);
+        long delayNanos = 0L;
+        if (workersReadyInTime &amp;&amp; LOCK_FIRE_INSTANT_UTC.isAfter(nowUtc)) {
+            delayNanos = Duration.between(nowUtc, LOCK_FIRE_INSTANT_UTC).toNanos();
+            log.warn("delayNanos: " + delayNanos + " - ~" + Duration.ofNanos(delayNanos).toMinutesPart() + " minutes");
+            
+        }
+
+        fireScheduler.schedule(new Runnable() {
+            public void run() {
+                startGate.countDown();
+            }
+        }, delayNanos, TimeUnit.NANOSECONDS);
+
+        fireScheduler.shutdown();
+        fireScheduler.awaitTermination(1L, TimeUnit.MINUTES);
+
+        Future f;
+        int i;
+        for (i = 0; i &lt; futures.size(); i++) {
+            f = (Future) futures.get(i);
+            try {
+                f.get();
+            } catch (Exception ex) {
+                ruleLog.error("Concurrent lock example: worker future failed.", ex);
+            }
+        }
+
+        workerPool.shutdown();
+        workerPool.awaitTermination(60L, TimeUnit.MINUTES);
+
+        return "Concurrent identity lock completed.";
+    } finally {
+        if (fireScheduler != null &amp;&amp; !fireScheduler.isTerminated()) {
+            fireScheduler.shutdownNow();
+        }
+        if (workerPool != null &amp;&amp; !workerPool.isTerminated()) {
+            workerPool.shutdownNow();
+        }
+    }
+  
+  </Source>
+</Rule>
+
