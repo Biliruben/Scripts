@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Load For Prov">
+  <Source>
+<![CDATA[
+
+import sailpoint.object.Identity;
+import sailpoint.object.Link;
+import sailpoint.tools.Util;
+
+Identity identity = context.getObjectByName(Identity.class, "amy.cox");
+
+for(Link link : Util.safeIterable(identity.getLinks())) {
+    context.decache(link);
+    log.warn("Suck it: " + link);
+}
+
+identity.loadForProvisioning();
+
+]]>
+   </Source>
+</Rule>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Create BPRO">
+    <Source>
+import sailpoint.api.CorrelationModel;
+import sailpoint.object.Bundle;
+import sailpoint.object.BundleProfileRelationObject;
+    
+        String bundleName = "Designers - Golf Course";
+
+        Bundle b = context.getObjectByName(Bundle.class, bundleName);
+        CorrelationModel m = CorrelationModel.getCorrelationModel(context, null);
+        CorrelationModel.CorrelationRole cr = m.getCorrelationRole(b);
+        BundleProfileRelationObject bpro = new BundleProfileRelationObject(b, cr.getListenerHashCode(), BundleProfileRelationObject.Type.TYPE_INSERT);
+        BundleProfileRelationObject bpro2 = new BundleProfileRelationObject(b, cr.getListenerHashCode(), BundleProfileRelationObject.Type.TYPE_INSERT);
+        BundleProfileRelationObject bpro3 = new BundleProfileRelationObject(b, cr.getListenerHashCode(), BundleProfileRelationObject.Type.TYPE_INSERT);
+        context.saveObject(bpro);
+        context.saveObject(bpro2);
+        context.saveObject(bpro3);
+        context.commitTransaction();
+        log.warn(context.getObjects(BundleProfileRelationObject.class));
+
+    </Source>
+</Rule>

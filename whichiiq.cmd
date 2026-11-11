@@ -1,8 +1,14 @@
 @call %SCRIPT_HOME%\doEcho.cmd
 setlocal
-@call java --version
+@echo JDK ^& Node
+@call java -version
 @call node --version
-@echo %CATALINA_HOME%
+@echo.
+rem @echo CATALINA_HOME:
+rem @echo %CATALINA_HOME%
+call dumpNames JAVA_HOME CATALINA_HOME CATALINA_OPTS DEPLOY_DIR
 if not defined DEPLOY_DIR set DEPLOY_DIR=c:\localhost
-dir %DEPLOY_DIR%\*xml
+@echo.
+@echo DEPLOY_DIR:
+for %%i in (%DEPLOY_DIR%\*xml) do @echo %%i
 endlocal

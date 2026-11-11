@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Decode JWT User">
+  <Source>
+    <![CDATA[
+
+    import sailpoint.object.Identity;
+    import sailpoint.service.oauth.OAuthAccessToken;
+    import sailpoint.service.oauth.OAuthTransformer;
+    import sailpoint.tools.Base64Util;
+    import sailpoint.integration.AuthenticationUtil;
+    import sailpoint.service.oauth.OAuthTokenIssuer;
+    import sailpoint.object.OAuthClient;
+    import com.auth0.jwt.interfaces.DecodedJWT;
+
+    public String toString(DecodedJWT jwt) {
+        StringBuilder buff = new StringBuilder();
+        buff.append("\ntoken: " + jwt.getToken());
+        buff.append("\n\nheader: " + new String(Base64Util.decode(jwt.getHeader())));
+        buff.append("\n\npayload: " + new String(Base64Util.decode(jwt.getPayload())));
+        // buff.append("\n\nsignature: " + new String(Base64Util.decode(jwt.getSignature())));
+        buff.append("\n\nsignature: " + new String(java.util.Base64.getUrlDecoder().decode(jwt.getSignature())));
+
+        return buff.toString();
+    }
+
+    try {
+    String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Im5PbzNaRHJPRFhFSzFqS1doWHNsSFJfS1hFZyIsImtp" +
+            "ZCI6Im5PbzNaRHJPRFhFSzFqS1doWHNsSFJfS1hFZyJ9.eyJhdWQiOiJhcGk6Ly9oY3JvY2tlci52dHhodWIuY29" +
+            "tL2lpcS9hcGkiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC8zZjQzZjg3OS0yZGQwLTRmYjEtYmFkMS1" +
+            "kMjg3NGRiNjkxNzEvIiwiaWF0IjoxNjI5OTMyNzgyLCJuYmYiOjE2Mjk5MzI3ODIsImV4cCI6MTYyOTkzNjY4Miw" +
+            "iYWNyIjoiMSIsImFpbyI6IkFVUUF1LzhUQUFBQUwzRjMyR2hjbnc2N3dGOGxHM1lzZVpWUFVzMEVtTm9LQXZiQ1l" +
+            "3QXdTV01WWUlXbldIMERLZEdJakRVa25pMnhGN1JpbnJwNUhKQ0NqTURETlF2WGJRPT0iLCJhbXIiOlsicHdkIiw" +
+            "ibWZhIl0sImFwcGlkIjoiODI1ZjViMzctOTdiMC00MTZhLWFhY2YtNzhhNTI5ZTA1MWJkIiwiYXBwaWRhY3IiOiI" +
+            "xIiwiZmFtaWx5X25hbWUiOiJDcm9ja2VyIiwiZ2l2ZW5fbmFtZSI6IkhlbnJ5IiwiaXBhZGRyIjoiMTM3LjgzLjI" +
+            "wNi4xOTkiLCJuYW1lIjoiSGVucnkgQ3JvY2tlciIsIm9pZCI6ImJkOWQ1YTRhLTM1MjgtNDM1YS05N2M2LTc2MzI" +
+            "4ZjlmZWNkNSIsInJoIjoiMC5BVkFBZWZoRFA5QXRzVS02MGRLSFRiYVJjVGRiWDRLd2wycEJxczk0cFNuZ1ViMVF" +
+            "BS3MuIiwic2NwIjoiR2V0VG9rZW4iLCJzdWIiOiJLOTJzbzN6ejZjVVpKeUZ5RmZMTVZSa0NPS0F5bWYwZUxWaDJ" +
+            "STXVaSkV3IiwidGlkIjoiM2Y0M2Y4NzktMmRkMC00ZmIxLWJhZDEtZDI4NzRkYjY5MTcxIiwidW5pcXVlX25hbWU" +
+            "iOiJoZW5yeUBzcG1hZ25vbGlhLm9ubWljcm9zb2Z0LmNvbSIsInVwbiI6ImhlbnJ5QHNwbWFnbm9saWEub25taWN" +
+            "yb3NvZnQuY29tIiwidXRpIjoiSG50cE9BYVd5RVdKelN6djJFNExBdyIsInZlciI6IjEuMCJ9.MFMXiao6mtA6DNr" +
+            "ie6_LdfhtVobb0kvfUB2Y48bSaZLXDC-YrG6d0QQJCNFAWBEEVbBIMOPhewQ8Wt-v03mikXZHyUKeFWFvrdRsKZtT" +
+            "wkm6xi4kYv2trSu8rHuT1iF5w3nKeno06SzyvLN-1zsgRAEUn3qA_bGNrOKOl9GNLUB8baKHZGoeaW863ZrI1QDAj" +
+            "BKykyZYs6p4cKRdU5buGrVflV9EoCzX9wD9urK5gmJX1mlk07UD0VzPLaolJwRMUT_9iCvtUcAAwpKUNfdKkxzjVW" +
+            "PnXiVhS4YutzvWaBgXViCq8niul_iVpSt_av3p7d18Qhs8nnDGQ1rjPB_ISA";
+    
+
+    DecodedJWT jwt = AuthenticationUtil.decodeToken(token);
+    log.warn("jwt: " + jwt);
+
+    log.warn(toString(jwt));
+
+
+    } catch (Throwable t) {
+        log.error(t.getMessage(), t);
+    }
+    
+    ]]>
+  </Source>
+</Rule>
+

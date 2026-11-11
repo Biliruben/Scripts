@@ -30,6 +30,7 @@ if not defined choice set choice=%errorlevel%
 
 call :IIQ_%CHOICE%
 endlocal & set path=%path%& set java_home=%java_home%& set CATALINA_HOME=%CATALINA_HOME%& set MYSQL_PORT=%MYSQL_PORT%
+call %SCRIPT_HOME%\whichiiq.cmd
 goto EOF
 
 :IIQ_1
@@ -66,7 +67,8 @@ goto eof
 :IIQ_4
 :IIQ_8.5
 call switchmysql 57
-call switchjdk 4
+rem call switchjdk 2
+call switchjdk 2
 call switchnode 3
 call switchtomcat 2
 goto eof

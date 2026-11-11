@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
 <Rule language="beanshell" name="Run Partition Manager Cert">
+  <ReferencedRules>
+    <Reference class="sailpoint.object.Rule" name="Workflow Library"/>
+  </ReferencedRules>
+
     <Source>
         import sailpoint.api.Terminator;
         import sailpoint.api.SailPointContext;
@@ -28,6 +32,7 @@
                                 int seconds)
             throws GeneralException {
 
+            log.warn("awaitTask: ");
             int iterations;
 
             for (iterations = 0 ; iterations &lt; seconds ; iterations++) {
@@ -53,6 +58,7 @@
                                       int seconds)
             throws GeneralException {
 
+            log.warn("awaitTaskResult: ");
             TaskResult result = null;
             int iterations;
     
@@ -78,7 +84,7 @@
         public TaskSchedule runTask(SailPointContext context, TaskDefinition def,
                                 Map args)
             throws Exception {
-
+            log.warn("runTask: " + context + def);
             TaskResult res = context.getObject(TaskResult.class, def.getName());
             if (res != null) {
                 context.removeObject(res);
@@ -92,22 +98,16 @@
 
         public void suspendRequestProcessor() throws GeneralException {
 
+            log.warn("suspendRequestProcessor: ");
             Environment env = Environment.getEnvironment();
             Service s = env.getRequestService();
             s.suspend();
         }
 
-        public void resumeRequestProcessor() throws GeneralException {
-
-            Environment env = Environment.getEnvironment();
-            Service s = env.getRequestService();
-            s.start();
-        }
-
         public TaskResult startTask(SailPointContext context, TaskDefinition def,
                                 Map args)
             throws Exception {
-
+            log.warn("startTask: ");
             TaskResult result = null;
             TaskSchedule sched = runTask(context, def, args);
             if (sched != null)
@@ -115,7 +115,7 @@
             return result;
         }
 
-
+try {
         Terminator terminator = new Terminator(context);
         terminator.deleteObjects(Certification.class, null);
 
@@ -163,19 +163,16 @@
         });
 
         try {
-            TaskDefinition taskDefinition = context.getObject(TaskDefinition.class, "Partitioned Global Manager Cert");
+            TaskDefinition taskDefinition = context.getObject(TaskDefinition.class, "KickOffGlobalManagerCert");
     
-            suspendRequestProcessor();
             TaskResult result = null;
-            try {
-                result = startTask(context, taskDefinition, null);
-            } finally {
-                resumeRequestProcessor();
-            }
-    
+            result = startTask(context, taskDefinition, null);
             if (result == null) {
+                log.warn("null result");
                 throw new IllegalStateException("Could not launch task.");
             }
+
+            log.warn("awating task");
             awaitTask(context, result, 15);
             
             String groupId = result.getString(PartitionedManagerCertificationTaskExecutor.RET_CERT_GROUP_ID);
@@ -185,6 +182,8 @@
         } finally {
             ManagerCertificationPartitionRequestExecutor.setInterceptor(null);
         }
-
+} catch (Throwable t) {
+    log.error(t.getMessage(), t);
+}
     </Source>
 </Rule>

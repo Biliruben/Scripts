@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="OAuth Token Decoder">
+  <Source>
+    <![CDATA[
+
+    import sailpoint.object.Identity;
+    import sailpoint.service.oauth.OAuthAccessToken;
+    import sailpoint.service.oauth.OAuthTransformer;
+    import sailpoint.tools.Base64Util;
+    import sailpoint.integration.AuthenticationUtil;
+    import sailpoint.service.oauth.OAuthTokenIssuer;
+    import sailpoint.object.OAuthClient;
+
+
+    String token = "KkphbWVzLlNtaXRoLlk4WGZiQVYzajRQRDdSUUhLdC9QQmlMZzk4cUtnNno3andEbUxkbHlvUWZrY1FnU1JpTXVEaTZ0d2U0bmg1ZG4wK1ZScTZxalFBSTY0ZW5kUkNYei9vNWZVUW9KdUVqZ1RCVzRBVHlFY3Y0azF2cENQdmFLS1JyZ1NXVThaT3FicERyWFFJOGVHby8wNnpqZE5uN3B6dz09";
+    String decodedBearerToken = new String(Base64Util.decode(token));
+    log.warn("deocdedBearerToken: " + decodedBearerToken);
+
+    String[] parts = AuthenticationUtil.decodeHeader("Bearer " + token);
+    log.warn("parts: " + Arrays.toString(parts));
+
+
+    
+    ]]>
+  </Source>
+</Rule>
+

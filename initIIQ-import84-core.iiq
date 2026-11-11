@@ -1,4 +1,5 @@
 import init.xml
 import init-lcm.xml
+import init-pam.xml
 import "c:\etn_data\Application_ADDirect_84_modified.xml"
 import "c:\etn_data\Configuration_externalMessageBus.xml"

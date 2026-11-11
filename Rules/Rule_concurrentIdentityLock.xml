@@ -27,23 +27,39 @@
     // User constants (UTC Instant per ISO-8601, e.g. 2026-12-31T23:59:59.123Z )
     // -----------------------------------------------------------------------------
 
+    /*
+    Internal test IDs
+    */
+    /*
     String[] TARGET_IDENTITY_IDS = new String[] {
         "0a0ae3ca9e2d170b819e2dcc68920623",
         "0a0ae3ca9e2d170b819e2dce56c7694d",
         "0a0ae3ca9e2d170b819e2dd074784c85",
         "0a0ae3ca9e2d170b819e2dca65532373"
     };
+    */
+
+    /*
+      Customer IDs
+    */
+    String[] TARGET_IDENTITY_IDS = new String[] {
+        "0a9b6a1a76531c95817653e6534d08d6",
+        "0a9b6a1a76531c95817653f020977870",
+        "0a9b6a1a76531c95817653da9e9240ae",
+        "0a0e3ca9e2d170b819e2dca65532373"
+    };
     
     String APPLICATION_NAME = "Identity Source";
-    // UTC+0 - math accordingly
-    Instant LOCK_FIRE_INSTANT_UTC = Instant.parse("2026-05-19T15:29:00.000Z");
+
+    // 10 seconds from now
+    Instant LOCK_FIRE_INSTANT_UTC = Instant.now().plusSeconds(10);
     log.warn("fire instant: " + LOCK_FIRE_INSTANT_UTC);
 
     ExecutorService workerPool = null;
     ScheduledExecutorService fireScheduler = null;
     Log ruleLog = log;
     
-    boolean doAppNonsense = true;
+    boolean doAppNonsense = false;
 
     CountDownLatch allWorkersReady = new CountDownLatch(4);
     CountDownLatch startGate = new CountDownLatch(1);
@@ -130,7 +146,8 @@
         long delayNanos = 0L;
         if (workersReadyInTime &amp;&amp; LOCK_FIRE_INSTANT_UTC.isAfter(nowUtc)) {
             delayNanos = Duration.between(nowUtc, LOCK_FIRE_INSTANT_UTC).toNanos();
-            log.warn("delayNanos: " + delayNanos + " - ~" + Duration.ofNanos(delayNanos).toMinutesPart() + " minutes");
+            long delaySeconds = Duration.ofNanos(delayNanos).toMillis() / 1000;
+            log.warn("delayNanos: " + delayNanos + " - " + delaySeconds + " seconds");
             
         }
 

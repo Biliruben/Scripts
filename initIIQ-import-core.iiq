@@ -1,2 +1,3 @@
 import init.xml
 import init-lcm.xml
+import init-pam.xml

@@ -6,6 +6,11 @@
         import sailpoint.object.Filter;
         import sailpoint.object.QueryOptions;
         import sailpoint.object.Identity;
+        import sailpoint.object.Bundle;
+        import org.apache.logging.log4j.core.config.Configurator;
+        import org.apache.logging.log4j.Level;
+try {
+
 
         String IDENTITY_ID = "8a852bb7677743bc016779a50b290467";
         String APPLICATION_NAME = "OKTA";
@@ -17,13 +22,43 @@
         opts.add(f1);
         Filter f2 = Filter.ne("id", IDENTITY_ID);
         opts.add(f2);
-        log.warn("QueryOptions: " + opts);
+        //log.warn("QueryOptions: " + opts);
 
         StringBuilder buff = new StringBuilder();
-        Iterator results = context.search(Identity.class, opts, "id");
+        // Iterator results = context.search(Identity.class, opts, "id");
+        opts = new QueryOptions();
+        opts.setCloneResults(true,false);
+
+        Configurator.setLevel("org.hibernate.SQL", Level.DEBUG);
+        Configurator.setLevel("org.hibernate.type", Level.TRACE);
+
+
+        Iterator results = context.search(Bundle.class, opts, "id, name, disabled, type, inheritance.id");
+
+        /*
+        String sql = "select b.id, b.name, b.disabled, b.type, bc.child from spt_bundle"
+            + " b left outer join spt_bundle_children"
+            + " bc on b.id = bc.bundle";
+
+        Iterator it = context.search("sql:" + sql, null, opts);
+        */
+
+        context.printStatistics();
         while (results.hasNext()) {
             buff.append(results.next()[0]).append("\n");
         }
-        return buff.toString();
+
+        Configurator.setLevel("org.hibernate.SQL", Level.WARN);
+        Configurator.setLevel("org.hibernate.type", Level.WARN);
+
+        log.warn("iterated...");
+        context.printStatistics();
+        // return buff.toString();
+} catch (Throwable t) {
+    log.error(t.getMessage(), t);
+} finally {
+        Configurator.setLevel("org.hibernate.SQL", Level.WARN);
+        Configurator.setLevel("org.hibernate.type", Level.WARN);
+}
 ]]></Source>
 </Rule>

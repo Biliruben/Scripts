@@ -23,10 +23,11 @@ REM point to the java executable (and not point to any other java executable)
 set JDK8=c:\jdk1.8.0_45
 set JDK11=c:\jdk-11.0.11
 set JDK14=c:\jdk-14.0.2
-rem set JDK17=c:\jdk-17.0.6
+set JDK17_6=c:\jdk-17.0.6
 set JDK17=c:\jdk-17.0.12
+set JDK21=c:\jdk-21.0.2
 
-set JDK_LIST=%JDK8% %JDK11% %JDK14% %JDK17%
+set JDK_LIST=%JDK8% %JDK11% %JDK14% %JDK17% %JDK17_6% %JDK21%
 
 call %SCRIPT_HOME%\makeChoice %JDK_LIST%
 rem echo if not defined CHOICE choice /t 60 /D 1 /C %choiceStr% /M "Which JDK (%promptStr%)?"
@@ -72,5 +73,18 @@ REM JDK17
 :JDK_4
 set JAVA_HOME=%JDK17%
 goto EOF
+
+REM JDK17_6
+:JDK_5
+set JAVA_HOME=%JDK17_6%
+goto EOF
+
+rem JDK21
+:JDK_6
+set JAVA_HOME=%JDK21%
+goto EOF
+
+
+
 
 :EOF

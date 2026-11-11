@@ -1,0 +1,201 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<!-- Copyright © 2026 SailPoint Technologies, Inc. All Rights Reserved. -->
+
+<Rule language="beanshell" name="Export-TaskResult-Report">
+  <Description>
+    Export a TaskResult Jasper report to CSV and PDFusing the same rendering path as the Task Result UI export.
+
+    Arguments:
+      taskResultNamePrefix - TaskResult name. If a partial name is provided, the first TaskResult with a name that
+                             starts with this prefix will be used.
+      csvOutPath           - Output file path for CSV export. Leave blank or null to skip CSV export.
+      pdfOutPath           - Output file path for PDF export. Leave blank or null to skip PDF export.
+
+    Import and run (IIQ console):
+      import examples/rules/Export-TaskResult-Report.xml
+      rule Export-TaskResult-Report
+
+  </Description>
+  <Source>
+  <![CDATA[
+    import java.io.FileOutputStream;
+    import java.util.Iterator;
+    import java.util.List;
+    import java.util.Locale;
+    import java.util.Map;
+    import java.util.TimeZone;
+
+    import net.sf.jasperreports.engine.JRParameter;
+
+    import sailpoint.api.TaskManager;
+    import sailpoint.object.Attributes;
+    import sailpoint.object.Filter;
+    import sailpoint.object.JasperResult;
+    import sailpoint.object.QueryOptions;
+    import sailpoint.object.TaskDefinition;
+    import sailpoint.object.TaskExecutor;
+    import sailpoint.object.TaskResult;
+    import sailpoint.reporting.JasperExecutor;
+    import sailpoint.reporting.JasperExport;
+    import sailpoint.reporting.JasperRenderer;
+    import sailpoint.tools.GeneralException;
+    import sailpoint.tools.Util;
+
+    // Required arguments
+    String taskResultNamePrefix = "Field Scriptlet Upgrade Task";
+
+    // File names
+    // leave file name blank or null to skip exporting that file type
+    String csvOutPath = "c:/temp/report_output.csv";
+    String pdfOutPath = "c:/temp/report_output.pdf";
+
+    Locale exportLocale = Locale.getDefault();
+    TimeZone exportTimeZone = TimeZone.getDefault();
+
+    TaskResult resolveTaskResultBytaskResultNamePrefix(String taskResultNamePrefix) throws GeneralException {
+        if (Util.isNullOrEmpty(taskResultNamePrefix)) {
+            throw new GeneralException("taskResulttaskResultNamePrefix must not be empty");
+        }
+        taskResultNamePrefix = taskResultNamePrefix.trim();
+
+        Filter nameFilter = Filter.like("name", taskResultNamePrefix, Filter.MatchMode.START);
+        QueryOptions selectQo = new QueryOptions();
+        selectQo.add(nameFilter);
+        selectQo.addOrdering("name", true, true);
+        selectQo.addOrdering("id", true);
+        selectQo.setResultLimit(1);
+
+        Iterator it = context.search(TaskResult.class, selectQo);
+        if (!it.hasNext()) {
+            System.out.println("No TaskResult found with name starting with: " + taskResultNamePrefix);
+            return;
+        }
+        TaskResult selected = (TaskResult) it.next();
+        boolean hasMulti = false;
+
+        while (it.hasNext()) {
+          // exhaust the cursor
+          hasMulti = true;
+          it.next();
+        }
+
+        if (hasMulti) {
+            System.out.println("More than one TaskResults match prefix '" + taskResultNamePrefix + "'. Exporting first match: "
+                    + selected.getName());
+        }
+
+        return selected;
+    }
+
+    JasperResult resolveJasperResult(TaskResult tr) throws GeneralException {
+        JasperResult jr = tr.getReport();
+        if (jr == null) {
+            String jasperId = (String) tr.getAttribute("jasperResultId");
+            if (jasperId != null) {
+                jr = context.getObjectById(JasperResult.class, jasperId);
+          /*
+                if (jr != null) {
+                    context.decrypt(jr);
+                }
+          */
+            }
+        }
+        if (jr == null) {
+            throw new GeneralException("TaskResult '" + tr.getName() + "' has no JasperResult to export");
+        }
+        return jr;
+    }
+
+    JasperResult jasperResultForCsvExport(TaskResult tr, JasperResult jr, Locale locale, TimeZone timeZone)
+            throws GeneralException {
+        TaskDefinition def = tr.getDefinition();
+        if (def == null) {
+            return jr;
+        }
+
+        TaskManager tm = new TaskManager(context);
+        TaskExecutor exec = tm.getTaskExecutor(def);
+        if (!(exec instanceof JasperExecutor)) {
+            return jr;
+        }
+
+        JasperExecutor jexec = (JasperExecutor) exec;
+        Attributes inputs = def.getArguments();
+        if (inputs == null) {
+            inputs = new Attributes();
+        }
+
+        if (jexec.isOverrideCSVOnExport(inputs)) {
+            throw new GeneralException("Task '" + def.getName()
+                    + "' uses a custom CSV export that requires the UI; not supported in this rule.");
+        }
+
+        if (jexec.isRerunCSVOnExport()) {
+            inputs = new Attributes(inputs);
+            inputs.put(JRParameter.IS_IGNORE_PAGINATION, Boolean.TRUE);
+            inputs.put(JasperExecutor.OP_RENDER_TYPE, "csv");
+            inputs.put(JasperExecutor.OP_LOCALE, locale.toString());
+            inputs.put(JasperExecutor.OP_TIME_ZONE, timeZone.getID());
+            jr = jexec.buildResult(def, inputs, context);
+        }
+
+        return jr;
+    }
+
+    /** MAIN METHOD **/
+    try {
+
+        if (Util.isNullOrEmpty(taskResultNamePrefix)) {
+            taskResultNamePrefix = "Report_";
+        }
+
+        TaskResult tr = resolveTaskResultBytaskResultNamePrefix(taskResultNamePrefix);
+        if (tr == null) {
+          // No TaskResult found. exit
+          return;
+        }
+        JasperResult jr = resolveJasperResult(tr);
+        jr = jasperResultForCsvExport(tr, jr, exportLocale, exportTimeZone);
+
+        if (jr == null) {
+          // No JasperResult found on the TaskResult. Complain and exit
+          System.out.println("No JasperResult found on " + tr);
+          return;
+        }
+
+        JasperRenderer renderer = new JasperRenderer(jr);
+        renderer.putOption(JasperExport.USR_LOCALE, exportLocale);
+        renderer.putOption(JasperExport.USR_TIMEZONE, exportTimeZone);
+
+        StringBuilder ruleResultBuff = new StringBuilder();
+        if (!Util.isNullOrEmpty(csvOutPath)) {
+          FileOutputStream out = new FileOutputStream(csvOutPath);
+          try {
+              renderer.renderToCSV(out , "csv");
+              out.flush();
+              ruleResultBuff.append("Exported TaskResult '" + tr.getName() + "' to CSV: " + csvOutPath + "\n");
+          } finally {
+              out.close();
+          }
+        }
+        if (!Util.isNullOrEmpty(pdfOutPath)) {
+          FileOutputStream out = new FileOutputStream(pdfOutPath);
+          try {
+              renderer.renderToPDF(out);
+              out.flush();
+              ruleResultBuff.append("Exported TaskResult '" + tr.getName() + "' to PDF: " + pdfOutPath + "\n");
+          } finally {
+              out.close();
+          }
+        }
+
+        return ruleResultBuff.toString();
+    } catch (Throwable t) {
+        // gets the full stack trace for better debugging
+        log.error(t.getMessage(), t);
+        throw t;
+    }
+  ]]>
+  </Source>
+</Rule>

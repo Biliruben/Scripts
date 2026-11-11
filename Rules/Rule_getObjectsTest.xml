@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule name="Do Query">
+	<Source>
+		<![CDATA[	
+        import sailpoint.object.Filter;
+        import sailpoint.object.QueryOptions;
+        import sailpoint.object.Identity;
+        import sailpoint.object.Bundle;
+        import org.apache.logging.log4j.core.config.Configurator;
+        import org.apache.logging.log4j.Level;
+try {
+
+
+        QueryOptions opts = new QueryOptions();
+        // get all Bundles
+        List bundles = context.getObjects(Bundle.class, opts);
+
+        // now, get each object
+
+        Configurator.setLevel("org.hibernate.SQL", Level.DEBUG);
+        Configurator.setLevel("org.hibernate.type", Level.TRACE);
+        // test
+        context.getObjectByName(Identity.class, "james.smith");
+
+        for (Bundle b : bundles) {
+            String id = b.getId();
+            Bundle again = context.getObjectById(Bundle.class, id);
+            log.warn(again);
+        }
+
+        log.warn("iterated...");
+        // return buff.toString();
+} catch (Throwable t) {
+    log.error(t.getMessage(), t);
+} finally {
+        Configurator.setLevel("org.hibernate.SQL", Level.WARN);
+        Configurator.setLevel("org.hibernate.type", Level.WARN);
+}
+]]></Source>
+</Rule>

@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Projection Search Test">
+  <Source>
+    <![CDATA[
+
+    import sailpoint.object.QueryOptions;
+    import sailpoint.object.Identity;
+
+    try {
+        context.decache();
+        QueryOptions ops = new QueryOptions();
+
+        Iterator results = context.search(Identity.class, ops, "id,manager");
+        log.warn("Pre first hasNext stats:");
+        context.printStatistics();
+    
+        // Be Kind and Re-rewind
+        int i = 0;
+        int limit = 10;
+        while (results.hasNext() && i < limit) {
+            if (i < limit) {
+                log.warn("Post hasNext stats:");
+                context.printStatistics();
+            }
+            Object[] row = results.next();
+            if (i < limit) {
+                log.warn("Post next stats:");
+                log.warn(Arrays.toString(row));
+                Identity mgr = row[1];
+                log.warn("i: " + i + "; mgr: " + mgr);
+                context.printStatistics();
+                if (mgr != null) {
+                    log.warn(mgr.toXml());
+                }
+            }
+            log.warn("Decache");
+            context.decache();
+            i++;
+        }
+
+        log.warn("Done!");
+        context.printStatistics();
+        log.warn("Connections: " + context.getEnvironment().getActiveConnections());
+    } catch (Throwable t) {
+       log.warn(t.getMessage(), t);
+        context.printStatistics();
+       throw t;
+    }
+    ]]>
+  </Source>
+</Rule>

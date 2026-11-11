@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="OAuth Token Test">
+  <Source>
+    <![CDATA[
+
+    import sailpoint.object.Identity;
+    import sailpoint.service.oauth.OAuthAccessToken;
+    import sailpoint.service.oauth.OAuthTransformer;
+    import sailpoint.tools.Base64;
+
+
+    try {
+    // case sensitive
+    String identityName = "spadmin";
+    Identity identity = context.getObjectByName(Identity.class, identityName);
+    log.warn("Using identity: " + identity);
+    String identityId = identity.getId();
+
+    String clientId = Base64.encodeBytes(identityId.getBytes());
+
+    // Needs a json ala:
+    // {"clientId":"YzBhODU2MWM5ZTZiMTRmZTgxOWU2YjM1NzU1MjA0OGE=","identityId":"James.Smith","expiration":1780068857132,"scope":[]}
+    String tokenJson = "{\"clientId\":\"" +
+        clientId + "\"" +
+        ",\"identityId\":\"" + identityName + "\"" +
+        ",\"expiration\":\"" + System.currentTimeMillis() + 500000L + "\"" +
+        ",\"scope\":[]}";
+    log.warn ("tokenJson: " + tokenJson);
+    // OAuthAccessToken token = new OAuthAccessToken(clientId, identityName, new ArrayList(), System.currentTimeMillis() + 500000L);
+    OAuthAccessToken token = OAuthAccessToken.fromString(tokenJson);
+    log.warn("token: " + token);
+
+    String encryptedToken = new OAuthTransformer(context).encrypt(clientId, token.toString());
+
+    // THIS IS WHERE THE * IS ADDED, DUMMY!!!
+    String bearerTokenRaw = "*" + identityName + "." + encryptedToken;
+    String encryptedBearerToken = Base64.encodeBytes(bearerTokenRaw.getBytes()).replaceAll("[\\r\\n]","");
+
+    return "bearer token:\n" + encryptedBearerToken;
+    } catch (Throwable t) {
+        log.error (t.getMessage(), t);
+    }
+    ]]>
+  </Source>
+</Rule>
+

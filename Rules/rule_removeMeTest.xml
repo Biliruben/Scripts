@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Remove Me Test">
+  <Source>
+    <![CDATA[
+    public static class RuleHelper {
+      public void static test() {
+        System.out.println("holy shit!");
+      }
+    }
+    sailpoint.accesshistory.changeevent.RuleHelper.test();
+]]>
+    
+    
+  </Source>
+</Rule>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Clean BPR">
+    <Source>
+import sailpoint.api.CorrelationModel;
+import sailpoint.object.Bundle;
+import sailpoint.object.Filter;
+import sailpoint.object.QueryOptions;
+import sailpoint.api.Terminator;
+import sailpoint.object.BundleProfileRelationObject;
+import sailpoint.object.BundleProfileRelation;
+    
+        String bundleName = "Designers - Golf Course";
+
+        Bundle b = context.getObjectByName(Bundle.class, bundleName);
+        Filter f = Filter.eq("bundleId", b.getId());
+        QueryOptions opts = new QueryOptions();
+        opts.add(f);
+        new Terminator(context).deleteObjects(BundleProfileRelation.class, opts);
+        context.commitTransaction();
+
+    </Source>
+</Rule>

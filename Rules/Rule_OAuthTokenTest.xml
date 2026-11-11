@@ -12,11 +12,14 @@
 
     // case sensitive
     String identityName = "James.Smith";
-    String identityId = "c0a856f49b091e52819b096f36fc048a";
+    Identity identity = context.getObjectByName(Identity.class, identityName);
+    log.warn("Using identity: " + identity);
+    String identityId = identity.getId();
 
     String clientId = Base64Util.encodeBytes(identityId.getBytes());
 
     OAuthAccessToken token = new OAuthAccessToken(clientId, identityName, new ArrayList(), System.currentTimeMillis() + 500000L);
+    log.warn("token: " + token);
 
     String encryptedToken = new OAuthTransformer(context).encrypt(clientId, token.toString());
 

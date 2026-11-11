@@ -1,5 +1,6 @@
 SET @query = 'SELECT
     bugs.bug_id,
+    bugs.bug_status,
     target_patch.milestone,
     bugs.target_milestone,
     bugs.short_desc

@@ -6,17 +6,16 @@
     import sailpoint.object.Filter;
     import sailpoint.object.Identity;
     import sailpoint.object.QueryOptions;
-
-    String name = "james.smith";
-
-    QueryOptions opts = new QueryOptions();
-    Filter f = Filter.eq("name", name);
-    opts.add(f);
-    List<Identity> identities = context.getObjects(Identity.class, opts);
     Identity jimmy = null;
-    for (Identity id : identities) {
-        jimmy = id;
-    }
+          try {
+            String name = "james.smith";
+            QueryOptions opts = null;
+
+            jimmy = context.getObject(Identity.class, opts);
+          } catch (Throwable t) {
+            log.error(t.getMessage(), t);
+          }
+
     return jimmy;
     ]]>
   </Source>

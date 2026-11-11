@@ -119,9 +119,13 @@ goto end
 :findMerge
 rem This should be a surpurfulous, but just in case
 if defined IIQ_STASH goto end
+rem 6-2-2026 - new Intellij user - don't do this anymore
+goto end
+rem Dead Code \/ \/ \/
 call %SCRIPT_HOME%\mergeBaseDiff.cmd
 echo %msg% | findstr /c:"%iiqVersionP%-BaseConfig" > NUL
 if not ERRORLEVEL 1 set IIQ_STASH=%stash%
+rem Dead Code /\ /\ /\
 goto end
 
 :error

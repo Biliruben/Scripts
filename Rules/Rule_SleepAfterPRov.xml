@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Sleep After Provisioning">
+    <Source>
+long time = 60;
+log.warn("My After Provisioning: pausing for " + time + " seconds");
+try {
+  Thread.sleep(time*1000);
+} catch(Exception e) {
+  log.error("Exception during pause:", e);
+}
+log.warn("My After Provisioning: continuing.");
+    
+    </Source>
+</Rule>

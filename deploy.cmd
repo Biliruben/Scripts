@@ -10,6 +10,7 @@ shift
 goto parseArgs
 :argsParsed
 dir %DEPLOY_DIR%
+echo CATALINA_HOME=%CATALINA_HOME%
 endlocal
 goto end
 

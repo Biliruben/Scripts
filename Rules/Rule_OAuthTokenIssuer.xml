@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Issue OAuth Token">
+  <Source>
+    <![CDATA[
+
+    import sailpoint.object.Identity;
+    import sailpoint.service.oauth.OAuthAccessToken;
+    import sailpoint.service.oauth.OAuthTokenIssuer;
+    import sailpoint.service.oauth.OAuthTransformer;
+    import sailpoint.service.oauth.OAuthClientService;
+    import sailpoint.service.oauth.OAuthTokenRequest;
+    import sailpoint.tools.Base64Util;
+    import sailpoint.object.OAuthClient;
+    import org.apache.commons.lang3.StringUtils;
+
+try{
+    // Identity token
+    String identityName = "Amy.Cox";
+    Identity identity = context.getObjectByName(Identity.class, identityName);
+    log.warn("Using identity: " + identity);
+
+    Map result = OAuthTokenIssuer.generateToken(identity, context).toMap();
+    log.warn ("Identity token for: " + identityName + "\n" + result);
+
+} catch (Throwable t) {
+    log.error(t.getMessage(), t);
+}
+    ]]>
+  </Source>
+</Rule>
+

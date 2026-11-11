@@ -1,5 +1,7 @@
 @if not defined doEcho set doEcho=off
 @echo %doEcho%
+echo Stubbed out for now
+goto eof
 setlocal EnableDelayedExpansion
 
 :: Clear CHOICE everytime

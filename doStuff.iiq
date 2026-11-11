@@ -1,0 +1,3 @@
+service start Request
+import c:\temp\doStuff.xml
+run "Do Stuff" sync

@@ -13,3 +13,5 @@ if %_u_JIRA_PREFIX%==IIQETN set tagPrefix=e
 if %_u_JIRA_PREFIX%==IIQMAG set tagPrefix=m
 if %_u_JIRA_PREFIX%==IIQCB set tagPrefix=c
 if %_u_JIRA_PREFIX%==IIQHH set tagPrefix=h
+if %_u_JIRA_PREFIX%==IIQR2 set tagPrefix=r
+if %_u_JIRA_PREFIX%==IIQYA set tagPrefix=y
